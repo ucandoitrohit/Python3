@@ -1,0 +1,9 @@
+- name: display date and time
+  hosts: testip
+  tasks:
+  - name: display date
+    debug:
+        var: ansible_date_time.date
+  - name: display time
+    debug:
+        var: ansible_date_time.time
