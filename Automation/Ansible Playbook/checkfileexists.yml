@@ -1,0 +1,20 @@
+- name: check file exists
+  hosts: testip
+  tasks:
+  - name: check file exists
+    stat:
+        path: /home/jai/file
+    register: file_detail
+
+  - debug:
+        msg: "file exists at location"
+    when: file_detail.stat.exists == true
+
+  - debug:
+        msg: " file not exists at location"
+    when: file_detail.stat.exists == false
+
+  - name: OS match
+    copy:
+        content: "hello{{ ansible_distribution }}"
+    when: file_detail.stat.exists == false and ansible_distribution == Debain
