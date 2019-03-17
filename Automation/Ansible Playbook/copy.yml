@@ -1,0 +1,7 @@
+- name: copy content
+  hosts: testip
+  tasks:
+  - name: copy content
+    copy:
+        content: "first\n"
+        dest: /home/jai/file
