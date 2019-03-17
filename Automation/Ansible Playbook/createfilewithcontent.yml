@@ -1,0 +1,10 @@
+- name: create a file with content
+  hosts: testip
+  tasks:
+  - name: create file
+    copy:
+        dest: /home/jai/file
+        content: |
+           1
+           2
+
