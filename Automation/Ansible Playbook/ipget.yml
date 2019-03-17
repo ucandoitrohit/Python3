@@ -1,0 +1,7 @@
+- name: get ip address
+  hosts: testip
+  tasks:
+  - name: ipv4 display
+    debug:
+        msg: "{{ ansible_default_ipv4 }}"
+
