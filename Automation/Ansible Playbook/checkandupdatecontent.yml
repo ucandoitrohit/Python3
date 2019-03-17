@@ -1,0 +1,9 @@
+- name: search and replace by lineinfile
+  hosts: testip
+  tasks: 
+  - name: search content
+    lineinfile:
+        dest: /home/jai/file
+        state: present
+        regexp: '^3'
+        line: '12'
