@@ -1,0 +1,8 @@
+- name: search and replace by replace
+  hosts: testip
+  tasks:
+  - name: check all
+    replace:
+        path: /home/jai/file
+        regexp: 5
+        replace: 12
