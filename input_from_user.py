@@ -1,7 +1,7 @@
 #!/bin/python
 
-name = raw_input("What is your name? ")
-birthdate = raw_input("What is your birthdate? ")
+name = input("What is your name? ")
+birthdate = input("What is your birthdate? ")
 
 age = input("How old are you? ")
 
