@@ -6,7 +6,7 @@
 Login on MasterNode and Client-Node
 ------------------------------------------
 [rohit@master ~]$ cat /etc/hosts
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4<br/>
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
 192.168.43.8    master.k8s.com master
