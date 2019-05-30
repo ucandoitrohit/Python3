@@ -3,6 +3,8 @@
 
 *Kubeadm* helps you setup/bootstrap a minimum viable/usable Kubernetes cluster
 
+
+
 Login on MasterNode and Client-Node
 ------------------------------------------
 [rohit@master ~]$ cat /etc/hosts<br/>
@@ -13,6 +15,8 @@ Login on MasterNode and Client-Node
 192.168.43.29   node1.k8s.com node1
 
 [rohit@master ~]$ systemctl stop firewalld
+
+[rohit@master ~]$ swapoff -a
 
 Enable the sysctl setting net.bridge.bridge-nf-call-iptables
 -----------------------------------------------------------------
