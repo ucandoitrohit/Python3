@@ -3,7 +3,7 @@
   tasks:
   - name: create file
     copy:
-        dest: /home/jai/file
+        dest: /home/rohit/file
         content: |
            1
            2
