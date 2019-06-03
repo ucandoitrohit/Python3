@@ -4,7 +4,7 @@
   - name: Extract the tar file
     unarchive:
         src: "{{ item }}"
-        dest: /home/jai/
+        dest: /home/rohit/
     with_items:
     - nrpe.tar.gz
     - nagios-plugins-2.2.1.tar.gz
@@ -19,7 +19,7 @@
   - name: Install Nagios Plugins
     command: "{{ item }}"
     args:
-        chdir: /home/jai/nagios-plugins-2.2.1/
+        chdir: /home/rohit/nagios-plugins-2.2.1/
     with_items:
     - ./configure
     - make
@@ -28,7 +28,7 @@
   - name: Install NRPE
     command: "{{ item }}"
     args:
-        chdir: /home/jai/nrpe-nrpe-3.2.1
+        chdir: /home/rohit/nrpe-nrpe-3.2.1
     with_items:
     - ./configure
     - make all
@@ -46,11 +46,9 @@
         path: /usr/local/nagios/etc/nrpe.cfg
         regexp: '^(allowed_hosts=(.*)$)'
         backrefs: yes
-        line: '\1, gmna03.nic.in'
+        line: '\1, 172.45.67.2'
 
   - name: NRPE Service Start
     systemd:
         name: nrpe
         state: started
-
-
