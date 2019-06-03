@@ -2,7 +2,7 @@
   hosts: testip
   tasks:
   - lineinfile:
-        path: /home/jai/file
+        path: /home/rohit/file
         #path: /etc/sysctl.conf
         line: "{{ item }}"
         backup: yes
