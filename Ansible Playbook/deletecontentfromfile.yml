@@ -3,7 +3,7 @@
   tasks:
   - name: delete the content
     blockinfile:
-        path: /home/jai/file
+        path: /home/rohit/file
         marker: "{{ item }}"
         backup: yes
     with_items:
