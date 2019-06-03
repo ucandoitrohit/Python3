@@ -6,4 +6,4 @@
         line: "{{ item }}"
         backup: yes
     with_items:
-        - jai ALL=(ALL) ALL
+        - rohit ALL=(ALL) ALL
