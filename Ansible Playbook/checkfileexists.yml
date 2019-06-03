@@ -3,7 +3,7 @@
   tasks:
   - name: check file exists
     stat:
-        path: /home/jai/file
+        path: /home/rohit/file
     register: file_detail
 
   - debug:
