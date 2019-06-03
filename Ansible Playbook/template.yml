@@ -7,5 +7,5 @@
   - name: template
     template:
         src: loop.j2
-        dest: /home/jai/file
+        dest: /home/rohit/file
 
