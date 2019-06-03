@@ -4,4 +4,4 @@
   - name: copy content
     copy:
         content: "first\n"
-        dest: /home/jai/file
+        dest: /home/rohit/file
