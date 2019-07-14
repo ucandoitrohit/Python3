@@ -1,4 +1,4 @@
-- name: Installation of NAGIOS-Plugin and NRPE
+- name: Installation of NAGIOS-Plugin and NRPE on client side
   hosts: freshvm
   tasks:
   - name: Extract the tar file
@@ -41,7 +41,12 @@
     lineinfile:
         path: /etc/services
         line: 'nrpe          5666/tcp'
-  - name: entry
+  - name: entry in etc hosts file
+    lineinfile:
+        path: /etc/hosts
+        line: 'x.x.x.155    server1.example.com   server1'
+
+  - name: entry in nrpe file
     lineinfile:
         path: /usr/local/nagios/etc/nrpe.cfg
         regexp: '^(allowed_hosts=(.*)$)'
