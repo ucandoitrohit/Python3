@@ -21,5 +21,12 @@
   - name: Change password first login
     command:
         chage -d 0 user3
-
+  - name: Add in wheel group
+    user:
+      name: "{{ item }}"
+      groups: wheel
+    with_items:
+      - user1
+      - user2
+      - user3
     
