@@ -7,6 +7,7 @@
         backup: yes
         insertafter: x.x.x.122
   - name: NRPE Service restart
+  
     sysyemd:
       name: NRPE
       state: restarted
