@@ -1,0 +1,12 @@
+- name: copy file from src to dest
+  hosts: all
+  tasks:
+  - name: copy 
+    copy:
+        src: /root/nrpe.cfg
+        dest: /usr/local/nagios/etc/
+  - name: restart nrpe 
+    systemd:
+      name: nrpe
+      state: restarted
+
