@@ -8,4 +8,3 @@
     template:
         src: loop.j2
         dest: /home/rohit/file
-
