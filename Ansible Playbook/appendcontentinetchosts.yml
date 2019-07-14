@@ -1,0 +1,14 @@
+- name: append the content on file only file exists and restart services
+  hosts: all
+  tasks:
+  - lineinfile:
+        path: /etc/hosts
+        line: "100.80.16.123  server1.example.com   server1"
+        backup: yes
+        insertafter: EOF
+  - name: NRPE Service restart
+    sysyemd:
+      name: NRPE
+      state: restarted
+
+
