@@ -3,9 +3,9 @@
   tasks:
   - lineinfile:
         path: /etc/hosts
-        line: "100.80.16.123  server1.example.com   server1"
+        line: "x.x.x.123  server1.example.com   server1"
         backup: yes
-        insertafter: EOF
+        insertafter: x.x.x.122
   - name: NRPE Service restart
     sysyemd:
       name: NRPE
