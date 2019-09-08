@@ -15,12 +15,14 @@
     debug:
       msg: "{{ vm1.stdout_lines }}"
 
-  - name: Hostname of Server
-    shell: hostname
-    register: vm
-  - name:  Hostname of Server
+  - name: IP Adress
     debug:
-      msg: "{{ vm.stdout }}"
+        msg: "{{ ansible_default_ipv4.address }}"
+
+  - name: Hostname
+    debug:
+        msg: "{{ ansible_fqdn }}"
+
 
   - name: Yum clean all Command
     command: yum clean all
