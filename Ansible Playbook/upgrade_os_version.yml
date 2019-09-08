@@ -1,0 +1,72 @@
+- name: Upgrading the OS from RHEL 7.4 to RHEL 7.6
+  hosts: test
+  serial: 10
+  tasks:
+  - name: Current Kernel Version
+    shell: uname -r
+    register: vm
+  - name:  Current Kernel Version
+    debug:
+      msg: "{{ vm.stdout_lines }}"
+  - name: Current OS Version
+    shell: cat /etc/redhat-release
+    register: vm1
+  - name:  Current OS Version
+    debug:
+      msg: "{{ vm1.stdout_lines }}"
+
+  - name: Hostname of Server
+    shell: hostname
+    register: vm
+  - name:  Hostname of Server
+    debug:
+      msg: "{{ vm.stdout }}"
+
+  - name: Yum clean all Command
+    command: yum clean all
+    args:
+      warn: no
+  - name: Yum repolist Command
+    command: yum --disablerepo=* --enablerepo=local repolist all
+
+  - name: OS and Kernel upgrading from RHEL 7.4 to RHEL 7.6
+    command: yum --disablerepo=* --enablerepo=local update -y
+
+  - name: Rebooting the Server
+    shell: sleep 2 && reboot
+    async: 1
+    poll: 0
+
+  - name: Server is rebooting
+    wait_for_connection:
+        connect_timeout: 20
+        sleep: 5
+        delay: 5
+        timeout: 300
+
+  - name: Uptime after reboot
+    shell: uptime
+    register: vm
+  - name:  Uptime after reboot
+    debug:
+      msg: "{{ vm.stdout }}"
+
+  - name: ping pong
+    action: ping
+    register: h
+#  - debug: msg="{ hello.stdout }"
+  - debug:
+    msg: "{{ h.stdout  }}"
+
+  - name: Kernel Version After Upgrade
+    shell: uname -r
+    register: vm
+  - name:  Kernel Version After Upgrade
+    debug:
+      msg: "{{ vm.stdout_lines }}"
+  - name: OS Version after Upgrade
+    shell: cat /etc/redhat-release
+    register: vm1
+  - name:  OS Version after Upgrade
+    debug:
+      msg: "{{ vm1.stdout_lines }}"
