@@ -7,7 +7,6 @@
 
 
 
-# ansible-playbook command.yml --extra-var "x=45"
 # ansible-playbook command-lin.yml -e "@variable-values.yml"
  
 
