@@ -1,5 +1,5 @@
 - name: Upgrading the OS from RHEL 7.4 to RHEL 7.6
-  hosts: test
+  hosts: proxydc
   serial: 10
   tasks:
   - name: Current Kernel Version
@@ -14,7 +14,7 @@
   - name:  Current OS Version
     debug:
       msg: "{{ vm1.stdout_lines }}"
-
+ 
   - name: IP Adress
     debug:
         msg: "{{ ansible_default_ipv4.address }}"
@@ -33,11 +33,13 @@
 
   - name: OS and Kernel upgrading from RHEL 7.4 to RHEL 7.6
     command: yum --disablerepo=* --enablerepo=local update -y
+    when: ansible_distribution == 'RedHat' and ansible_distribution_version == '7.4'
 
   - name: Rebooting the Server
     shell: sleep 2 && reboot
-    async: 1
+    async: 10
     poll: 0
+    when: ansible_distribution == 'RedHat' and ansible_distribution_version == '7.4'
 
   - name: Server is rebooting
     wait_for_connection:
@@ -45,6 +47,7 @@
         sleep: 5
         delay: 5
         timeout: 300
+    when: ansible_distribution == 'RedHat' and ansible_distribution_version == '7.4'
 
   - name: Uptime after reboot
     shell: uptime
