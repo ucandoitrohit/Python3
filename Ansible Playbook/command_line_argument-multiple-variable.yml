@@ -1,0 +1,15 @@
+- name: Command Line arguments multiplte variable
+  hosts: localhost
+  gather_facts: false
+  tasks:
+  - debug:
+      msg:
+      - "this {{x}}"
+      - "this {{y}}"
+      - "this {{z}}"
+
+
+# ansible-playbook command.yml --extra-var "x=45 y=55 z='this is multi'"
+# ansible-playbook command.yml -e "x=45 y =6"
+# ansible-playbook command.yml -e "{'x':34,'y':44}"
+
