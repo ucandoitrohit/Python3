@@ -1,0 +1,15 @@
+---
+  x: 4
+  y:
+   - 4
+   - 5
+   - "ansoble"
+  pkgs:
+  "linux": "httpd"
+  "ubuntu": "apache2" 
+  
+
+
+# ansible-playbook command_line_argument-with-other-file.yml -e "@variable-file.yml"
+
+
