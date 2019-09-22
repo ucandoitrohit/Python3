@@ -10,3 +10,4 @@
 # ansible-playbook command.yml --extra-var "x=45"
 # ansible-playbook command.yml -e "x=45"
 # ansible-playbook command.yml -e "{'x':34}"
+
