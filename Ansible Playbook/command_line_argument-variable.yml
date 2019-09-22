@@ -1,0 +1,10 @@
+- name: Command Line arguments
+  hosts: localhost
+  gather_facts: false
+  tasks:
+  - debug: var=x
+
+
+
+# ansible-playbook command.yml --extra-var "x=45"
+#ansible-playbook command.yml -e "x=45"
