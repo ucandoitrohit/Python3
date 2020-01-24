@@ -1,0 +1,127 @@
+#====================================
+# DockerFile on
+# RHEL Latest
+# By Rohit
+#====================================
+
+
+FROM rhel:latest
+LABEL project="Nagios" \
+      author="Rohit Vishwakarma" \
+      image_name="nagios"
+
+RUN yum update -y \
+	yum install -y epel-release \
+	httpd \
+	httpd-tools \
+	php \
+	gcc \
+	glibc \
+	glibc-common \
+	wget \
+	unzip \
+	gd \
+	gd-devel \
+	gd \
+	gd-devel \
+	perl \
+	postfix \
+	net-snmp \
+	openssl \	
+	openssl-devel \	
+	make \
+
+RUN useradd nagios \
+         && groupadd nagcmd \
+         && usermod -aG nagcmd nagios
+         && usermod -aG nagcmd apache
+
+
+RUN wget -O /tmp/nagioscore.tar.gz https://assets.nagios.com/downloads/nagioscore/release/nagios-4.3.4.tar.gz 
+WORKDIR /tmp/ 
+RUN tar -xzf nagioscore.tar.gz
+WORKDIR /tmp/nagios-4.3.4/
+RUN ./configure --with-command-group=nagcmd \
+         && make all \
+         && make install \
+         && make install-int \
+         && make install-commandmode \
+         && make install-config \
+         && make instal-webconf \
+         &&	htpasswd -s -c /usr/local/nagios/etc/htpasswd.users nagiosadmin
+ 
+RUN wget -O /tmp/nagiosplugin.tar.gz https://nagios-plugins.org/download/nagios-plugins-2.2.1.tar.gz
+WORKDIR /tmp/ 
+RUN tar -xzf nagiosplugin.tar.gz
+WORKDIR /tmp/nagios-plugins-2.2.1/
+RUN ./configure --with-nagios-user=nagios --with-nagios-group=nagios \
+         && 	make \
+         &&	make install
+
+
+RUN wget --no-check-certificate -O /tmp/nrpe.tar.gz https://github.com/NagiosEnterprises/nrpe/archive/nrpe-3.2.1.tar.gz
+WORKDIR /tmp/
+RUN tar -xzf nrpe.tar.gz
+WORKDIR /tmp/nrpe-nrpe-3.2.1/
+RUN ./configure \
+         && 	make all \
+         && 	make install \
+         && 	make install-config
+
+
+
+RUN systemcctl enable httpd.service
+RUN systemctl enable nagios
+
+
+
+RUN echo "#!/bin/bash" >> /opt/run.sh
+RUN echo "/etc/rc.d/init.d/nagios start" >> /opt/run.sh
+RUN echo "/usr/sbin/httpd -k start" >> /opt/run.sh
+RUN echo >> /opt/run.sh
+RUN chmod +x /opt/run.sh
+
+ENTRYPOINT ["/opt/run.sh"]
+
+
+	
+                
+
+
+
+
+docker build -t rohithub/nagios:rhel-latest .
+
+docker run -p 80:80 -d rohithub/nagios:rhel-latest
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
