@@ -1274,7 +1274,7 @@ vi docker-compose.yml
 version: '3.3'
 services:
 	db:
-		iamges: mysql:5.7
+		images: mysql:5.7
 		volumes:
 			- db_data:/var/lib/mysql
 		restart:always
@@ -1688,63 +1688,191 @@ services:
 docker-compose up
 
 
-Docker Cluster
+Docker Swarm
 ==============
+Maximum 7 Master can build for master
+
+
+
+
+
+
 Build 3 Node
 Install docker in all node
 
 on Master
 node 1 -  
 docker swarm init --advertise-addr 192.168.2.2 ( if another node want to mastr
-
+or
 docker swarm init
-
 docker node ls
 
 
 Docker Swarm
 ======================
-
 Master 
-
 docker swarm init
+Output:
+docker swarm join --token token_number Master_IP
 
 docker node ls
 
 
-get token number to become a worker
-----------------------------
+On Node1
+-----------
+docker swarm join --token token_number Master_IP
 
+On Node2
+-----------
+docker swarm join --token token_number Master_IP
+
+
+On Maaster
+-----------
+docker node ls
+
+
+
+Add Remove node from docker swarm
+=====================================
+On MAster
+-----------
+To get token Number for the worker
+-----------------------------------
 docker swarm join-token worker
 
 get token number to become a master
-----------------------------
-
+--------------------------------
 docker swarm join-token manager
 
 
 To remove node from cluster
 ----------------------------
-node02
+On Node02
 docker swarm leave 
+docker info
 
 to remove from master also
 ----------------------------------
-master
+On Master
 docker node rm worker _id
-
 docker node ls
 
+Docker Swarm Promote and Demote
+----------------------------------
+On Master
+
+docker node inspect worker01
+
+TO make Worker as A MAnager or Master
+----------------------------------------
+On Master
+docker node promote worker01 worker02
+
+docker  node ls
+
+docker node depromote worker01 worker02
+
+docker  node ls
 
 
+Docker Swarm Service
+========================
+On MAster
+--------------
 docker container run -it alpine ping 192.168.43.8
-docker service create --replicas 4 alpine ping 192.168.43.8
+docker service create -d alpine ping 192.168.43.8
+docker service ls
+
+docker service create -d --replicas 4 alpine ping 192.168.43.8
+docker service ls
 
 docker service ps vd
 
 
+On Node
+----------
+Delete the worker
+docker container ls
+docker container rm  -f cont_id
+
+
+
+Docker Swarm Scale and Port Mapping
+--------------------------------------
+On MAster
+docker service create -d --replicas 2 alpine ping 192.168.43.8
+docker service create -d --replicas 3 alpine ping 192.168.43.2
+
+docker service ls
+
+docker service scale service_id=7
+
+docker service rm service_id
+docker service ls
+
+
+
+Port Mappig
+--------------
+docker service create -d -p 8090:80 nginx
+docker service ls
+
+
+Docker Swarm Service Mode
+===========================
+docker node ls
+
+docker service create -d --replicas=3 alpine ping 192.168.25.4
+docker service ls
+
+
+
+docker service create \
+  --name=viz \
+  --publish=8080:8080/tcp \
+  --constraint=node.role==manager \
+  --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
+  manomarks/visualizer
+
+
+
+docker service create --mode=globalalpine  ping 8.8.8.8
+
+
+
+
+Docker Swarm Label and constraint
+=======================================
+Create container on MAster node only
+
+docker service create --replicas=3 -constraint="node.role==manager" alpine ping 192.168.25.10
+
+docker service create --replicas=3 -constraint="node.role==worker" alpine ping 192.168.25.10
+
+
+docker node update --label-add="ssd=true" worker01
+
+docker service create --constraint="node.labels.ssd==true" --replicas=3 -d alpine 192.169.15.10
+
+docker service ls
+
+
+
+
+
+
+
 Apache
 https://medium.com/@vi1996ash/steps-to-build-apache-web-server-docker-image-1a2f21504a8e
+
+
+
+
+
+
+
+
 
 
 
