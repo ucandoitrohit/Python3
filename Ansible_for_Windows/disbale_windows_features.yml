@@ -1,0 +1,5 @@
+---
+- name: Uninstall Telnet
+  win_feature:
+    name: Telnet-Client
+    state: absent
