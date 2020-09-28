@@ -1,0 +1,500 @@
+    3  git push origin master
+    4  pwd
+    5  repository access denied. access via a deployment key is read-only.
+    6  git remote -v
+    7  git remote add origin https://rohitbit@bitbucket.org/rohitbit/sandy.git
+    8  git push origin master
+    9  git init
+   10  pwd
+   11  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   12  echo "Rohit  Vishwakarma" >> contributors.txt
+   13  ls
+   14  git status
+   15  git add contributors.txt
+   16  git status
+   17  git commit -m 'Initial commit with contributors'
+   18  git push -u origin master
+   19  ssh -v git@bitbucket.org
+   20  git remote add origin https://rohitbit@bitbucket.org/rohitbit/sandy.git
+   21  git push origin master
+   22  cat /c/Users/lenovo/.ssh/id_rsa.pub
+   23  git remote add origin https://rohitbit@bitbucket.org/rohitbit/sandy.git
+   24  git push origin master
+   25  git pull origin master
+   26  ls
+   27  git push origin master
+   28  git pull origin master
+   29  ls
+   30  git push origin master
+   31  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   32  git init
+   33  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   34  git status
+   35  git status
+   36  git status
+   37  cat file1.txt 
+   38  git add file1.txt 
+   39  cat file1.txt 
+   40  git commit -m "first"
+   41  cat file1.txt 
+   42  vim file1.txt 
+   43  cat file1.txt 
+   44  git init
+   45  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   46  git pull origin master
+   47  git clone git@bitbucket.org:rohitbit/sandy.git
+   48  ls
+   49  cd sandy/
+   50  ll
+   51  git status
+   52  git add file2.txt 
+   53  git commit -m "2"
+   54  git push origin master
+   55  ls
+   56  git clone git@bitbucket.org:rohitbit/sandy.git
+   57  git init
+   58  cd..
+   59  ls
+   60  git clone git@bitbucket.org:rohitbit/sandy.git
+   61  ls
+   62  cd sandy/
+   63  ll
+   64  ls
+   65  cd ..
+   66  ls
+   67  git init
+   68  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   69  remote -v
+   70  remote -V
+   71  git remote -V
+   72  git remote -v
+   73  pwd
+   74  ll
+   75  cls
+   76  clear
+   77  git init
+   78  git remote add orgin https://sandeep_prasad@bitbucket.org/sandeep_prasad/news.git
+   79  git status
+   80  git status
+   81  git status
+   82  clear
+   83  git git add .
+   84  git add .
+   85  git status
+   86  git status
+   87  git add file3.txt 
+   88  git status
+   89  git status
+   90  git rest
+   91  git reset
+   92  git status
+   93  git add .
+   94  git status
+   95  git commit -m "file first commited"
+   96  git status
+   97  cat file.txt 
+   98  cat fil2.
+   99  cat file2.txt 
+  100  git status
+  101  git add .
+  102  git commit -m "file first commiteddddddd"
+  103  git push -u origin master
+  104  git push -u orgin master
+  105  git init
+  106  git remote add origin https://sandeep_prasad@bitbucket.org/sandeep_prasad/demo.git
+  107  git status
+  108  git status
+  109  git add .
+  110  git status
+  111  git status
+  112  git add .
+  113  git status
+  114  git commit -m "sending test file"
+  115  git status
+  116  git push -u origin master
+  117  pwd
+  118  ls
+  119  pwd
+  120  pwd
+  121  cd demo333
+  122  ll
+  123  git pull origin master
+  124  ls
+  125  ll
+  126  pwd
+  127  git commit -m "deleted"
+  128  git log
+  129  ls
+  130  pwd
+  131  cd ..
+  132  git pull .
+  133  cd demo333
+  134  ls
+  135  git pull .
+  136  git add .
+  137  git pull .
+  138  git clone https://sandeep_prasad@bitbucket.org/sandeep_prasad/demo.git
+  139  ls
+  140  cd demo/
+  141  ll
+  142  cd demo333/
+  143  ll
+  144  pwd
+  145  cd ..
+  146  cd ..
+  147  pwd
+  148  cd ..
+  149  cd ..
+  150  git clone https://sandeep_prasad@bitbucket.org/sandeep_prasad/demo.git
+  151  cd demo3
+  152  pwd
+  153  git clone https://sandeep_prasad@bitbucket.org/sandeep_prasad/demo.git
+  154  pwd
+  155  ll
+  156  cd demo/
+  157  ll
+  158  ls
+  159  cd demo333/
+  160  ll
+  161  cat test.txt 
+  162  git status
+  163  git add .
+  164  cat test.txt 
+  165  git commit t -m "changes"
+  166  git commit  -m "changes"
+  167  git push -u origin master
+  168  git pull origin master
+  169  cat test.txt 
+  170  cat test.txt 
+  171  git pull origin master
+  172  cat test.txt 
+  173  ls
+  174  git sttaus
+  175  git status
+  176  git add .
+  177  git commit -m "new file"
+  178  git push -u origin master
+  179  git pull origin master
+  180  cat file2.txt 
+  181  exit
+  182  git init
+  183  git clone https://sandeep_prasad@bitbucket.org/sandeep_prasad/jason.git
+  184  git init
+  185  git status
+  186  git add .
+  187  git commit -m ."Adding fresh files"
+  188  git push -u origin master
+  189  git remote add origin https://sandeep_prasad@bitbucket.org/sandeep_prasad/jason.git
+  190  git status
+  191  git push -u origin master
+  192  git status
+  193  git add home.php
+  194  git commit -m "updating home page"
+  195  git add home.php
+  196  git commit -m "updating home page"
+  197  git add about.php 
+  198  git commit -m "updating home page"
+  199  git push -u origin master
+  200  gi status
+  201  git status
+  202  git status
+  203  git commit -m "home page modification"
+  204  git add home.php
+  205  git status
+  206  git commit -m "modified home page"
+  207  git push -u origin master
+  208  #!/bin/sh
+  209  #Set your own java options in environment variable JAVA_OPTS
+  210  #For example, to give it a larger heap
+  211  #   export JAVA_OPTS=-Xmx1024m
+  212  SCRIPT=$(readlink -f $0)
+  213  SCRIPTPATH=`dirname $SCRIPT`
+  214  java $JAVA_OPTS -cp "$SCRIPTPATH/lib/vtop-ui.jar" com.vmware.vtop.VTopMain $@
+  215  exit
+  216  git --version
+  217  git-clone https://github.com/geerlingguy/ansible-role-nfs.git
+  218  git clone https://github.com/geerlingguy/ansible-role-nfs.git
+  219  ls
+  220  pwd
+  221  cd ansible-role-nfs/
+  222  ll
+  223  cd tasks/
+  224  ll
+  225  cat main.yml 
+  226  git clone https://github.com/geerlingguy/ansible-role-ntp.git
+  227  git clone https://github.com/geerlingguy/ansible-role-ntp.git
+  228  pwd
+  229  cd ..
+  230  pwd
+  231  cd ..
+  232  cd ansible-galaxy/
+  233  ll
+  234  pwd
+  235  git clone https://github.com/geerlingguy/ansible-role-ntp.git
+  236  git-clone https://github.com/geerlingguy/ansible-role-nfs.git
+  237  git clone https://github.com/geerlingguy/ansible-role-nfs.git
+  238  git clone https://github.com/geerlingguy/ansible-role-git.git
+  239  git clone https://github.com/geerlingguy/ansible-role-apache.git
+  240  git clone https://github.com/geerlingguy/ansible-role-security.git
+  241  git clone https://github.com/geerlingguy/ansible-role-ssh-chroot-jail.git
+  242  git clone https://github.com/geerlingguy/ansible-role-firewall.git
+  243  git clone https://github.com/dev-sec/ansible-os-hardening.git
+  244  git clone https://github.com/geerlingguy/ansible-role-ansible.git
+  245  git clone https://github.com/ahuffman/ansible-resolv.git
+  246  git clone https://github.com/Oefenweb/ansible-swapfile.git
+  247  git clone https://github.com/debops/debops.git
+  248  git clone https://github.com/Oefenweb/ansible-sysctl.git
+  249  git clone https://github.com/ruzickap/ansible-role-vmwaretools.git
+  250  git clone https://github.com/chmduquesne/ansible-network-interfaces.git
+  251  git clone https://github.com/jbronn/ansible-ssh-hardening.git
+  252  git clone https://github.com/bertvv/ansible-role-hosts.git
+  253  exit
+  254  git clone https://github.com/sadsfae/ansible-nagios
+  255  pwd
+  256  ll
+  257  vi ansible-nagios
+  258  cd ansible-nagios/
+  259  ll
+  260  cd hosts 
+  261  ll
+  262  cat hosts 
+  263  ll
+  264  cd install/
+  265  ll
+  266  cat nagios.yml 
+  267  vi nagios.yml 
+  268  ll
+  269  cd roles/
+  270  ll
+  271  cd nagios
+  272  ll
+  273  cd tasks/
+  274  ll
+  275  vi main.yml 
+  276  ll
+  277  cd ..
+  278  ll
+  279  cd files/
+  280  ll
+  281  cat nagios.cfg 
+  282  q!
+  283  ll
+  284  vi nagios.cfg 
+  285  cd ..
+  286  exit
+  287  pwd
+  288  mkdir git
+  289  cd git
+  290  ssh-keygen
+  291  cat /c/Users/lenovo/.ssh/id_rsa.pub 
+  292  pwd
+  293  git init .
+  294  pwd
+  295  git clone git@github.com:ucandoitrohit/rohit_repo.git
+  296  pwd
+  297  ls
+  298  ls
+  299  cd rohit_repo/
+  300  ll
+  301  git branch
+  302  git branch user1_b
+  303  git branch
+  304  git checkout user1_b
+  305  git branch
+  306  vi abc3
+  307  git add .
+  308  git commit -m "user1_branch"
+  309  ls
+  310  git pusg origin user1_b
+  311  git push origin user1_b
+  312  useradd user2
+  313   
+  314  git branch prod
+  315  git branch 
+  316  git checkout prod
+  317  git branch 
+  318  vi abc4
+  319  vi abc4
+  320  git add abc4
+  321  ll
+  322  git commit -m " production branch"
+  323  ls
+  324  rm abc4 
+  325  ll
+  326  git checkout master
+  327  git checkout prod
+  328  ll
+  329  rm abc4
+  330  ls
+  331  ll
+  332  git checkout master
+  333  ls
+  334  git checkout prod
+  335  ll
+  336  git checkout master
+  337   
+  338  git branch
+  339  git branch prod
+  340  git checkou prod
+  341  ls
+  342  git branch 
+  343  git checkout prod
+  344  git branch 
+  345  vi prod_file
+  346  ls
+  347  git add .
+  348  git commit -m "conflict"
+  349  git checkout master
+  350  ls
+  351  vi prod_file
+  352  git add .
+  353  git commit -m "master"
+  354  git merge master prod
+  355  vi prod_file 
+  356  ls
+  357  cd ..
+  358  ll
+  359  mkdir new_repo
+  360  cd new_repo/
+  361  git init .
+  362  vi abc1
+  363  git add .
+  364  git commit -m "first commit
+  365  "
+  366  vi abc2
+  367  git add .
+  368  git commit -m "second "
+  369  git log
+  370  ls
+  371    
+  372  git branch new
+  373  vim 1
+  374  git add .
+  375  git commit -m "first"
+  376  vi 2
+  377  git add .
+  378  git commit -m "second"
+  379  ll
+  380  rm abc1
+  381  rm abc2
+  382  git add .
+  383  git commit -m "done"
+  384  git log
+  385  cd ..
+  386  mkdir don
+  387  cd don
+  388  git init .
+  389  echo 1 >> 1
+  390  ll
+  391  cat 1
+  392  git add .
+  393  git commit -m "first"
+  394  echo 2 >> 2
+  395  git add .
+  396  git commit -m "second"
+  397  git log
+  398  git reset --soft 5d07adbc3052930582e2c441b2e0a648a743e874
+  399  git log
+  400  cat 1 
+  401  git status -s
+  402  git commit -m " commit after reset"
+  403  git branch
+  404  ls
+  405  ls
+  406  cd ..
+  407  ll
+  408  rm _rvf *
+  409  ll
+  410  rm -rvf *
+  411  ll
+  412  mkdir new
+  413  cd new/
+  414  git init .
+  415  echo first >> abc1
+  416  git add abc1
+  417  git commit -m "first"
+  418  echo second >> abc2
+  419  git status
+  420  git status -s
+  421  git add abc2 
+  422  git status -s
+  423  git status -s
+  424  echo four >> abc4
+  425  git add abc3 
+  426  git status -s
+  427  git stash
+  428  git status -s
+  429  git status pop
+  430  git stash pop
+  431  git status -s
+  432   git commit -m "statsh"
+  433  ssh-keygen
+  434  cat /c/Users/lenovo/.ssh/id_rsa
+  435  cat /c/Users/lenovo/.ssh/id_rsa.pub 
+  436  quit
+  437  exit
+  438  git status -s
+  439  ls
+  440  ll
+  441  cd D
+  442  pwd
+  443  cd /d
+  444  ls
+  445  mkdir python_repo
+  446  cd python_repo/
+  447  ls
+  448  history
+  449  ls
+  450  git init .
+  451  git clone git@github.com:ucandoitrohit/Python3.git
+  452  ls
+  453  cd Python3/
+  454  ls
+  455  vim uptime
+  456  git status
+  457  git add .
+  458  git status .
+  459  history
+  460  git commit -m "Code for uptime"
+  461  git rmeote -v
+  462  git remote -v
+  463  git push origin master
+  464  ls
+  465  history
+  466  cd /d
+  467  cd python_repo/
+  468  cd Python3/
+  469  ll
+  470  mkdir Github
+  471  cd Github/
+  472  vi 1.print.py
+  473  git add .
+  474  git commit -m "Print Function"
+  475  git push origin master
+  476  ls
+  477  cp 1.print.py ../
+  478  ll
+  479  ls
+  480  cd ..
+  481  ls
+  482  rmdir Github/
+  483  rmdir Github/ -rf
+  484  cd Github/
+  485  ll
+  486  rm 1.print.py 
+  487  cd ..
+  488  rmdir Github/
+  489  git commit -m delete
+  490  git add Github
+  491  git commit -m "delete"
+  492  git push origin master
+  493  git add 1.print.py 
+  494  git commit -m "Print Function"
+  495  git push origin master
+  496  vi 2.add_two_number.py
+  497  cd /c/
+  498  cd Users/lenovo/VirtualBox\ VMs/
+  499  ls
+  500  exit
+  501  history
+  502  history >> get
