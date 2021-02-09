@@ -1,6 +1,6 @@
 VM is Down			
 			
-$vcentername = @("vcsdcxeu01.goep.hm.com")			
+$vcentername = @("vcenter")			
 $credential = Get-Credential			
 Connect-VIserver -Server $vcentername -Credential $credential -Force			
 $vms = Get-Content C:\Servername.txt			
