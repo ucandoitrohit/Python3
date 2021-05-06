@@ -77,6 +77,7 @@ Foreach ($Computer in $ComputerName) {
                    }
             $Reportnew += $out
         }
+        
         catch {
         $out = [PSCustomObject]@{
                     ComputerName  = $Computer
