@@ -75,7 +75,8 @@ $HTML += "</Table></BODY></HTML>"
 $HTML | Out-File $filename
 }
 $Uname = Get-Content Env:USERNAME
-        $msmptserver = 'SMTP-SERVER'
+
+$msmptserver = 'SMTP-SERVER'
         $mport = '25'
         $mto = 'EMAIL-ID'
         $mfrom = ''EMAIL-ID''
