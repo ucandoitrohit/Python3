@@ -7,7 +7,7 @@ Function Get-Packages
             $Ping = Test-Connection -ComputerName $ServerName -Count 1 -Quiet						
             If($Ping)						
             {						
-                Get-InstalledApp -ComputerName $ServerName						
+                 Get-InstalledApp -ComputerName $ServerName						
             }						
             Else						
             {						
