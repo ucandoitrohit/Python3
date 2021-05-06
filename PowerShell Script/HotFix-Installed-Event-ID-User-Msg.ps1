@@ -33,9 +33,11 @@ $out +=             [PSCustomObject]@{
                     Message       = "No Output"
                 }
             } finally {
+                
                 $null = $OS
                 $null = $Uptime
             }
         }
        $out | Format-Table -AutoSize
+
 
