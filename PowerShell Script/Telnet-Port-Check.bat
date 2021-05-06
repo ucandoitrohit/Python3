@@ -7,7 +7,7 @@ $Ports   =  "135",
             "53",
             "88",
             "445"
-$Destination = "DC01"
+$Destination = "DC02"
 $Results = @()
 $Results = Invoke-Command $Servers {param($Destination,$Ports)
                 $Object = New-Object PSCustomObject
