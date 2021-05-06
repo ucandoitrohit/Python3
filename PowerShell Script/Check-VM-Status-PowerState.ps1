@@ -11,6 +11,6 @@ foreach($vm in $vms){
     }			
     else			
     {			
-       Wriet-host "$vm is down"			
+           Wriet-host "$vm is down"			
     }			
 }			
