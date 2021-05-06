@@ -1,0 +1,250 @@
+    3  git push origin master
+    6  git remote -v
+    7  git remote add origin https://rohitbit@bitbucket.org/rohitbit/sandy.git
+    8  git push origin master
+    9  git init
+   11  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   14  git status
+   15  git add contributors.txt
+   16  git status
+   17  git commit -m 'Initial commit with contributors'
+   18  git push -u origin master
+   19  ssh -v git@bitbucket.org
+   20  git remote add origin https://rohitbit@bitbucket.org/rohitbit/sandy.git
+   21  git push origin master
+   23  git remote add origin https://rohitbit@bitbucket.org/rohitbit/sandy.git
+   24  git push origin master
+   25  git pull origin master
+   27  git push origin master
+   28  git pull origin master
+   30  git push origin master
+   31  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   32  git init
+   33  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   34  git status
+   35  git status
+   36  git status
+   38  git add file1.txt 
+   40  git commit -m "first"
+   44  git init
+   45  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   46  git pull origin master
+   47  git clone git@bitbucket.org:rohitbit/sandy.git
+   51  git status
+   52  git add file2.txt 
+   53  git commit -m "2"
+   54  git push origin master
+   56  git clone git@bitbucket.org:rohitbit/sandy.git
+   57  git init
+   60  git clone git@bitbucket.org:rohitbit/sandy.git
+   67  git init
+   68  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   71  git remote -V
+   72  git remote -v
+   77  git init
+   78  git remote add orgin https://sandeep_prasad@bitbucket.org/sandeep_prasad/news.git
+   79  git status
+   80  git status
+   81  git status
+   83  git git add .
+   84  git add .
+   85  git status
+   86  git status
+   87  git add file3.txt 
+   88  git status
+   89  git status
+   90  git rest
+   91  git reset
+   92  git status
+   93  git add .
+   94  git status
+   95  git commit -m "file first commited"
+   96  git status
+  100  git status
+  101  git add .
+  102  git commit -m "file first commiteddddddd"
+  103  git push -u origin master
+  104  git push -u orgin master
+  105  git init
+  106  git remote add origin https://sandeep_prasad@bitbucket.org/sandeep_prasad/demo.git
+  107  git status
+  108  git status
+  109  git add .
+  110  git status
+  111  git status
+  112  git add .
+  113  git status
+  114  git commit -m "sending test file"
+  115  git status
+  116  git push -u origin master
+  123  git pull origin master
+  127  git commit -m "deleted"
+  128  git log
+  132  git pull .
+  135  git pull .
+  136  git add .
+  137  git pull .
+  138  git clone https://sandeep_prasad@bitbucket.org/sandeep_prasad/demo.git
+  150  git clone https://sandeep_prasad@bitbucket.org/sandeep_prasad/demo.git
+  153  git clone https://sandeep_prasad@bitbucket.org/sandeep_prasad/demo.git
+  162  git status
+  163  git add .
+  165  git commit t -m "changes"
+  166  git commit  -m "changes"
+  167  git push -u origin master
+  168  git pull origin master
+  171  git pull origin master
+  174  git sttaus
+  175  git status
+  176  git add .
+  177  git commit -m "new file"
+  178  git push -u origin master
+  179  git pull origin master
+  182  git init
+  183  git clone https://sandeep_prasad@bitbucket.org/sandeep_prasad/jason.git
+  184  git init
+  185  git status
+  186  git add .
+  187  git commit -m ."Adding fresh files"
+  188  git push -u origin master
+  189  git remote add origin https://sandeep_prasad@bitbucket.org/sandeep_prasad/jason.git
+  190  git status
+  191  git push -u origin master
+  192  git status
+  193  git add home.php
+  194  git commit -m "updating home page"
+  195  git add home.php
+  196  git commit -m "updating home page"
+  197  git add about.php 
+  198  git commit -m "updating home page"
+  199  git push -u origin master
+  201  git status
+  202  git status
+  203  git commit -m "home page modification"
+  204  git add home.php
+  205  git status
+  206  git commit -m "modified home page"
+  207  git push -u origin master
+  216  git --version
+  217  git-clone https://github.com/geerlingguy/ansible-role-nfs.git
+  218  git clone https://github.com/geerlingguy/ansible-role-nfs.git
+  226  git clone https://github.com/geerlingguy/ansible-role-ntp.git
+  227  git clone https://github.com/geerlingguy/ansible-role-ntp.git
+  235  git clone https://github.com/geerlingguy/ansible-role-ntp.git
+  236  git-clone https://github.com/geerlingguy/ansible-role-nfs.git
+  237  git clone https://github.com/geerlingguy/ansible-role-nfs.git
+  238  git clone https://github.com/geerlingguy/ansible-role-git.git
+  239  git clone https://github.com/geerlingguy/ansible-role-apache.git
+  240  git clone https://github.com/geerlingguy/ansible-role-security.git
+  241  git clone https://github.com/geerlingguy/ansible-role-ssh-chroot-jail.git
+  242  git clone https://github.com/geerlingguy/ansible-role-firewall.git
+  243  git clone https://github.com/dev-sec/ansible-os-hardening.git
+  244  git clone https://github.com/geerlingguy/ansible-role-ansible.git
+  245  git clone https://github.com/ahuffman/ansible-resolv.git
+  246  git clone https://github.com/Oefenweb/ansible-swapfile.git
+  247  git clone https://github.com/debops/debops.git
+  248  git clone https://github.com/Oefenweb/ansible-sysctl.git
+  249  git clone https://github.com/ruzickap/ansible-role-vmwaretools.git
+  250  git clone https://github.com/chmduquesne/ansible-network-interfaces.git
+  251  git clone https://github.com/jbronn/ansible-ssh-hardening.git
+  252  git clone https://github.com/bertvv/ansible-role-hosts.git
+  254  git clone https://github.com/sadsfae/ansible-nagios
+  288  mkdir git
+  289  cd git
+  293  git init .
+  295  git clone git@github.com:ucandoitrohit/rohit_repo.git
+  301  git branch
+  302  git branch user1_b
+  303  git branch
+  304  git checkout user1_b
+  305  git branch
+  307  git add .
+  308  git commit -m "user1_branch"
+  310  git pusg origin user1_b
+  311  git push origin user1_b
+  314  git branch prod
+  315  git branch 
+  316  git checkout prod
+  317  git branch 
+  320  git add abc4
+  322  git commit -m " production branch"
+  326  git checkout master
+  327  git checkout prod
+  332  git checkout master
+  334  git checkout prod
+  336  git checkout master
+  338  git branch
+  339  git branch prod
+  340  git checkou prod
+  342  git branch 
+  343  git checkout prod
+  344  git branch 
+  347  git add .
+  348  git commit -m "conflict"
+  349  git checkout master
+  352  git add .
+  353  git commit -m "master"
+  354  git merge master prod
+  361  git init .
+  363  git add .
+  364  git commit -m "first commit
+  367  git add .
+  368  git commit -m "second "
+  369  git log
+  372  git branch new
+  374  git add .
+  375  git commit -m "first"
+  377  git add .
+  378  git commit -m "second"
+  382  git add .
+  383  git commit -m "done"
+  384  git log
+  388  git init .
+  392  git add .
+  393  git commit -m "first"
+  395  git add .
+  396  git commit -m "second"
+  397  git log
+  398  git reset --soft 5d07adbc3052930582e2c441b2e0a648a743e874
+  399  git log
+  401  git status -s
+  402  git commit -m " commit after reset"
+  403  git branch
+  414  git init .
+  416  git add abc1
+  417  git commit -m "first"
+  419  git status
+  420  git status -s
+  421  git add abc2 
+  422  git status -s
+  423  git status -s
+  425  git add abc3 
+  426  git status -s
+  427  git stash
+  428  git status -s
+  429  git status pop
+  430  git stash pop
+  431  git status -s
+  432   git commit -m "statsh"
+  438  git status -s
+  450  git init .
+  451  git clone git@github.com:ucandoitrohit/Python3.git
+  456  git status
+  457  git add .
+  458  git status .
+  460  git commit -m "Code for uptime"
+  461  git rmeote -v
+  462  git remote -v
+  463  git push origin master
+  473  git add .
+  474  git commit -m "Print Function"
+  475  git push origin master
+  489  git commit -m delete
+  490  git add Github
+  491  git commit -m "delete"
+  492  git push origin master
+  493  git add 1.print.py 
+  494  git commit -m "Print Function"
+  495  git push origin master
+  501  history | grep git
+  502  history | grep git >> git-cmd.txt

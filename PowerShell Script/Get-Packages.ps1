@@ -2,9 +2,8 @@ Function Get-Packages
 {						
  $date = (Get-Date).tostring("dd-MM-yyyy-hh-mm-ss")   						
     $ComputerName = Get-Content D:\New-PW\ip.txt						
-						
         Foreach($ServerName in $ComputerName)						
-        {						
+       {						
             $Ping = Test-Connection -ComputerName $ServerName -Count 1 -Quiet						
             If($Ping)						
             {						
