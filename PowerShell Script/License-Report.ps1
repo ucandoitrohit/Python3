@@ -334,7 +334,7 @@ $Report1 =@()
         Write $fragments | clip
         ConvertTo-Html -Head $header1 -Title $ReportTitle -PreContent ($fragments | out-String) -PostContent $footer  | Out-File 'C:\Users\rovis\Documents\SAP-RvTool\Report\EUS\EUS-License\License.htm'
 
-       Invoke-Item 'C:\Users\rovis\Documents\SAP-RvTool\Report\EUS\EUS-License\License.htm'
+        Invoke-Item 'C:\Users\rovis\Documents\SAP-RvTool\Report\EUS\EUS-License\License.htm'
 
        Disconnect-TestInfraName
        Disconnect-AtlasInfraName
