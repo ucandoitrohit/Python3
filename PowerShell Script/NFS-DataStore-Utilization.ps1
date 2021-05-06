@@ -18,8 +18,9 @@ $a = $a + "</style>"
 $Datastorename = Get-Datastore -Name *NFS*
 foreach($Datastorecluster in $Datastorename){
 #Get-Datastore -Name NFSQ72TMP3 | Select Name, @{N="Cluster"; E={(Get-VMHost -Datastore $_ | Get-Cluster).Name}},@{N="FreeSpace"; E={[Math]::Round($_.FreeSpaceGB,2)}},  @{N="Capacity"; E={[Math]::Round($_.CapacityGB,2) }}, @{N="Percentage"; E={"{0:P1}" -f($_.FreeSpaceGB/$_.CapacityGB )}}
- $Datastorename | Select Name, @{N="Cluster"; E={(Get-VMHost -Datastore $_ | Get-Cluster).Name}},@{N="Capacity(GB)"; E={[Math]::Round($_.CapacityGB,2) }}, @{N="FreeSpace(GB)"; E={[Math]::Round($_.FreeSpaceGB,2)}}, @{N="Free %"; E={"{0:P1}" -f($_.FreeSpaceGB/$_.CapacityGB )}} |  ConvertTo-HTML -head $a -body "<H2>NFS DataStore Utilization - sestovora001 - $date </H2>"| Out-File $filename
+ $Datastorename | Select-Object Name, @{N="Cluster"; E={(Get-VMHost -Datastore $_ | Get-Cluster).Name}},@{N="Capacity(GB)"; E={[Math]::Round($_.CapacityGB,2) }}, @{N="FreeSpace(GB)"; E={[Math]::Round($_.FreeSpaceGB,2)}}, @{N="Free %"; E={"{0:P1}" -f($_.FreeSpaceGB/$_.CapacityGB )}} |  ConvertTo-HTML -head $a -body "<H2>NFS DataStore Utilization - sestovora001 - $date </H2>"| Out-File $filename
 }
+
         $mbody1 = Get-Content "$filename"
         $Top1 = "<html> This auto script is executed by User - <b> Rohit Vishwakarma </b></html>"
         $mbody = $mbody1 + $top1
