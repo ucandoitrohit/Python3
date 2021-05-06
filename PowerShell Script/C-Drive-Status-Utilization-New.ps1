@@ -3,6 +3,7 @@ $passwd = Get-Content "C:\pass.txt" | ConvertTo-SecureString
 $credentials = New-Object System.Management.Automation.PSCredential ("username@domain.com",$passwd )
 
 Connect-VIServer -Server vCenter-NAme   -Credential $credentials
+
 [string] $dt2 = get-date
 [string] $dt3 = get-date -Format dd/MM/yyyy
 $OutputObj =@()
@@ -296,7 +297,7 @@ $out4 = @"
         Free Space (GB)
     </td>
    <td bgcolor="gray" style="color: #FFFFFF; font-size: 20; height: 30px;text-align: center;">
-        Free Space %
+            Free Space %
     </td>
 </tr>
 <tr>
@@ -316,7 +317,7 @@ $sig =@"
 "@
 ##########################################################################################################################################################
 
-#Send-MailMessage -SmtpServer SMTP-SERVER -Port 25 -To EMAIL-ID -From EMAIL-ID -Subject "C: Drive Status -$dt3" -Body "$head `n $out1 `n $out2 `n $out3 `n $out4 `n  $out5 $sig" -BodyAsHtml
+Send-MailMessage -SmtpServer SMTP-SERVER -Port 25 -To EMAIL-ID -From EMAIL-ID -Subject "C: Drive Status -$dt3" -Body "$head `n $out1 `n $out2 `n $out3 `n $out4 `n  $out5 $sig" -BodyAsHtml
 
 Disconnect-VIServer -Server vCenter-Name -Confirm:$false
 Disconnect-VIServer -Server vCenter-Name -Confirm:$false
