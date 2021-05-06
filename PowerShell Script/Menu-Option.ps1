@@ -453,7 +453,6 @@ function Set-RemovePath{
     Write-host "`n`n"
 }
 ###################################################################################################################################################################################
-
 $temp = "C$\Users"
 $dt = get-date -Format dd-MM-yy
 $RemotePatchFolderPath = "Patch-Monthly-Folder-$dt"
