@@ -60,5 +60,5 @@ $sig =@"
             Send-MailMessage -SmtpServer SMTP-SERVER -Port 25 -To EMAIL-ID -From EMAIL-ID -Subject "SAP Snapshot Report - vc - $dt3" -Body "$nosnapshotsap $sig" -BodyAsHtml
        }
   #  }
-
   Disconnect-VIServer -Server vCenter-Name -Confirm:$false
+  
