@@ -2179,7 +2179,6 @@ $OutputObj20 | Add-Member -Name "FreeSpace(GB)20" -MemberType NoteProperty -Valu
 $OutputObj20 | Add-Member -Name "FreeSpace(%)20" -MemberType NoteProperty -Value ([math]::Round(((100* ($newdisk20.FreeSpace))/ ($newdisk20.Capacity)),2))
 
  
-
 $drive20 = $OutputObj20.'Drive Name20'
 
 $capacity20 = $OutputObj20.'Capacity(GB)20'
