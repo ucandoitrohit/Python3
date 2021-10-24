@@ -1,6 +1,5 @@
 import keyword
-keys = ["for", "while", "tanisha", "break", "sky",
-"elif", "assert", "pulkit", "lambda", "else", "sakshar"]
+keys = ["for", "while", "ram", "break", "welcome","elif", "dance", "rohit", "lambda", "else", "sakshar","git"]
  
 for i in range(len(keys)):
     if keyword.iskeyword(keys[i]):
