@@ -36,3 +36,26 @@ nowt = time(
 )
 
 print(nowt)
+
+print("==============Convert datetime object to YYYY/MM/DD HH/MM/SS (string)====================")
+from datetime import datetime
+curr = datetime.now()
+format_dt = datetime.strftime(curr,"%Y/%m/%d %H/%M/%S")
+
+print(curr)
+print(format_dt)
+print(type(format_dt))
+
+
+print("==============Convert YYYY/MM/DD HH/MM/SS (string) to datetime object====================")
+from datetime import datetime
+curr = datetime.now()
+format_dt = datetime.strftime(curr,"%Y/%m/%d %H/%M/%S")
+
+print(curr)
+print(format_dt)
+print(type(format_dt))
+
+cont = datetime.strptime(format_dt,"%Y/%m/%d %H/%M/%S")
+print(cont)
+print(type(cont))
