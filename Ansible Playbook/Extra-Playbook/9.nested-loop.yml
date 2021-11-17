@@ -1,0 +1,11 @@
+- name: nested loop
+  hosts: all
+  tasks:
+  - name: make user and group
+    user: 
+      name: "{{ item[0] }}"
+      state: present
+      groups: "{{ item[1] }}"
+    with_nested:
+      - ['rohit','raj']
+      - ['student','sales']
