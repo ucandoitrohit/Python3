@@ -31,7 +31,9 @@
       permanent: true
       state: enabled
     notify:
-      - restart firewallds
+      - restart firewalld
 
-
-  
+  - name: resatrt firewalld
+    service:
+      name: firewalld
+      state: restarted
