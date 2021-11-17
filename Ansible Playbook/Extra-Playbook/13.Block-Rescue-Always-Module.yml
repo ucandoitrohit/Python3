@@ -1,0 +1,16 @@
+- name: block rescue always
+  hosts: all
+  tasks:
+  - block:
+    - name: upgrade db
+      shell:
+        cmd: /usr/local/lib/upgrade-database
+    rescue:
+    - name: revert after failure
+      shell:
+        cmd: /usr/local/lib/revert-database
+    always:
+    - name: always restart
+      service:
+        name: mariadb
+        state: restarted
