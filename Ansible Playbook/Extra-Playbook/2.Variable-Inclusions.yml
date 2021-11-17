@@ -1,0 +1,50 @@
+- name: Deploy
+  hosts: all
+  vars:
+    apache_pkg: httpd
+    firewall_pkg: fiewalld
+    web_service: httpd
+    firewall_service: firewalld
+    rule: http
+  tasks:
+  - name: Install
+    yum:
+      name: 
+        - "{{ apache_pkg }}"
+        - "{{ firewall_service }}"
+      state: latest
+
+  - name: strat
+    service:
+      name: "{{ firewall_service }}"
+      enable: true
+      state: started
+  
+  - name: web content
+    copy:
+      content: "Hello World"
+      dest: "/var/www/html/index.html"
+
+  - name: Start {{ Web_service }}
+    service:
+      name : "{{ Web_service }}"
+      enable: true
+      state: started
+
+  - name: Open firewall {{ rule }}
+    firewalld:
+      service: "{{ rule }}"
+      permanemt: true
+      immediate: true
+      state: enable
+  
+  - name: Verify Web
+    hosts: localhost
+    become: false
+    tasks:
+      - name: TEst
+        uri:
+          url: http://client1.example.com
+          status_code: 200
+          
+
