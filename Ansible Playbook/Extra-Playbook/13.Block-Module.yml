@@ -1,0 +1,16 @@
+- name: block module
+  hosts: all
+  tasks:
+    - name: install apache
+      block:
+        - packages:
+            name: "{{ item }}"
+            state: installed
+          with_items:
+            - httpd
+            - mod_ssl
+        - services:
+            name: httpd
+            state: started
+            enable: true
+      when: ansible_distribution == 'CentOS'
