@@ -1,0 +1,13 @@
+- name: with item complex
+  hosts: all
+  tasks:
+  - name: manage user and group
+    user:
+      name: "{{ item.name }}"
+      state: present
+      groups: "{{ item.groups }}"
+    with_items:
+      - { name: 'rohit', groups: student }
+      - { name: 'ram', groups: sales }
+      
+
