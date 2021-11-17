@@ -6,6 +6,7 @@
     web_service: httpd
     firewall_service: firewalld
     rule: http
+    system_owner: rohit@example.com
   tasks:
   - name: Install
     yum:
