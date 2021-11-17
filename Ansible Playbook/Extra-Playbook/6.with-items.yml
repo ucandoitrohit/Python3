@@ -1,0 +1,16 @@
+- name: with item
+  hosts: all
+  tasks:
+  - name: remove service
+    yum: 
+      name: "{{ item }}"
+      state: absent
+    with_items:
+      - httpd
+      - vsftpd
+  - name: remove file
+    file:
+      path: "{{ item }}"
+    with_items:
+      - "/var/ftp/pub/README"
+      - "/var/www/html/index.html"
