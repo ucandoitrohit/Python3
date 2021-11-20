@@ -1,0 +1,18 @@
+- name: download large file check status where it is
+  hosts: all
+  tasks:
+  - name: download
+    get_url:
+      url: https://www.google.com/large/file
+      dest: /tmp
+    async: 7200
+    poll: 0
+    register: download_file
+  
+  - name: wait for download file
+    async_status:
+      jid: "{{ download_file.ansible_job_id }}"
+    register: job_result
+    until: job_result.finsihed
+    retries: 20
+    delay: 120
