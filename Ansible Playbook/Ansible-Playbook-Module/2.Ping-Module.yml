@@ -1,0 +1,10 @@
+- name: ping module
+  hosts: all
+  become: false
+  tasks:
+    - name: test conection
+      ping:
+
+
+# ansible-playbook -i ping-module.yml
+

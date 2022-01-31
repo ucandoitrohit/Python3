@@ -1,0 +1,13 @@
+- name: ping module
+  hosts: all
+  vars:
+    fruit: "apple"
+  tasks:
+    - name: debug message
+      debug:
+        msg: "our friot is {{ fruit }}"
+
+# print Text/Variable during execution ansible module debug
+# ansible-playbook -i debug.yml 
+
+

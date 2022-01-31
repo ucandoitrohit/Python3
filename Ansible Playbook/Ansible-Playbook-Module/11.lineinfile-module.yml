@@ -1,0 +1,16 @@
+- name: lineinfile module
+  hosts: all
+  become: true
+  tasks:
+    - name: allow passsword authentication
+      lineinfile:
+        state: present
+        dest: /etc/ssh/ssh_config
+        regexp: "^PassworAuthentication"
+        line: "PasswordAuthtication yes"
+        validate: 'sshd -t -f %s'
+
+# Edit single line text by lineinfile module
+# ansible-playbook -i lineinfile.yml
+
+

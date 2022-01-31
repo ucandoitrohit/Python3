@@ -1,0 +1,14 @@
+- name: yum module
+  hosts: all
+  become: true
+  tasks:
+    - name: update
+      yum:
+        name: ngnix
+        state: latest
+        update_cache: true
+
+# Rollimg update Redhat by yum module
+# ansible-playbook -i update.yml
+
+
