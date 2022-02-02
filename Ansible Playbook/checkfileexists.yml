@@ -1,4 +1,4 @@
-- name: check file exists
+- name: check file Exists
   hosts: testip
   tasks:
   - name: check file exists
