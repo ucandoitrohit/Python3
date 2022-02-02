@@ -1,4 +1,4 @@
-- name: create User and change password and Add in wheel group
+- name: Create User and change password and Add in wheel group
   hosts: all
   tasks: 
   - name: create user
