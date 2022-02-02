@@ -1,4 +1,4 @@
-- name: get ip address
+- name: get ip address of server
   hosts: testip
   tasks:
   - name: ipv4 display
