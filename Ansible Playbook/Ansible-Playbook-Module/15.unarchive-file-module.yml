@@ -1,0 +1,17 @@
+- name: archive module
+  hosts: all
+  become: false
+  vars:
+    myurl: "https://github.com/ucandoitrohit/Python3/test.zip"
+  tasks:
+    - name: extract archive file
+      unarchive:
+        src: "{{ myurl }}"
+        dest: "/home/rohit/"
+        remote_src: true
+        validate_certs: true
+
+# Unarchice file
+# ansible-playbook -i zip.yml 
+
+

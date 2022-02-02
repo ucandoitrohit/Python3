@@ -1,0 +1,16 @@
+- name: file module
+  hosts: all
+  vars:
+    myfile: "/home/rohit/test.txt"
+  tasks:
+    - name: check permission
+      file:
+        path: "{{ myfile }}"
+        owner: "rohit"
+        group: "user"
+        mode: '0777'
+
+# change file permission by file module
+# ansible-playbook -i permission.yml 
+
+

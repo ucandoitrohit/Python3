@@ -1,0 +1,22 @@
+- name: get_url module
+  hosts: all
+  become: false
+  vars:
+    myurl: "https://release.ansible.com/ansible/ansibe-2.9.25.tar.gz"
+    mycrt: "sha256://https://release.ansible.com/ansible/ansibe-2.9.25.tar.gz.sha"
+    mydest: "/home/rohit"
+  tasks:
+    - name: download file
+      get_url:
+        url: "{{ myurl }}"
+        dest: "{{ mydest }}"
+        checksum: "{{ mycrc }}"
+        mode: '0644'
+        owner: rohit
+        group: wheel
+
+
+# how to downloa the file by get_url moduel
+# ansible-playbook -i get_url.yml 
+
+

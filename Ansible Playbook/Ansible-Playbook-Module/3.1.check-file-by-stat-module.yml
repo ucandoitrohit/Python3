@@ -1,0 +1,26 @@
+- name: Check if a file exists
+  hosts: all
+  become: false
+  vars:
+    myfile: "/home/rohit/test.txt"
+  tasks:
+    - name: check if the file exists
+      stat:
+        path: "{{ myfile }}"
+      register: file_data
+
+    - name: file found
+      debug:
+        msg: "The File {{ myfile }} exists"
+      when: file_data.stat.exists
+
+    - name: file not found
+      debug:
+        msg: "The File {{ myfile }} not exists"
+      when: not file_data.stat.exists
+
+# Check if a file exists - anisble module stat
+# ansible-playbook -i stat.yml 
+# ansible-playbook -i stat.yml -e 'myfile=/home/rohit/est1.txt'
+
+

@@ -1,0 +1,14 @@
+- name: user module
+  hosts: all
+  become: true
+  tasks:
+    - name: delete user
+      user:
+        name: user1
+        state: absent
+        remove: true
+
+# delete user
+# ansible-playbook -i user-delete.yml 
+
+

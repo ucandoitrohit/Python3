@@ -1,0 +1,16 @@
+- name: reboot module
+  hosts: all
+  become: true
+  tasks:
+    - name: reboot hosts
+      reboot:
+        msg: "reboot by ansible"
+        pre_reboot_delay: 5
+        post_reboot_delay: 10
+        test_command: "whoami"
+
+
+# reboot module
+# ansible-playbook -i reboot.yml 
+
+

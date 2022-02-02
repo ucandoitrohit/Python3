@@ -1,0 +1,14 @@
+- name: service module
+  hosts: all
+  become: true
+  tasks:
+    - name: service restart ssh
+      service:
+        name: sshd
+        state: restarted
+        enabled: true
+
+
+
+# ansible-playbook -i service.yml
+

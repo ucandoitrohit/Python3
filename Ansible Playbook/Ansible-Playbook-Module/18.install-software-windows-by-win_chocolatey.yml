@@ -1,0 +1,18 @@
+- name: win_chocolatey module
+  hosts: all
+  become: false
+  gather_facts: false
+  vars:
+    - packages:
+      - git
+      - notepadplus
+  tasks:
+    - name: install packages
+      win_chocolatey:
+        name: "{{ packages }}"
+        state: present
+
+# instaled sofware in windows server
+# ansible-playbook -i win-software.yml 
+
+
