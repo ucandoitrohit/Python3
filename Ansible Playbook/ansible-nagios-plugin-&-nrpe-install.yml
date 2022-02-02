@@ -1,4 +1,4 @@
-- name: Installation of NAGIOS-Plugin and NRPE on client side
+- name: Installation of NAGIOS-Plugin and NRPE on client Server
   hosts: freshvm
   tasks:
   - name: Extract the tar file
