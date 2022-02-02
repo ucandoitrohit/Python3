@@ -1,4 +1,4 @@
-- name: Installation of Nagios-Core and NAGIOS-Plugin and NRPE on Master
+- name: Installation of Nagios-Core and NAGIOS-Plugin and NRPE on Master server
   hosts: freshvm
   tasks:
   - name: Extract the tar file
@@ -73,7 +73,7 @@
     - make install
     - make install-config
 
-  - name: Nagios Service Start
+  - name: Nagios Service Start 
     systemd:
         name: "{{ item }}"
         state: started
