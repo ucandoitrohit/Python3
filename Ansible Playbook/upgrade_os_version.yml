@@ -1,4 +1,4 @@
-- name: Upgrading the OS from RHEL 7.4 to RHEL 7.6
+- name: Upgrading the OS from RHEL 7.4 to RHEL 7.6 offline
   hosts: proxydc
   serial: 10
   tasks:
