@@ -1,4 +1,4 @@
-- name: append the content on file only file exists
+- name: append the content on file when file exists
   hosts: testip
   tasks:
   - lineinfile:
