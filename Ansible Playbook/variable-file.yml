@@ -2,8 +2,8 @@
   x: 4
   y:
    - 4
-   - 5
-   - "ansoble"
+   - 7
+   - "ansible"
   pkgs:
   "linux": "httpd"
   "ubuntu": "apache2" 
