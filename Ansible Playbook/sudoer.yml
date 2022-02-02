@@ -1,4 +1,4 @@
-- name: make user as sudo
+- name: make user as sudo user
   hosts: testip
   tasks:
   - lineinfile:
