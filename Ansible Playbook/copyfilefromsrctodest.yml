@@ -1,4 +1,4 @@
-- name: copy file from src to dest
+- name: copy file from src to dest server
   hosts: all
   tasks:
   - name: copy 
