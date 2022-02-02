@@ -1,0 +1,15 @@
+- name:  file module
+  hosts: all
+  vars:
+    myfile: "~/example.txt"
+  tasks:
+    - name: creating a empty file
+      file:
+        path: "{{ myfile }}"
+        state: touch
+
+
+
+# creating a empty fil
+# ansible-playbook -i file.yml
+
