@@ -1,4 +1,4 @@
-- name: Command Line arguments multiplte variable
+- name: Command Line arguments multiplte variables
   hosts: localhost
   gather_facts: false
   tasks:
