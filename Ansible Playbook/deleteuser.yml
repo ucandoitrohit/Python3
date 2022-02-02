@@ -1,4 +1,4 @@
-- name: Delete User with Home Directory
+- name: Delete User with Home Directory from server
   hosts: all
   tasks: 
   - name: create user
