@@ -1,4 +1,4 @@
-- name: search and replace by lineinfile
+- name: Search and replace by lineinfile
   hosts: testip
   tasks: 
   - name: search content
