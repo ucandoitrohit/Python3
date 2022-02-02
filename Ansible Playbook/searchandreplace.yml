@@ -1,4 +1,4 @@
-- name: search and replace by replace
+- name: search and replace by replace module
   hosts: testip
   tasks:
   - name: check all
