@@ -16,6 +16,6 @@
     debug:
       msg: "{{ local_process.stdout }}"
 
-  - name: display output remote_process
+  - name: display output remote_process all
     debug:
       msg: "{{ remote_process.stdout }}"
