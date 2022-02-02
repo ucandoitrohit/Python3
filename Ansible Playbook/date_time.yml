@@ -1,4 +1,4 @@
-- name: display date and time
+- name: display date and time of 
   hosts: testip
   tasks:
   - name: display date
