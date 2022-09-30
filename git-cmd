@@ -1,5 +1,4 @@
    25  git push origin master
-   26  cat /c/Users/lenovo/.ssh/id_rsa.pub
    27  git remote add origin https://rohitbit@bitbucket.org/rohitbit/sandy.git
    28  git push origin master
    29  git pull origin master
@@ -268,8 +267,7 @@
   292  mkdir git
   293  cd git
   294  ssh-keygen
-  295  cat /c/Users/lenovo/.ssh/id_rsa.pub 
-  296  pwd
+ 296  pwd
   297  git init .
   298  pwd
   299  git clone git@github.com:ucandoitrohit/rohit_repo.git
@@ -411,8 +409,6 @@
   435  git status -s
   436   git commit -m "statsh"
   437  ssh-keygen
-  438  cat /c/Users/lenovo/.ssh/id_rsa
-  439  cat /c/Users/lenovo/.ssh/id_rsa.pub 
   440  quit
   441  exit
   442  git status -s
