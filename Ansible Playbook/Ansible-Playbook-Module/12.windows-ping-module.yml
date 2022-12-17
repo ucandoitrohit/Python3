@@ -1,0 +1,12 @@
+- name: ping Windows module
+  hosts: all
+  become: false
+  gather_facts: false
+  tasks:
+    - name: test conection
+      win_ping:
+
+
+
+# ansible-playbook -i ping-win-module.yml
+

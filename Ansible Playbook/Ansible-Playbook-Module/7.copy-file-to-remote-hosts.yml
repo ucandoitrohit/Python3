@@ -1,0 +1,15 @@
+- name: copy module
+  hosts: all
+  become: false
+  tasks:
+    - name: copy file
+      copy:
+        src: report.txt
+        dest: /home/rohit/
+        owner: rohit
+        mode: '0644'
+        
+# Copy fil to remote hosts by copy module
+# ansible-playbook -i copy.yml
+
+

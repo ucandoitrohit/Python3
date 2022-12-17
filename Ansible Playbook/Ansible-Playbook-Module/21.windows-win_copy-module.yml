@@ -1,0 +1,16 @@
+- name: win_copy module
+  hosts: all
+  become: false
+  gather_facts: false
+  vars:
+    source: "reboot.txt"
+    destination: "Desktop/report.txt"
+  tasks:
+    - name: copy report on windows 
+      win_copy:
+        src: "{{ source }}"
+        dest: "{{ destination }}"
+
+# copy the file on windows server by win_copy module
+# ansible-playbook -i win_copy.yml
+

@@ -1,0 +1,39 @@
+---
+- hosts: all
+  vars:
+    firewall: firewalld
+  tasks:
+  - name: install firewalld
+    yum:
+      name: "{{ firewall }}"
+      state: latest
+  - name: start
+    service:
+      name: "{{ firewall }}"
+      state: started
+      enabled: true
+
+- name:  lamp
+  tasks:
+    - name: include var file
+      include_vars: allvars.yml
+
+    - name: include tasks
+      include: lamp.yml
+    
+    - name: open  port for web
+      firewalld:
+        service: httpd
+        state: enabled
+        immediate: true
+        permanemt: true
+    
+    - name: index file
+      copy:
+        content: "{{ ansible_fqdn }}({{ ansible_default_ipv4.address }}) managed by Ansible"
+        dest: "{{ web_root }}/index.html"
+
+
+#ansible-playbook lab-copy-facts.yml            # run first
+#ansible-playbook playbook.yml            # run second
+

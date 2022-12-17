@@ -1,0 +1,7 @@
+server1.example.com
+
+[webserver]
+192.168.1.1
+
+[proxyserver]
+proxy.server.com

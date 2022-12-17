@@ -1,0 +1,10 @@
+- name: using template and jinja file
+  hosts: testip
+  vars:
+        var1: 'Hello World'
+        var2: 'Hello Again'
+  tasks:
+  - name: template
+    template:
+        src: loop.j2
+        dest: /home/rohit/file

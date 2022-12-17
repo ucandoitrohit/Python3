@@ -1,0 +1,59 @@
+- name: Installation of NAGIOS-Plugin and NRPE on client Server
+  hosts: freshvm
+  tasks:
+  - name: Extract the tar file
+    unarchive:
+        src: "{{ item }}"
+        dest: /home/rohit/
+    with_items:
+    - nrpe.tar.gz
+    - nagios-plugins-2.2.1.tar.gz
+  - name: install packages
+    yum:
+        name: "{{ item }}"
+    with_items:
+    - vim
+    - gcc
+    - openssl
+    - openssl-devel
+  - name: Install Nagios Plugins
+    command: "{{ item }}"
+    args:
+        chdir: /home/rohit/nagios-plugins-2.2.1/
+    with_items:
+    - ./configure
+    - make
+    - make install
+
+  - name: Install NRPE
+    command: "{{ item }}"
+    args:
+        chdir: /home/rohit/nrpe-nrpe-3.2.1
+    with_items:
+    - ./configure
+    - make all
+    - make install-groups-users
+    - make install
+    - make install-plugin
+    - make install-config
+    - make install-init
+  - name: entry
+    lineinfile:
+        path: /etc/services
+        line: 'nrpe          5666/tcp'
+  - name: entry in etc hosts file
+    lineinfile:
+        path: /etc/hosts
+        line: 'x.x.x.155    server1.example.com   server1'
+
+  - name: entry in nrpe file
+    lineinfile:
+        path: /usr/local/nagios/etc/nrpe.cfg
+        regexp: '^(allowed_hosts=(.*)$)'
+        backrefs: yes
+        line: '\1, 172.45.67.2'
+
+  - name: NRPE Service Start
+    systemd:
+        name: nrpe
+        state: started

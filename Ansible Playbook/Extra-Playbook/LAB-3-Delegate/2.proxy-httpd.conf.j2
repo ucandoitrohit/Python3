@@ -1,0 +1,2 @@
+ProxyPass "/external" "http://{{ ansible_fqdn }}"
+ProxyPassReverse "/external" "http://{{ ansible_hostname }}"

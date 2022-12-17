@@ -1,0 +1,8 @@
+- name: search and replace by replace module
+  hosts: testip
+  tasks:
+  - name: check all
+    replace:
+        path: /home/rohit/file
+        regexp: 5
+        replace: 12

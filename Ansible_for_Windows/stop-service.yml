@@ -1,0 +1,5 @@
+---
+- name: Stop "{{ service }}"
+  win_service:
+    name: "XblAuthManager"
+    state: stopped

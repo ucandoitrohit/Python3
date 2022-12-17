@@ -1,0 +1,82 @@
+- name: Installation of Nagios-Core and NAGIOS-Plugin and NRPE on Master server
+  hosts: freshvm
+  tasks:
+  - name: Extract the tar file
+    unarchive:
+        src: "{{ item }}"
+        dest: /home/rohit/
+    with_items:
+    - nagios-4.3.4.tar.gz
+    - nrpe.tar.gz
+    - nagios-plugins-2.2.1.tar.gz
+
+  - name: install packages
+    yum:
+        name: "{{ item }}"
+    with_items:
+    - vim
+    - gcc
+    - openssl
+    - openssl-devel
+    - httpd
+    - httpd-tools
+    - php
+    - gcc
+    - glibc-common
+    - gd
+    - gd-devel
+    - make
+    - net-snmp
+    - unzip
+
+  - name: Create Nagios group
+    group:
+      name: nagcmd
+      state: present
+    
+  - name: Create Nagios User in Master
+    user:
+      name: nagios
+      state: present
+      groups: nagcmd,apache
+
+  - name: Install Nagios Core
+    command: "{{ item }}"
+    args:
+        chdir: /home/rohit/nagios-4.3.4/
+    with_items:
+    - ./configure --with-command-group=nagcmd
+    - make all
+    - make install
+    - make install-init
+    - make install-commandmode
+    - make install-config
+    - make install-webconf
+ 
+  - name: Install Nagios Plugins
+    command: "{{ item }}"
+    args:
+        chdir: /home/rohit/nagios-plugins-2.2.1/
+    with_items:
+    - ./configure --with-nagios-user=nagios --with-nagios-group=nagios
+    - make
+    - make install
+
+  - name: Install NRPE
+    command: "{{ item }}"
+    args:
+        chdir: /home/rohit/nrpe-nrpe-3.2.1
+    with_items:
+    - ./configure
+    - make
+    - make all
+    - make install
+    - make install-config
+
+  - name: Nagios Service Start 
+    systemd:
+        name: "{{ item }}"
+        state: started
+    with_items:
+    - httpd
+    - nagios

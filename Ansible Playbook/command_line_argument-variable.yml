@@ -1,0 +1,16 @@
+- name: Command Line Arguments
+  hosts: localhost
+  gather_facts: false
+  tasks:
+  - debug: var=x
+
+
+
+
+# ansible-playbook command.yml --extra-var "x=45"
+# ansible-playbook command.yml -e "x=45"
+# ansible-playbook command.yml -e "{'x':34}"
+# ansible-playbook command.yml -e "{'x':[34,43,66]}"
+# ansible-playbook command.yml -e "{'x':{'a':1, 'b':2}}"
+
+

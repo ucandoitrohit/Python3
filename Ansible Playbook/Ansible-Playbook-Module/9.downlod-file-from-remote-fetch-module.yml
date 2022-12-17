@@ -1,0 +1,16 @@
+- name: fetch module
+  hosts: all
+  become: true
+  vars:
+    log_file: "/var/log/message"
+    dump_dir: "logs"
+  tasks:
+    - name: fetch file
+      fetch:
+        src: "{{ log_file }}"
+        dest: "{{ dump_dir }}"
+        
+# Copy file from remote hosts by fetch module
+# ansible-playbook -i fetch.yml
+
+

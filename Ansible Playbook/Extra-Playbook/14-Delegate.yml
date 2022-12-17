@@ -1,0 +1,21 @@
+- name: delegate
+  hosts: all
+  tasks:
+  - name: get process
+    command: ps
+    register: remote_process
+    change_when: false
+  
+  - name: local process
+    command: ps
+    delegate: localhost
+    register: local_process
+    change_when: false
+
+  - name: display output localhost
+    debug:
+      msg: "{{ local_process.stdout }}"
+
+  - name: display output remote_process all
+    debug:
+      msg: "{{ remote_process.stdout }}"

@@ -1,0 +1,17 @@
+- name: Command Line arguments with install Demand packages
+  hosts: localhost
+  gather_facts: false
+  tasks:
+  - name: install {{pkgs}}
+    yum:
+     name: "{{pkgs}}"
+     state: "{{req_state}}" 
+
+
+
+
+# ansible-playbook install.yml -e "pkgs=vim req_state=present"
+# ansible-playbook install.yml -e "pkgs=vim req_state=absent"
+ 
+
+

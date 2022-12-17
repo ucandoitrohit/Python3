@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: pod
+metadata:
+  name: hello-pod-tomcat
+spec:
+  containers:
+    - name: myfirsttomcatcontainer
+      image: tomcat
+      ports:
+      - containerPort: 8080

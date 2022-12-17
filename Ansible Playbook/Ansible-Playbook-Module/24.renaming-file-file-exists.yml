@@ -1,0 +1,32 @@
+- name:  rename file and directory
+  hosts: all
+  vars:
+    mysrc: "~/foo"
+    mydest: "~/boo"
+  tasks:
+    - name: check if file exists
+      stat:
+        path: "{{ mysrc }}"
+      register: check_file_name
+
+    - name: print
+      debug:
+        var: check_file_name
+    
+    - name: copy file with new name
+      copy:
+        remote_src: true
+        src: "{{ mysrc }}"
+        dst: "{{ mydest }}"
+      when: check_file_name.stat.exists 
+    
+    - name: remove file
+      file:
+        path: "{{ mysrc }}"
+        state: absent
+
+
+
+# renaming file
+# ansible-playbook -i file.yml
+

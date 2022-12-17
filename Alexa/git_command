@@ -1,0 +1,246 @@
+   24  git remote add origin https://rohitbit@bitbucket.org/rohitbit/sandy.git
+   25  git push origin master
+   27  git remote add origin https://rohitbit@bitbucket.org/rohitbit/sandy.git
+   28  git push origin master
+   29  git pull origin master
+   31  git push origin master
+   32  git pull origin master
+   34  git push origin master
+   35  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   36  git init
+   37  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   38  git status
+   39  git status
+   40  git status
+   42  git add file1.txt 
+   44  git commit -m "first"
+   48  git init
+   49  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   50  git pull origin master
+   51  git clone git@bitbucket.org:rohitbit/sandy.git
+   55  git status
+   56  git add file2.txt 
+   57  git commit -m "2"
+   58  git push origin master
+   60  git clone git@bitbucket.org:rohitbit/sandy.git
+   61  git init
+   64  git clone git@bitbucket.org:rohitbit/sandy.git
+   71  git init
+   72  git remote add origin git@bitbucket.org:rohitbit/sandy.git
+   75  git remote -V
+   76  git remote -v
+   81  git init
+   82  git remote add orgin https://sandeep_prasad@bitbucket.org/sandeep_prasad/news.git
+   83  git status
+   84  git status
+   85  git status
+   87  git git add .
+   88  git add .
+   89  git status
+   90  git status
+   91  git add file3.txt 
+   92  git status
+   93  git status
+   94  git rest
+   95  git reset
+   96  git status
+   97  git add .
+   98  git status
+   99  git commit -m "file first commited"
+  100  git status
+  104  git status
+  105  git add .
+  106  git commit -m "file first commiteddddddd"
+  107  git push -u origin master
+  108  git push -u orgin master
+  109  git init
+  110  git remote add origin https://sandeep_prasad@bitbucket.org/sandeep_prasad/demo.git
+  111  git status
+  112  git status
+  113  git add .
+  114  git status
+  115  git status
+  116  git add .
+  117  git status
+  118  git commit -m "sending test file"
+  119  git status
+  120  git push -u origin master
+  127  git pull origin master
+  131  git commit -m "deleted"
+  132  git log
+  136  git pull .
+  139  git pull .
+  140  git add .
+  141  git pull .
+  142  git clone https://sandeep_prasad@bitbucket.org/sandeep_prasad/demo.git
+  154  git clone https://sandeep_prasad@bitbucket.org/sandeep_prasad/demo.git
+  157  git clone https://sandeep_prasad@bitbucket.org/sandeep_prasad/demo.git
+  166  git status
+  167  git add .
+  169  git commit t -m "changes"
+  170  git commit  -m "changes"
+  171  git push -u origin master
+  172  git pull origin master
+  175  git pull origin master
+  178  git sttaus
+  179  git status
+  180  git add .
+  181  git commit -m "new file"
+  182  git push -u origin master
+  183  git pull origin master
+  186  git init
+  187  git clone https://sandeep_prasad@bitbucket.org/sandeep_prasad/jason.git
+  188  git init
+  189  git status
+  190  git add .
+  191  git commit -m ."Adding fresh files"
+  192  git push -u origin master
+  193  git remote add origin https://sandeep_prasad@bitbucket.org/sandeep_prasad/jason.git
+  194  git status
+  195  git push -u origin master
+  196  git status
+  197  git add home.php
+  198  git commit -m "updating home page"
+  199  git add home.php
+  200  git commit -m "updating home page"
+  201  git add about.php 
+  202  git commit -m "updating home page"
+  203  git push -u origin master
+  205  git status
+  206  git status
+  207  git commit -m "home page modification"
+  208  git add home.php
+  209  git status
+  210  git commit -m "modified home page"
+  211  git push -u origin master
+  220  git --version
+  221  git-clone https://github.com/geerlingguy/ansible-role-nfs.git
+  222  git clone https://github.com/geerlingguy/ansible-role-nfs.git
+  230  git clone https://github.com/geerlingguy/ansible-role-ntp.git
+  231  git clone https://github.com/geerlingguy/ansible-role-ntp.git
+  239  git clone https://github.com/geerlingguy/ansible-role-ntp.git
+  240  git-clone https://github.com/geerlingguy/ansible-role-nfs.git
+  241  git clone https://github.com/geerlingguy/ansible-role-nfs.git
+  242  git clone https://github.com/geerlingguy/ansible-role-git.git
+  243  git clone https://github.com/geerlingguy/ansible-role-apache.git
+  244  git clone https://github.com/geerlingguy/ansible-role-security.git
+  245  git clone https://github.com/geerlingguy/ansible-role-ssh-chroot-jail.git
+  246  git clone https://github.com/geerlingguy/ansible-role-firewall.git
+  247  git clone https://github.com/dev-sec/ansible-os-hardening.git
+  248  git clone https://github.com/geerlingguy/ansible-role-ansible.git
+  249  git clone https://github.com/ahuffman/ansible-resolv.git
+  250  git clone https://github.com/Oefenweb/ansible-swapfile.git
+  251  git clone https://github.com/debops/debops.git
+  252  git clone https://github.com/Oefenweb/ansible-sysctl.git
+  253  git clone https://github.com/ruzickap/ansible-role-vmwaretools.git
+  254  git clone https://github.com/chmduquesne/ansible-network-interfaces.git
+  255  git clone https://github.com/jbronn/ansible-ssh-hardening.git
+  256  git clone https://github.com/bertvv/ansible-role-hosts.git
+  258  git clone https://github.com/sadsfae/ansible-nagios
+  292  mkdir git
+  293  cd git
+  297  git init .
+  299  git clone git@github.com:ucandoitrohit/rohit_repo.git
+  305  git branch
+  306  git branch user1_b
+  307  git branch
+  308  git checkout user1_b
+  309  git branch
+  311  git add .
+  312  git commit -m "user1_branch"
+  314  git pusg origin user1_b
+  315  git push origin user1_b
+  318  git branch prod
+  319  git branch 
+  320  git checkout prod
+  321  git branch 
+  324  git add abc4
+  326  git commit -m " production branch"
+  330  git checkout master
+  331  git checkout prod
+  336  git checkout master
+  338  git checkout prod
+  340  git checkout master
+  342  git branch
+  343  git branch prod
+  344  git checkou prod
+  346  git branch 
+  347  git checkout prod
+  348  git branch 
+  351  git add .
+  352  git commit -m "conflict"
+  353  git checkout master
+  356  git add .
+  357  git commit -m "master"
+  358  git merge master prod
+  365  git init .
+  367  git add .
+  368  git commit -m "first commit
+  371  git add .
+  372  git commit -m "second "
+  373  git log
+  376  git branch new
+  378  git add .
+  379  git commit -m "first"
+  381  git add .
+  382  git commit -m "second"
+  386  git add .
+  387  git commit -m "done"
+  388  git log
+  392  git init .
+  396  git add .
+  397  git commit -m "first"
+  399  git add .
+  400  git commit -m "second"
+  401  git log
+  402  git reset --soft 5d07adbc3052930582e2c441b2e0a648a743e874
+  403  git log
+  405  git status -s
+  406  git commit -m " commit after reset"
+  407  git branch
+  418  git init .
+  420  git add abc1
+  421  git commit -m "first"
+  423  git status
+  424  git status -s
+  425  git add abc2 
+  426  git status -s
+  427  git status -s
+  429  git add abc3 
+  430  git status -s
+  431  git stash
+  432  git status -s
+  433  git status pop
+  434  git stash pop
+  435  git status -s
+  436   git commit -m "statsh"
+  442  git status -s
+  454  git init .
+  455  git clone git@github.com:ucandoitrohit/Python3.git
+  460  git status
+  461  git add .
+  462  git status .
+  464  git commit -m "Code for uptime"
+  465  git rmeote -v
+  466  git remote -v
+  467  git push origin master
+  477  git add .
+  478  git commit -m "Print Function"
+  479  git push origin master
+  493  git commit -m delete
+  494  git add Github
+  495  git commit -m "delete"
+  496  git push origin master
+  497  git add 1.print.py 
+  498  git commit -m "Print Function"
+  499  git push origin master
+  503  git commit -m "Alexa AI" Auto.py 
+  504  history | grep git
+  505  git add Auto.py 
+  506  git add Auto.py 
+  507  git commit -m "Alexa"
+  508  git push origin master
+  517  git add nagios_master.sh 
+  518  git commit -m "Script for Adding Host in hostgroup changing the cfg file aslo"
+  519  git push origin master
+  523  history | grep git >> git_command

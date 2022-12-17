@@ -1,0 +1,9 @@
+- name: manage ufw
+  ufw:
+    port: "{{ item }}"
+    rule: allow
+  with_items:
+    - ssh
+    - ftp
+    - http
+    

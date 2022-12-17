@@ -1,0 +1,7 @@
+- name: copy content file
+  hosts: testip
+  tasks:
+  - name: copy content
+    copy:
+        content: "first\n"
+        dest: /home/rohit/file

@@ -1,0 +1,17 @@
+- name:  copy module
+  hosts: all
+  vars:
+    myfile: "~/example.txt"
+  tasks:
+    - name: creating a simple text file
+      copy:
+        dest: "{{ myfile }}"
+        content: 
+          line1
+          line2
+          etc
+
+
+# creating a simple  file
+# ansible-playbook -i file.yml
+

@@ -1,0 +1,23 @@
+- name: firewalld module
+  hosts: all
+  become: true
+  tasks:
+    - name: ngnix installed
+      yum:
+        name: ngnix
+        state: present
+      
+    - name: firewalld rule
+      firewalld:
+        service: "{{ item }}"
+        state: enabled
+        permanent: true
+        immediate: true
+      with_items:
+        - http
+        - https  
+
+# filewalld rue
+# ansible-playbook -i firewal.yml 
+
+

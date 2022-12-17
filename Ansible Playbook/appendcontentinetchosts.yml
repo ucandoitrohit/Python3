@@ -1,0 +1,15 @@
+- name: append the content on file when  file exists and restart services
+  hosts: all
+  tasks:
+  - lineinfile:
+        path: /etc/hosts
+        line: "x.x.x.123  server1.example.com   server1"
+        backup: yes
+        insertafter: x.x.x.122
+  - name: NRPE Service restart
+  
+    sysyemd:
+      name: NRPE
+      state: restarted
+
+

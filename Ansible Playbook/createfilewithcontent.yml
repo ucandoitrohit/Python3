@@ -1,0 +1,10 @@
+- name: create a file with Content
+  hosts: testip
+  tasks:
+  - name: create file
+    copy:
+        dest: /home/rohit/file
+        content: |
+           1
+           2
+

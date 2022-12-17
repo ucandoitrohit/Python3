@@ -1,0 +1,9 @@
+---
+- name: Install all Windows Security Updates 
+  hosts: all 
+  tasks:
+  - win_updates:
+      category_names:
+        - ServicePacks
+        - SecurityUpdates
+      reboot: yes

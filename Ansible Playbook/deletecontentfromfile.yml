@@ -1,0 +1,13 @@
+- name: delete the specific content from file
+  hosts: testip
+  tasks:
+  - name: delete the content
+    blockinfile:
+        path: /home/rohit/file
+        marker: "{{ item }}"
+        backup: yes
+    with_items:
+        - 2
+        - 4
+        - 7
+

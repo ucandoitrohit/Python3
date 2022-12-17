@@ -1,0 +1,15 @@
+- name: ping module
+  hosts: all
+  become: false
+  tasks:
+    - name: generate /etc/hosts file
+      blockinfile:
+        state: present
+        dest: /etc/hosts
+        content:
+          192.168.0.200   demo  demo.examle.com
+
+# Edit multi-line text by blockinfile module
+# ansible-playbook -i blockinfile.yml 
+
+

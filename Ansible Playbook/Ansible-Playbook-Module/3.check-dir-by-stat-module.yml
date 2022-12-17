@@ -1,0 +1,21 @@
+- name: ping module
+  hosts: all
+  become: false
+  vars:
+    directory: "/tmp"
+  tasks:
+    - name: check if the directory exists
+      stat:
+        path: "{{ directory }}"
+      register: dir_to_check
+
+    - name: directory found
+      debug:
+        msg: "Directory {{ directory }} present"
+      when: dir_to_check.stat.isdir is defined and dir_to_check.stat.isdir   
+
+# Check if a directory exists - anisble module stat
+# ansible-playbook -i stat.yml 
+# ansible-playbook -i stat.yml -e 'directory=/var'
+
+

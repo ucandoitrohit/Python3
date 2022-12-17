@@ -1,0 +1,13 @@
+- name: with item complex
+  hosts: all
+  vars:
+    web_service:
+      - httpd
+      - vsftpd
+  tasks:
+  - name: Start
+    service:
+      name: "{{ item }}"
+      state: started
+    with_items: "{{ web_service }}"  
+

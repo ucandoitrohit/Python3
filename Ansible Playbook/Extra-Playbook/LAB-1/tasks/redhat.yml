@@ -1,0 +1,11 @@
+- name: manage firewalld
+  firewalld:
+    service: "{{ item }}"
+    permanemt: true
+    immediate: true
+    state: enable
+  with_items:
+    - httpd
+    - vsftpd
+    - mariadb
+    

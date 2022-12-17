@@ -1,0 +1,17 @@
+- name: Deploy
+  hosts: all
+  tasks:
+  - name: Install
+    packages:
+      name: vsftpd
+      state: latest
+  - name: Enable
+    services: 
+      name: vsftpd
+      enable: true
+  - name: Create
+    copy:
+      content: "Hello World"
+      dest: /var/ftp/pub/README
+      force: no           # if file exists no change
+      mode: 0444

@@ -1,0 +1,5 @@
+---
+- name: Uninstall Putty
+  win_msi:
+    path: C:\Users\{{ user }}\Documents\{{ Tool }}
+    state: absent

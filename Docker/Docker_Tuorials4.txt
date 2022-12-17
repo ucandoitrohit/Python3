@@ -1,0 +1,1965 @@
+myDocker Tutorial
+=================
+Docker written in GO language
+
+Namespace technology used in container
+
+PID 
+Network Namespace
+IPC	inter process communication
+Mount
+UTS	unique time sharing
+
+Docker is Client-Server Architecture
+
+docker info
+
+docker --help
+
+
+docker image --help
+
+
+
+
+docker conatiner ls		== 	docker ps
+
+docker image ls		== 	docker ps -a
+docker conatiner ls -a	==
+
+
+docker  network ls		== 	
+
+
+docker images ls
+
+docker container run ubuntu cat /etc/os-release
+above cmd container deploy ubuntu and run the run and conatiner stoped
+
+docker container ls
+
+docker conatiner ls -a
+
+docker images 
+
+
+
+---
+Create a First Container
+========================================
+docker container run ubuntu cat /etc/redhat-release
+
+docker container run ubuntu sleep 30
+docker ps			==	docker conatiner ls
+
+after 30 sec
+
+docker container ls
+
+
+
+
+
+
+----
+
+docker container run nginx 			to download nginx conatiner
+docker container ls				running container
+
+docker container ls -a			all container shw
+
+
+docker container rm container_id
+
+
+----
+
+
+docker container ls
+
+docker container ls -a
+
+docker container start container_id
+
+docker container stop container_id
+
+
+
+--------
+-d = deattched meand run in background
+
+
+docker conatiner run -d ubuntu
+
+docker containter ls -a
+
+
+
+docker container run -it  ubuntu /bin/bash
+it will login in container
+
+-i = intractive
+-t = tty
+
+
+docker container ls
+
+docker container run -it  ubuntu /bin/bash
+it will run in backgroup deattached conatiner
+
+docker container ls -a
+
+
+
+---------------
+
+docker conatiner run centos
+
+docker conatiner ls -a			showing running contaainer
+or
+docker images 				show all images download
+
+
+
+docker container run -it centos /bin/bash	to run conatiner and login in conatin er
+cat /etc/redhat-release
+
+ctrl +pq				to exit from container but container will run in background
+ or
+exit   			exit from container and stopped
+
+
+
+-----
+docker container ls -aq			to get only conatiner id
+
+
+docker container rm $(docker container ls -aq)		to delete all avialable container
+
+
+---------------
+docker inspact
+
+
+docker container ls
+
+docker container run -d centos 
+
+docker container inspect container_id
+
+docker container inspect container_id | less
+
+
+172.17.0.2		container IP
+
+from outside this container can not access
+
+
+curl 172.17.0.2  from base dc
+
+-------
+logs
+
+docker container logs container_id
+docker container top container_Id		running process showing
+
+ps -aux
+
+dokcer container stats
+
+---
+Networking
+
+
+docker container ls
+nginx - 172.17.0.2
+
+to access from outside
+
+
+PORT Forwarding
+
+suppose docker hosts ip is 192.168.0.104
+container ip 172.17.0.2
+
+
+docker container run -d -p 3600:80 nginx
+
+netstat -plnt
+-----
+to specifiy container name
+----
+
+docker container run -d -p 3600:80 --name test_web nginx
+docker container ls
+
+
+Shell Access
+--------------
+docker container exec -it container_id /bin/bash
+
+apt-get
+
+Renmae container name
+
+docker container  rename container_id new_container_name
+
+
+docker container ls
+
+docker container restat container_id
+
+
+----------------
+Attached running container
+
+docker container run -itd centos /bin/bash
+or
+docker container run -itd --name os_name centos /bin/bash
+change the container name 
+
+
+docker container attach container id
+
+docker container stop container_id
+
+docker container kill container_id
+
+docker container wait container_id			waiting for stop
+
+docker container pause  conatiner_id			
+docker container unpause  conatiner_id			
+
+
+docker container prune			delete all exit container
+dokcer conatiner ls	
+dokcer conatiner ls	-a
+
+
+
+docker container port container_id
+
+
+-------------
+Copy file from Docker Host to Container
+====================================================
+
+
+Create a docker
+----
+
+docker container create centos sleep 60
+docker container ls -a
+
+docker container start container_id
+
+----
+check changes in docker conatiner
+
+docker container diff container_id
+
+C 	- create
+D	- delete
+A	- Added file or directory
+
+
+docker container run -it centos /bin/bash
+
+watch `docker container diff containe_id`
+
+
+to copy the file from docker host to container
+-----------------------------------------------------------------
+
+docker container cp test/ conatiner_id:/tmp/
+
+
+------
+Import/Export
+-------------------------
+docker container run -it centos /bin/bash
+yum update
+
+
+
+docker container create centos sleep 60
+docker container start conatiner_id
+docker ontainer attach container_id
+yum install git -y
+ctrl + pq
+
+docker container ls
+
+docker container export container_id > my_container_git.tar
+or
+docker container export container_id -o my_container_git.tar
+
+
+container has been exported
+
+Import
+--------
+
+docker image import my_container_git.tar my_import_git
+
+docker run -it my_import_git /bin/bash
+
+
+
+------
+Create image with running container
+-------------------------------------------------
+docker run -it centos /bin/bash
+or
+[root@dockr ~]# docker run --name rohi385932cont -it centos /bin/bash
+
+docker container commit --author "ROhit" -m "this is test commit" container_id new_image_name
+
+docker image ls
+
+docker container run -it my_image_new /bin/bash
+
+
+
+
+PUSH image on docker hub
+-----------------------------------------
+
+how to pull image from hub with specific version like ubuntu:14.04
+
+docker pull ubuntu:14.04
+
+dokcer image ls
+
+
+How to PUSH image to hub
+----------------------------------
+
+docker image tag image_name ucandoitrohit/tag_name
+or
+docker image tag git_centos ucandoitrohit/push_git_centos
+doker image
+
+
+docker push ucandoitrohit/push_git_centos
+
+docker login
+
+docker push ucandoitrohit/push_git_centos
+
+
+change format
+----------------
+
+docker images ls --format '{{.ID}} , {[.Repository}}'
+
+
+
+HISTORY
+-------------------
+docker image history image_name
+
+
+INSPECT
+----------
+
+docker image ls
+
+docker image inspect image_name
+
+
+SAVE/LOAD  difference between export and save
+----------------
+
+docker image save image_name:tag_name > imgae_name.tar
+docker image history image_name
+
+
+docker image load < image_name.tar
+
+
+In SAVE 
+All layered are contained by images
+Tag information
+Version information
+
+kept by SAVE command
+
+
+No layered are define in EXPORT image
+
+
+LOAD and IMPORT
+Keep all infomartion like name , repo, version , tag 
+
+
+IMPORT is keep only single layered
+
+save command saves whole image with history and metadata but export command exports only files structure (without history and metadata). 
+So the exported tar file will be smaller then the saved one
+
+
+
+DOCKERFILE
+--------------------
+
+vi DockerFile
+
+FROM centos:7.6						//base image name
+
+wq!
+
+
+
+docker image build -t new_centos:1 .
+docker image ls
+
+
+docker container run -it new_centos:1
+
+---------
+ 
+vi DockerFile
+
+FROM centos:7.6 
+RUN yum update && yum install tree -y
+
+
+docker image build -t new_centos:2 .
+docker image ls
+
+docker container run -it new_centos:2
+
+
+---------
+vi DockerFile
+
+FROM centos:7.6.3
+RUN yum update && yum install tree -y
+RUN touch /tmp/a
+RUN touch /tmp/b
+RUN touch /tmp/c
+RUN touch /tmp/d
+RUN touch /tmp/e
+
+docker image  build -t new_centos:3 .
+docker image ls
+
+docker container run -it new_centos:3
+
+
+docker image
+------------
+LABEL
+============
+
+vi DockerFile
+
+FROM centos:7.6.3
+LABEL name="Rohit"
+LABEL email="do@rohit.in"
+RUN yum update && yum install tree -y
+
+docker image build -t my_centos:4
+docker images
+
+docker image inspect my_centos:4
+
+-----
+ENV
+=======
+
+
+vi DockerFile
+
+FROM centos:7.6.3
+LABEL name="Rohit"
+LABEL email="do@rohit.in"
+ENV NAME rohit
+ENV PASS password
+ENV HOSTNAME domain.nic.in
+
+
+docker image build -t my_centos:5
+docker images
+docker container run -it my_centos:5
+env
+
+
+
+
+vi DockerFile
+
+FROM centos:7.6.3
+LABEL name="Rohit"
+LABEL email="do@rohit.in"
+ENV NAME rohit
+ENV PASS password
+ENV HOSTNAME domain.nic.in
+RUN pwd>/tmp/1stpwd.txt
+CMD cd /tmp/
+RUN pwd>/tmp/2ndpwd.txt
+
+docker image build -t my_centos:7 .
+docker images
+docker container run -it my_centos:6 bash
+cd /tmp
+ls
+cat 1stpwd.txt.
+/
+cat 2ndpwd.txt.
+/
+ 
+
+-------
+vi DockerFile
+
+FROM centos:7.6.3
+LABEL name="Rohit"
+LABEL email="do@rohit.in"
+ENV NAME rohit
+ENV PASS password
+ENV HOSTNAME domain.nic.in
+RUN pwd>/tmp/1stpwd.txt
+CMD cd /tmp/
+RUN pwd>/tmp/2ndpwd.txt
+WORKDIR /tmp
+RUN pwd>/tmp/3rdpwd.txt
+
+docker image build -t my_centos:7 .
+docker images
+docker container run -it my_centos:7 bash
+cd /tmp
+ls
+cat 1stpwd.txt.
+/
+cat 2ndpwd.txt.
+/
+cat 3rdpwd.txt
+/tmp
+
+
+--------------
+ADD, COPY, USER
+-------------------------------
+vi DockerFile
+
+FROM centos:7.6.3
+LABEL name="Rohit"
+LABEL email="do@rohit.in"
+ENV NAME rohit
+ENV PASS password123
+RUN pwd>/tmp/1stpwd.txt
+CMD cd /tmp/
+RUN pwd>/tmp/2ndpwd.txt
+WORKDIR /tmp
+RUN pwd>/tmp/3rdpwd.txt
+RUN yum update && yum install -y python && yum install ssh
+RUN useradd -d /home/rohit -g root -G sudo -m -p $(echo "$PASS" | openssl passwd -l stdin) $NAME
+RUN whoami > /tmp/1stwhoami.txt
+USER $NAME
+RUN whoami > /tmp/2ndwhoami.txt
+
+docker image build -t my_centos:8 .
+docker images
+docker container run -it my_centos:8 bash
+cd /tmp
+ls
+cat 1stpwd.txt.
+/
+cat 2ndpwd.txt.
+/
+cat 3rdpwd.txt
+/tmp
+cat /tmp/1stwhoami.txt
+root
+cat /tmp/2ndwhoami.txt
+rohit
+
+----------------
+COPY 
+
+vi DockerFile
+
+FROM centos:7.6.3
+LABEL name="Rohit"
+LABEL email="do@rohit.in"
+ENV NAME rohit
+ENV PASS password123
+RUN pwd>/tmp/1stpwd.txt
+CMD cd /tmp/
+RUN pwd>/tmp/2ndpwd.txt
+WORKDIR /tmp
+RUN pwd>/tmp/3rdpwd.txt
+RUN yum update && yum install -y python && yum install ssh
+RUN useradd -d /home/rohit -g root -G sudo -m -p $(echo "$PASS" | openssl passwd -l stdin) $NAME
+RUN whoami > /tmp/1stwhoami.txt
+USER $NAME
+RUN whoami > /tmp/2ndwhoami.txt
+RUN mkdir -p /tmp/project
+COPY testprojectfolder /tmp/project
+
+
+
+docker image build -t my_centos:8
+docker images
+docker container run -it my_centos:8
+cd /tmp
+ls
+cat 1stpwd.txt.
+/
+cat 2ndpwd.txt.
+/
+cat 3rdpwd.txt
+/tmp
+cat /tmp/1stwhoami.txt
+root
+cat /tmp/2ndwhoami.txt
+rohit
+cd /tmp/project
+ls
+
+------------------------------------------------------------------------------------------------
+ADD
+
+vi DockerFile
+
+FROM centos:7.6.3
+LABEL name="Rohit"
+LABEL email="do@rohit.in"
+ENV NAME rohit
+ENV PASS password123
+RUN pwd>/tmp/1stpwd.txt
+CMD cd /tmp/
+RUN pwd>/tmp/2ndpwd.txt
+WORKDIR /tmp
+RUN pwd>/tmp/3rdpwd.txt
+RUN yum update && yum install -y python && yum install ssh
+RUN useradd -d /home/rohit -g root -G sudo -m -p $(echo "$PASS" | openssl passwd -l stdin) $NAME
+RUN whoami > /tmp/1stwhoami.txt
+USER $NAME
+RUN whoami > /tmp/2ndwhoami.txt
+COPY testproject.tar.gz /tmp/project
+
+
+docker image build -t my_centos:8
+docker images
+docker container run -it my_centos:8
+cd /tmp
+ls
+cat 1stpwd.txt.
+/
+cat 2ndpwd.txt.
+/
+cat 3rdpwd.txt
+/tmp
+cat /tmp/1stwhoami.txt
+root
+cat /tmp/2ndwhoami.txt
+rohit
+cd /tmp/project
+ls
+testproject.tar.gz
+
+
+
+
+
+vi DockerFile
+
+FROM centos:7.6.3
+LABEL name="Rohit"
+LABEL email="do@rohit.in"
+ENV NAME rohit
+ENV PASS password123
+RUN pwd>/tmp/1stpwd.txt
+CMD cd /tmp/
+RUN pwd>/tmp/2ndpwd.txt
+WORKDIR /tmp
+RUN pwd>/tmp/3rdpwd.txt
+RUN yum update && yum install -y python && yum install ssh
+RUN useradd -d /home/rohit -g root -G sudo -m -p $(echo "$PASS" | openssl passwd -l stdin) $NAME
+RUN whoami > /tmp/1stwhoami.txt
+USER $NAME
+RUN whoami > /tmp/2ndwhoami.txt
+ADD testproject.tar.gz /tmp/project
+
+
+docker image build -t my_centos:8
+docker images
+docker container run -it my_centos:8
+
+cd /tmp/project
+ls
+testproject						//extracted file
+
+With ADD cmd it will extract th tar file in container
+
+With COPY it will copy only
+
+
+-------
+CMD
+Suppose i want to install python on continer and need python shell
+>>>
+
+
+vi DockerFile
+
+FROM centos:7
+LABEL name="Rohit"
+LABEL email="do@rohit.in"
+ENV NAME rohit
+ENV PASS password123
+RUN pwd>/tmp/1stpwd.txt
+CMD cd /tmp/
+RUN pwd>/tmp/2ndpwd.txt
+WORKDIR /tmp
+RUN pwd>/tmp/3rdpwd.txt
+RUN yum update && yum install -y python && yum install ssh
+RUN useradd -d /home/rohit -g root -G sudo -m -p $(echo "$PASS" | openssl passwd -l stdin) $NAME
+RUN whoami > /tmp/1stwhoami.txt
+USER $NAME
+RUN whoami > /tmp/2ndwhoami.txt
+ADD testproject.tar.gz /tmp/project
+CMD ["pyton"]
+
+
+docker image build -t my_centos:9 .
+docker images
+docker container run -it my_centos:9 bash
+Python
+>>>
+
+
+------------------
+
+
+vi DockerFile
+
+FROM centos:7.6.3
+LABEL name="Rohit"
+LABEL email="do@rohit.in"
+ENV NAME rohit
+ENV PASS password123
+RUN pwd>/tmp/1stpwd.txt
+CMD cd /tmp/
+RUN pwd>/tmp/2ndpwd.txt
+WORKDIR /tmp
+RUN pwd>/tmp/3rdpwd.txt
+RUN yum update && yum install -y python && yum install ssh
+RUN useradd -d /home/rohit -g root -G sudo -m -p $(echo "$PASS" | openssl passwd -l stdin) $NAME
+RUN whoami > /tmp/1stwhoami.txt
+USER $NAME
+RUN whoami > /tmp/2ndwhoami.txt
+ADD testproject.tar.gz /tmp/project
+CMD ["sh"]
+
+
+docker image build -t my_centos:9
+docker images
+docker container run -it my_centos:9
+Python
+>>>
+
+
+----------------------------------
+DOCKER EXPOSED
+
+vi DockerFile
+
+FROM centos:7
+ENV NAME rohit
+ENV PASS password123
+RUN mkdir -p /var/run/sshd
+RUN yum update
+RUN yum install -y openssh-server
+RUN useradd -d /home/rohit -g root -G sudo -m -p $(echo "$PASS" | openssl passwd -l stdin) $NAME
+ CMD ["/usr/sbin/sshd", "-D"]
+
+
+docker image build -t my_centos:9
+docker images
+docker container run -P -itd my_centos:9
+docker container ls
+docker container inspect container_id
+172.17.0.2
+
+from host machine
+ssh rohit@172.17.0.2
+
+
+
+vi DockerFile
+
+FROM centos:7
+ENV NAME rohit
+ENV PASS password123
+RUN mkdir -p /var/run/sshd
+RUN yum update
+RUN yum install -y openssh-server
+RUN useradd -d /home/rohit -g root -G sudo -m -p $(echo "$PASS" | openssl passwd -l stdin) $NAME
+EXPOSED 22
+CMD ["/usr/sbin/sshd", "-D"]
+
+
+docker image build -t my_centos:9
+docker images
+docker container run -P -itd my_centos:9
+docker container ls
+
+note down the port id 32788
+note down the base host ip address 192.168.25.20
+
+go to base machine
+
+ssh rohit@192.168.25.20 -p 32788
+
+
+
+Multiple Port Exposed
+------------------------
+ESXPOSE 22 80
+
+
+EntryPoint
+--------------------
+
+when container run then it will run
+
+vi DockerFile
+
+FROM centos:7
+ENV NAME rohit
+ENV PASS password123
+RUN mkdir -p /var/run/sshd
+RUN yum update
+RUN yum install -y python tree
+ENTRYPOINT ["tree"]
+
+
+docker image build -t my_centos:9
+docker images
+docker container run -P -it my_centos:9
+
+
+Use case of entrypoint
+
+vi DockerFile
+
+FROM centos:7
+ENV NAME rohit
+ENV PASS password123
+RUN mkdir -p /var/run/sshd
+RUN yum update
+RUN yum install -y python tree
+ENTRYPOINT ["tree"]
+CMD ["--version"]
+
+docker image build -t my_centos:9
+docker images
+docker container run -P -it my_centos:9
+
+
+tree 1.432
+-------------
+
+vi DockerFile
+
+FROM centos:7
+ENV NAME rohit
+ENV PASS password123
+RUN mkdir -p /var/run/sshd
+RUN yum update
+RUN yum install -y python tree
+COPY test.sh /tmp/
+ENTRYPOINT ["/tmp/tesh.sh"]
+
+docker image build -t my_centos:10
+docker images
+docker container run -it my_centos:10 rohit
+
+This is first line
+name is rohit
+
+shell excuted
+tesh.sh
+#!/bin/bash
+echo "this is first lne"
+echo "name $1"
+
+---
+Her $1 is argument
+
+---------------------
+VOLUME
+
+
+Types:
+
+Volume
+Bind Mount
+Tmpfs mount
+
+
+Volume - managed by docker
+Bind Mount  - host space used like /tmp
+Tmfs mount - 
+
+docker volume ls
+
+docker images ls
+
+docker container run -d --name mysql1 -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql
+docker volume ls
+docker volume inspect volume_id
+
+
+
+new volume create by docker only 
+
+docker images inspect mysql | grep volume
+/var/lib/mysql
+
+docker volume inspect volume_id
+
+on base machine
+
+cd /var/lib/docker/volume/volume_id
+
+docker container ls
+
+docker container exec -it container_id bash
+docker container ls
+docker container rm -f container_id
+
+
+
+Another container
+docker container run -d --name mysql1 -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql
+docker container exec -it container_id bash
+check the database 
+
+database is lost
+
+docker container inspect volum_id
+
+Specify the Volume Name
+===========================
+docker volume ls
+get old volume where we create a database and attached to new container
+
+
+docker container run -itd -v voune_name:/var/lib/mysql  mysql
+
+docker container exec -it vontainer_id bash
+
+mysql
+show databasesl;
+
+
+docker container run -d --name xyz_db -v abc:.var/lib/mysqk -e MYSQL_ALLOW_EMPY_PASSWORD=true mysql
+
+it will create abc volume
+
+
+
+dockr volume create mytest1
+dockr volume create mytest2
+dockr volume ls
+docker container run -d --name xyz_db -v abc:.var/lib/mysqk -e MYSQL_ALLOW_EMPY_PASSWORD=true mysql
+docker container ls
+
+docker volume ls
+
+docker volume rm mytest1 mytest2
+
+docker volume prune	(unused volume delete)
+docker volume ls
+
+
+
+to remove used volume
+----------------------
+docker container rm id
+docker volume prune
+
+
+
+Bind
+=====
+
+docker container run -it -v /home/rohit/:tmp/test centos:7 bash
+docker container run -it -v $(pwd):tmp/test centos:7  bash
+
+docker container run -it -mount type=bind,source=$(pwd),target=/tmp/test centos:7  bash
+
+cd /tmp/test
+ll
+
+
+
+Docker Networking
+=================
+
+docker network ls
+
+bridge
+host
+none
+
+
+
+docker network inspect bridge
+
+docker container ls
+dockr container run -itd nginx
+
+docker network inspect bridge
+
+
+docker container run -it ubuntu:14 bash
+ping 8.8.8.8
+
+
+docker ntwork create --help
+
+
+
+
+docker ntwork creat -d bridge network_name
+
+docker network ls
+
+
+
+docker container run -it --network test ubuntu:14.04 bash
+
+docker containr inspect con_id
+
+
+
+
+docker container run --network=test  -itd -P ngnx
+docker container run -itd -P ubuntu:14.0 bash
+  
+
+How to connect two different subnet container
+====================================================
+example:
+172.17.0.1 - ubuntu
+172.18.0.1 - nginx
+
+
+docker container run --network=test -itPd nginx
+in container
+
+wget host_ip:port
+wget 192.168.25.40:3334
+
+
+
+
+Docker Network DNS
+====================
+docker conatiner run -it ubuntu:14.0 bash
+hostname
+tr6344rfg5434
+
+docker conatiner run -it ubuntu:14.0 bash
+hostname
+345tye343565
+
+ping tr6344rfg5434
+
+
+
+docker network create test
+
+docker container run --network=test -it ubuntu:14.04 bash
+hostname
+43tr32435654
+copy the hostname
+
+dcker conatienr ls
+
+docker container run --network=test -it ubuntu:14.04 bash
+ping 43tr32435654
+
+Custom Network created is already DNS is enable
+
+
+Summary
+----------
+By default network for docker like bridge
+DNS is not enabled
+
+Network created custom DNS is enabled
+
+
+
+Host network
+===============
+docker container run -it --network=host ubuntu:14.04 bash
+ifconfig
+172.17.0.1
+192.168.25.20
+
+when we define a host network to container then all the process of container will be isloated
+but the network will be not a isoloated it will atched to docker host
+
+
+
+No Network Define
+===============
+docker container run -it --network=none ubuntu:14.04 bash
+ifconfig
+
+
+How to connect one container with multiple network
+==============================================================
+docker network sl
+docker network create test
+docker container run -it --network bridg ubntu:14.0 bash
+ifconfig
+
+exit
+docker network connect test container_id
+
+docker network diconnect test container_id
+
+Docker Registry-Repository
+===============================
+download the image from docker.io
+
+docker image pull ubuntu
+
+
+Private Registry Server
+---------------------------
+
+docker image pull registry
+docker container run -d -p 5000:5000 --name simple_registry registry
+docker container ls
+in browser
+
+http://127.0.0.1:5000/v2/_catalog
+
+How too push image to our registry
+-------------------------------------
+
+docker image ls
+
+docker image tag redis:apline 127.0.0.1:5000/redis:apline
+docker image ls
+
+Push on local registry server
+--------------------------------
+docker image push 127.0.0.1:5000/redis:apline
+
+
+On browser check it
+http://127.0.0.1:5000/v2/_catalog
+
+
+Pull from our registry
+---------------------------
+docker image pull 127.0.0.1:5000/redis:apline
+
+
+Docker use only https secure hub not http
+only 127.0.0.0/8 is case we can use for http
+
+
+vim daemon.json
+{
+ "insure-registries": ["127.0.0.1:5000"]
+}
+or
+{
+ "insure-registries": ["10.0.0.15:5000"]
+}
+
+mv daemon.json /etc/docker/
+
+systemctl restart docker
+
+
+
+How to create https certificate
+-----------------------------------
+openssl req -newkey rsa:4096 -nodes -sha256 -keyout certs/domain.key -x509 -days 365 -out certs/domain.crt
+
+ common Name: repo.docker.local
+
+domain.crt
+domain.key
+
+Copy the certificate
+--------------------------
+cd /etc/docker
+mkdir cert.d
+cd cert.d
+mkdir repo.docker.local:5000
+cd domain.crt /etc/docker/cert.d/repo.docker.local:5000/ca.cert
+
+systemctl restart docker
+
+Restart the registry also
+---------------------------
+
+docker container run -d -p 5000:5000 --name secure_registry -v $(pwd)/certs/:/certs -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key registry
+
+docker image tag mairdb repo.docker.local:5000/maridb
+
+docker image push repo.docker.local:5000/maridb
+
+
+
+Docker Registry With Basic Authentication
+============================================
+
+mkdir auth
+docker container run --entrypoint htpasswd registry -bnB rohit password > auth/passwd
+
+docker container ls
+
+docker container run -d 
+-p 5000:5000 --name registry_own
+-v "$(pwd)"/auth:/auth
+-v "$(pwd)"/certs:certs
+-e "REGISTRY_AUTH=htpasswd"
+-e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm"
+-e  REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
+-e  REGISTRY_HTTP_TLS_CERTIFCATE=/certs/domain.crt
+-e  REGISTRY_HTTP_TLS_KEY=/certs/domain.key
+registry
+
+
+docker container ls
+
+docker image ls
+
+docker image push repo.docker.local:5000/maridb 
+
+docker login repo.docker.local:5000
+rohit
+password
+
+docker image push repo.docker.local:5000/maridb 
+
+
+Docker Compose
+==================
+Databse Container
+
+docker container run --name mysql_name -e MYSQL_PASSWORD=mypassword -d mysql:5.7
+docker container inspect cont_id
+get IP address
+172.17.0.2
+
+
+docker container run --name wordpress_name -e WORDPRESS_DB_HOST=172.17.0.2:3306 -e WORDPRESS_DB_USER=root -e WORDPRESS_DB_PASSWORD=mypassword -d wordpress
+
+
+docker container inspct cont_id
+get IP address
+
+
+
+Deploy Wordpress 
+-------------------------
+vi docker-compose.yml
+
+version: '3.3'
+services:
+	db:
+		images: mysql:5.7
+		volumes:
+			- db_data:/var/lib/mysql
+		restart:always
+		environment:
+			- MYSQL_ROOT_PASSWORD=password
+			- MYSQL_DATABASE=wordpress
+			- MYSQL_USER=wordpress
+			- MYSQL_PASSWORD=wordpress
+	wordpress:
+		depends_on:
+			- db
+		images: wordpress:latest
+		ports:
+			- "8000:80"
+		restart: always
+		environment:
+			- WORDPRESS_DB_HOST=db:3306
+			- WORDPRESS_DB_USER=wordpress
+			- WORDPRESS_DB_PASSWORD=wordpress
+			- WORDPRESS_DB_NAME=WORDPRESS
+volumes:
+	db_data: {}
+
+
+---------------
+docker-compose up -d
+docker container ls
+
+docker-compose down
+
+docker volume ls
+
+docker-compose down --volumes
+
+------------------------
+First Docker Compose
+--------------------------
+vi docker-compose.yml
+version: '3'
+services:
+   webapp1:
+      image: nginx
+      ports:
+      - "8000:80"
+
+
+docker-compose up -d
+
+docker container ls
+
+docker network ls
+docker volume ls
+
+-----------------------------
+vi docker-compose.yml
+version: '3'
+services:
+   webapp1:
+      image: nginx
+      ports:
+      - "8000:80"
+   webapp2:
+      image: apache
+      ports:
+      - "8001:80"
+
+docker-compose up -d
+
+---------------------------
+Rename the Docker compose file
+===================================
+
+vi docker-compose_new_file_name.yml
+version: '3'
+services:
+   webapp1:
+      image: nginx
+      ports:
+      - "8000:80"
+
+
+
+docker-compose -f docker-compose_new_file_name.yml up -d 
+
+docker-compose -f docker-compose_new_file_name.yml down
+
+
+Docker compose Command
+---------------------------
+docker-compose --help
+
+down - all will remove 
+up --  new container , network volume 
+create-- container will ceate not network
+start
+stop
+rm --  container will delete but network will not delete
+
+
+
+
+docker-compose create
+or
+docker-compose up --no-start
+
+
+
+docker-compose rm 
+
+
+
+docker-compose start
+docker container ls
+
+docker-compose stop
+
+
+
+
+
+Pause and unpause
+--------------------
+
+docker-compose up -d
+docker conatiner ls
+docker-compose ps
+docker-compose pause
+docker-compose unpause
+
+
+Kill
+--------
+docker-compose kill
+docker-compose ps
+docker-compose start
+docker-compose port Service_name 80
+or
+docker-compose webapp1 80
+docker-compose logs
+
+
+docker-compose exec webapp1 ls
+
+
+Scale,Top
+----------------
+vi docker-compose.yml
+version: '3'
+services:
+   webapp1:
+      image: nginx
+   webapp2:
+      image: apache
+
+
+docker-compose up -d
+docker-compose ps
+
+docker-compose scale webapp1=4 webapp=2
+docker-compose ps
+
+docker-compose down
+
+
+Bind Mount
+--------------
+vi docker-compose.yml
+version: '3'
+services:
+   frontend:
+      image: 'httpd:alpine'
+   	ports:
+	 - "8000:80"
+	volumes:
+	 - ./ot/:/usr/local/apache2/htdocs/
+
+docker-compose up -d
+
+--------------------
+vi dockerfile
+FROM python:3.4
+ADD . /code
+WORKDIR /code
+RUN pip install  -r requiremnet.txt
+CMD ["python", "app.py"]
+
+
+cat requiremnet.txt
+flash
+redis
+
+
+vi docker-compose.yml
+version: '3'
+services:
+   web:
+     build: .
+     ports:
+     - "5000:5000"
+   redis:
+     images: "redis:alpine"
+
+
+docker-compose up -d
+
+
+
+vi docker-compose.yml
+version: '3'
+services:
+   web:
+     build: .
+     ports:
+     - "5000:5000"
+     image: 'ucandoitrohit/myimage
+   redis:
+     images: "redis:alpine"
+
+
+
+docker-compose up -d
+
+vi dockerfile
+FROM python:3.4
+ADD . /code
+WORKDIR /code
+RUN pip install  -r requiremnet.txt
+CMD ["python", "app.py"]
+
+
+cat requiremnet.txt
+flash
+redis
+
+
+
+
+
+
+
+vi docker-compose.yml
+version: '3'
+services:
+   web:
+     build:
+        context: .
+        dockerfile: Dockerfile
+        args:
+         - PYTHON_VERSION=3.4-apline
+     image: python-redis-2
+     ports:
+     - "5000:5000"
+   redis:
+     images: "redis:alpine"
+
+
+vi dockerfile
+ARG PYTHON_VERSION
+FROM python:$PYTHON_VERSION
+ADD . /code
+WORKDIR /code
+RUN pip install  -r requiremnet.txt
+CMD ["python", "app.py"]
+
+
+cat requiremnet.txt
+flash
+redis
+
+docker-compose up -d
+
+
+
+
+Network and Volume docker compose
+=========================================
+version: '3'
+services:
+	web:
+		build:
+			context: .
+			dockerfile: Dockerfile
+			args: 
+				- PYTHON_VERSION=3.4-alpine
+		image: ucandoitrohit/python-redis
+		ports:
+			- "5000:5000"
+		networks:
+			- appnetwork
+	redis:
+		image: "redis:alpine"
+		volumes:
+			- myredisdata:/data
+		networks:
+			- appnetwork
+
+
+	redis2:
+		image: "redis:alpine"
+		volumes:
+			- myredisdata2:/data
+		networks:
+			- appnetwork2
+   
+networks:
+   appnetwork:
+   appnetwork2:
+
+volumes:
+   myrdisdata:    
+   myrdisdata2:    
+
+vi dockerfile
+ARG PYTHON_VERSION
+FROM python:$PYTHON_VERSION
+ADD . /code
+WORKDIR /code
+RUN pip install  -r requiremnet.txt
+CMD ["python", "app.py"]
+
+
+docker-compose up 
+
+
+
+
+
+
+Variable in docker compose
+----------------------------
+version: '3'
+services:
+   web:
+     build: .
+     ports:
+      - "5000:5000"
+     environment:
+      - Name=Rohit
+      - Add= Delhi
+   redis:
+     images: "redis:alpine"
+
+
+docker-compose up
+
+docker-compose exec web env
+
+vi dockerfile
+ARG PYTHON_VERSION
+FROM python:$PYTHON_VERSION
+ADD . /code
+WORKDIR /code
+RUN pip install  -r requiremnet.txt
+CMD ["python", "app.py"]
+
+
+
+vi docker-compose.yml
+version: '3'
+services:
+   web:
+     build: .
+     ports:
+      - "5000:5000"
+     environment:
+      - env.txt
+   redis:
+     images: "redis:alpine"
+
+
+vi env.txt
+Name=Rohit
+Add= Delhi
+
+
+docker-compose up
+docker-compose exec web env
+
+
+---------------------
+vi env.txt
+PYTHON_VERSION=3.4
+REDIS_IMAGE=redis:alpine
+
+vi dockerfile
+ARG PYTHON_VERSION
+FROM python:$PYTHON_VERSION
+ADD . /code
+WORKDIR /code
+RUN pip install  -r requiremnet.txt
+CMD ["python", "app.py"]
+
+
+vi docker-compose.yml
+version: '3'
+services:
+   web:
+     build:
+	context: .
+	dockerfile: Dockerfile
+	args:
+	- PYTHON_VERSION=${PYTHON_VERSION}
+     image: python-redis-1
+     ports:
+      - "5000:5000"
+   redis:
+     images: ${REDIS_IMAGE}
+
+
+
+docker-compose up
+
+
+Docker Swarm
+==============
+Maximum 7 Master can build for master
+
+
+
+
+
+
+Build 3 Node
+Install docker in all node
+
+on Master
+node 1 -  
+docker swarm init --advertise-addr 192.168.2.2 ( if another node want to mastr
+or
+docker swarm init
+docker node ls
+
+
+Docker Swarm
+======================
+Master 
+docker swarm init
+Output:
+docker swarm join --token token_number Master_IP
+
+docker node ls
+
+
+On Node1
+-----------
+docker swarm join --token token_number Master_IP
+
+On Node2
+-----------
+docker swarm join --token token_number Master_IP
+
+
+On Maaster
+-----------
+docker node ls
+
+
+
+Add Remove node from docker swarm
+=====================================
+On MAster
+-----------
+To get token Number for the worker
+-----------------------------------
+docker swarm join-token worker
+
+get token number to become a master
+--------------------------------
+docker swarm join-token manager
+
+
+To remove node from cluster
+----------------------------
+On Node02
+docker swarm leave 
+docker info
+
+to remove from master also
+----------------------------------
+On Master
+docker node rm worker _id
+docker node ls
+
+Docker Swarm Promote and Demote
+----------------------------------
+On Master
+
+docker node inspect worker01
+
+TO make Worker as A MAnager or Master
+----------------------------------------
+On Master
+docker node promote worker01 worker02
+
+docker  node ls
+
+docker node depromote worker01 worker02
+
+docker  node ls
+
+
+Docker Swarm Service
+========================
+On MAster
+--------------
+docker container run -it alpine ping 192.168.43.8
+docker service create -d alpine ping 192.168.43.8
+docker service ls
+
+docker service create -d --replicas 4 alpine ping 192.168.43.8
+docker service ls
+
+docker service ps vd
+
+
+On Node
+----------
+Delete the worker
+docker container ls
+docker container rm  -f cont_id
+
+
+
+Docker Swarm Scale and Port Mapping
+--------------------------------------
+On MAster
+docker service create -d --replicas 2 alpine ping 192.168.43.8
+docker service create -d --replicas 3 alpine ping 192.168.43.2
+
+docker service ls
+
+docker service scale service_id=7
+
+docker service rm service_id
+docker service ls
+
+
+
+Port Mappig
+--------------
+docker service create -d -p 8090:80 nginx
+docker service ls
+
+
+Docker Swarm Service Mode
+===========================
+docker node ls
+
+docker service create -d --replicas=3 alpine ping 192.168.25.4
+docker service ls
+
+
+
+docker service create \
+  --name=viz \
+  --publish=8080:8080/tcp \
+  --constraint=node.role==manager \
+  --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
+  manomarks/visualizer
+
+
+
+docker service create --mode=globalalpine  ping 8.8.8.8
+
+
+
+
+Docker Swarm Label and constraint
+=======================================
+Create container on MAster node only
+
+docker service create --replicas=3 -constraint="node.role==manager" alpine ping 192.168.25.10
+
+docker service create --replicas=3 -constraint="node.role==worker" alpine ping 192.168.25.10
+
+
+docker node update --label-add="ssd=true" worker01
+
+docker service create --constraint="node.labels.ssd==true" --replicas=3 -d alpine 192.169.15.10
+
+docker service ls
+
+
+
+
+
+
+
+Apache
+https://medium.com/@vi1996ash/steps-to-build-apache-web-server-docker-image-1a2f21504a8e
+
+
+
+
+
+
+
+
+
+
+
+[root@dockr ~]# cat Dockerfile
+FROM centos:latest
+MAINTAINER Rohit-ro385932
+RUN yum -y install httpd
+COPY index.html /var/www/html/
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+EXPOSE 80
+[root@dockr ~]# cat index.html
+<html>
+<body>
+
+<h1> Welcome Docker Example !!!! </h1>
+
+
+</body>
+</html>
+[root@dockr ~]#
+
+
+
+
+
+
+[root@dockr ~]# docker build -t rohi385932img:httpd-web .
+
+[root@dockr ~]# docker run -dit --name rohi385932cont -p 80:80 rohi385932img:httpd-web
+
+
+[root@dockr ~]# curl -i localhost
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[root@dockr ~]# docker run --name rohi385932cont -it centos /bin/bash
+[root@021a98722e3c /]# docker container ls -a
+bash: docker: command not found
+
+[root@021a98722e3c /]# cd /tmp/
+
+[root@021a98722e3c tmp]# touch 1 2 3 4 5 6 7  8 99
+
+[root@021a98722e3c tmp]# [root@dockr ~]#
+[root@dockr ~]#
+[root@dockr ~]#
+
+[root@dockr ~]# docker container ls
+CONTAINER ID        IMAGE               COMMAND             CREATED              STATUS              PORTS               NAMES
+021a98722e3c        centos              "/bin/bash"         About a minute ago   Up About a minute                       rohi385932cont
+
+[root@dockr ~]# docker container ls -a
+CONTAINER ID        IMAGE               COMMAND             CREATED              STATUS              PORTS               NAMES
+021a98722e3c        centos              "/bin/bash"         About a minute ago   Up About a minute                       rohi385932cont
+[root@dockr ~]#
+
+
+[root@dockr ~]# docker container ls
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+021a98722e3c        centos              "/bin/bash"         3 minutes ago       Up 3 minutes                            rohi385932cont
+
+[root@dockr ~]# docker container commit --author "Rohit Vishwakarma" -m "Creating Image from Container with custom name" 021a98722e3c rohi385932img
+sha256:3d0f41c5b754e0a554afad9fb1f966232b671ccb68306cda51c65ee8e8ad3c02
+
+[root@dockr ~]# docker image ls
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+rohi385932img           latest              3d0f41c5b754        12 seconds ago      202 MB
+my-container            latest              7b5a492133b6        3 months ago        109 MB
+
+
+
+
+FROM nginx:alpine
+COPY . /usr/share/nginx/html
+
+
+
+

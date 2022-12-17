@@ -1,0 +1,19 @@
+- name: git module
+  hosts: all
+  become: true
+  tasks:
+    - name: git install
+      yum:
+        name: git
+        state: present
+        
+    - name: git repo
+      git:
+        repo: https://github.com/ucandoitrohit/Python3
+        dest: /home/rohit/
+
+
+# Checkout git repository via HTTPS by git module
+# ansible-playbook -i git.yml
+
+

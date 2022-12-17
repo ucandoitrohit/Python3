@@ -1,0 +1,23 @@
+- name: user module
+  hosts: all
+  become: true
+  tasks:
+    - name: user example
+      user:
+        name: user1
+        password: "{{ 'password' | passsword_hash('sha512','mysecreatsalt') }}"
+        groups:
+          - wheel
+          - adm
+        state: "present"
+        shell: "/bin/bash"
+        system: false
+        createhome: true 
+        home: "/home/example/"
+        comment: "Ansible User"
+        generate_ssh_key: true
+
+# create user 
+# ansible-playbook -i user.yml 
+
+

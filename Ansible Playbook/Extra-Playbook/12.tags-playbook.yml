@@ -1,0 +1,24 @@
+- name: tag
+  hosts: all
+  tasks:
+  - name: install net packages
+    package:
+      name: "{{ item }}"
+      state: installed
+    with_items:
+      - nmap
+      - wireshark
+    tags:
+      - net-pkg
+
+  - name: install lamp
+    package:
+      name: "{{ item }}"
+      state: installed
+    with_items:
+      - httpd
+      - mysql
+    tags:
+      - lamp
+
+#ansible-playbook playbook.yml --tags 'lamp'      #it will run only lamp task

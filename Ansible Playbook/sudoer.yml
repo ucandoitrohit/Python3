@@ -1,0 +1,9 @@
+- name: make user as sudo user
+  hosts: testip
+  tasks:
+  - lineinfile:
+        path: /etc/sudoers
+        line: "{{ item }}"
+        backup: yes
+    with_items:
+        - rohit ALL=(ALL) ALL

@@ -1,0 +1,11 @@
+- name: ping module
+  hosts: all
+  tasks:
+    - name: debug message
+      debug:
+        msg: Hello Word
+
+# print Text/Variable during execution ansible module debug
+# ansible-playbook -i debug.yml 
+
+

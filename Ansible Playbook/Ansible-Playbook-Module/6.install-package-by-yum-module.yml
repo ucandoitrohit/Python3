@@ -1,0 +1,13 @@
+- name: yum module
+  hosts: all
+  become: false
+  tasks:
+    - name: install package
+      yum:
+        name: wget
+        state: present
+        
+# Install package in RedHat by yum/dnf
+# ansible-playbook -i yum.yml
+
+
