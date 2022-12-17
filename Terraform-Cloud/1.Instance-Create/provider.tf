@@ -5,7 +5,6 @@ provider "aws" {
 }
 
 /*
-new
 Instance Create
   Genreate SSH key 
     ssh-keygen -t rsa 
