@@ -27,7 +27,7 @@ if($ErrorProcess){
         Write-Warning $Error[0].Exception.Message
         $errorvcenter = $Error[0].Exception.Message
         $Error[0].Exception.Message | Out-File "$ReportExport\ConnectionError.txt"
-        Send-MailMessage -SmtpServer 10.60.95.11 -Port 25 -To rohit.vishwakarma -From automation.user -Subject "Daily Health Check Report - $VCServer" -Body "<b>$errorvcenter<b>" -BodyAsHtml
+        Send-MailMessage -SmtpServer 0.0.0.0 -Port 25 -To rohit.vishwakarma -From automation.user -Subject "Daily Health Check Report - $VCServer" -Body "<b>$errorvcenter<b>" -BodyAsHtml
         exit
     }
     else
