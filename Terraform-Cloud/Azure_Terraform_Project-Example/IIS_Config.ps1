@@ -1,4 +1,5 @@
-﻿Import-Module ServerManager
-Add-Windowsfeature Web-Server -includeallsubfeature
-Add-Windowsfeature Web-Asp-Net45
-Add-Windowsfeature NET-Framework-features
+﻿import-module servermanager
+add-windowsfeature web-server -includeallsubfeature
+add-windowsfeature Web-Asp-Net45
+add-windowsfeature NET-Framework-Features
+Set-Content -Path "C:\inetpub\wwwroot\Default.html" -Value "This is the server $($env:computername) !"
