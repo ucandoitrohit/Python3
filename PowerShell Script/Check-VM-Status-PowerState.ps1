@@ -1,5 +1,3 @@
-VM is Down			
-			
 $vcentername = @("vcenter")			
 $credential = Get-Credential			
 Connect-VIserver -Server $vcentername -Credential $credential -Force			
