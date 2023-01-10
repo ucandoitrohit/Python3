@@ -3,7 +3,6 @@ $passwd = Get-Content "C:\pass.txt" | ConvertTo-SecureString
 $credentials = New-Object System.Management.Automation.PSCredential ("username@domain.com",$passwd )
 
 Connect-VIServer -Server vCenter-NAme   -Credential $credentials
-
 [string] $dt2 = get-date
 [string] $dt3 = get-date -Format dd/MM/yyyy
 $OutputObj =@()
