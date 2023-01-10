@@ -4,9 +4,10 @@ $passwd = Get-Content "C:\pass.txt" | ConvertTo-SecureString
 $credentials = New-Object System.Management.Automation.PSCredential ("username@domain.com",$passwd )
 $vc1 = 'vc1'
 $vc2 = 'vc2'
-$vc3 = 'vc3'
+$vc3 = 'vc3server'
+
 $vcs =@($vc1, $vc2, $vc3)
-[string] $dt3 = get-date -Format dd/MM/yyyy
+[string]$dt3 = get-date -Format dd/MM/yyyy
 $datefile = get-date -uformat '%m-%d-%Y-%H%M%S'
 $parent_id   = Split-Path -Parent $MyInvocation.MyCommand.Definition
 #$vcs = Get-Content ($parent_id + "\vc.txt")
