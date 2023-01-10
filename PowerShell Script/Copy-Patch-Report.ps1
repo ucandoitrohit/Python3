@@ -1,7 +1,3 @@
-#JMPDC1EU08
-#JMPDC1EU10
-
-
 cls
 Function Get-Menu{
     param (
