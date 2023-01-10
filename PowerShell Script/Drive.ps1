@@ -9,7 +9,8 @@ Select-Object DeviceID,
 #>
 
 #$serverip = Get-Content .\powershell\ip.txt
-$serverip ="localhost","bvbnvnbvnbvnbvnv","localhost", "hdfs"
+#nw
+$serverip ="localhost","bvbnvnbvnbvnbvnv","localhost"
 $report =@()
 foreach($new in $serverip)
 {
