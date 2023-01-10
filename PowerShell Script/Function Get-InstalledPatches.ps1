@@ -1,5 +1,6 @@
+
+cls
 Function Get-InstalledPatches{			
-Cls			
 $VerbosePreference = 'Continue'			
         $ip =  Get-Content D:\New-PW\Script-to-get-Patceh-on-server\ip2.txt			
         $date = (Get-Date).tostring("dd-MM-yyyy-hh-mm-ss")   			
