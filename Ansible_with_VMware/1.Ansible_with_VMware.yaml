@@ -31,3 +31,12 @@ $ ansible-galaxy install -r requirements.yml
 #For Document
 
 ansible-doc vmware_portgroup
+
+
+
+The Ansible inventory is super simple and is limited to localhost because the Ansible controller is going to connect to the VMware infrastructure via the VMware API.
+
+**Inventory**
+localhost
+
+
