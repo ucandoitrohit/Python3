@@ -1,0 +1,91 @@
+name: VM Facts
+hosts: localhost				
+gather_facts: no				
+vars_files:				
+ - admin2.yml				
+tasks:				
+  - name: test				
+    vmware_guest_facts:				
+      validate_certs: no				
+      hostname: "{{ hostname }}"				
+      username: "{{ username }}"				
+      password: "{{ password }}"				
+      datacenter: GOVDR-MAILMSG-HYD				
+      name: Fresh_VM				
+      folder: /GOVDR-MAILMSG-HYD/vm/GovDR-Managment-VM/				
+    register: vm				
+  - name: test				
+    debug:				
+      msg: "{{ vm }}"				
+
+#===========================================
+
+name: power-on
+hosts: localhost
+gather_facts: no
+  vars_files:
+  - admin1.yml
+  tasks:
+  - name: test
+    vmware_guest:
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      validate_certs: no
+      name: Fresh_VM
+      datacenter: GOVDR-MAILMSG-HYD
+#      state: poweredoff
+      state: poweredon
+#================================================
+
+
+    name: snapshot-vm
+    hosts: localhost
+    gather_facts: no
+    vars_files:
+    - admin2.yml
+    tasks:
+    - name: Fresh_VM
+      vmware_guest_snapshot:
+        hostname: "{{ hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        name: "{{ item }}"
+        datacenter: GOVDR-MAILMSG-HYD
+        folder: /GOVDR-MAILMSG-HYD/vm/
+        state: present
+        #state: absent
+  state: remove_all
+        memory_dump: True
+        snapshot_name: snap2
+      with_items:
+        - Fresh_VM
+
+#=====================================================
+name: portgroup
+hosts: localhost
+gather_facts: no
+vars_files:
+  - admin2.yml
+ tasks:
+  - name: test
+    vmware_guest:
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      validate_certs: no
+      name: Fresh_VM
+      datacenter: GOVDR-MAILMSG-HYD
+      cluster: GOVDR-MGT01-CLUSTER
+      networks:
+      - name: "pg-mgmt(vlan 2244)"
+        device_type: vmxnet3
+        type: static
+      - name: "pg-dns(vlan 2246)"
+        device_type: vmxnet3
+        type: static
+
+
+
+
