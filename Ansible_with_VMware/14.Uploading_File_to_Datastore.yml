@@ -1,0 +1,49 @@
+# Uploading a File to the VMware Datastore
+
+
+#Ansible Module vsphere_copy
+#   community.vmware.vsphere_copy
+
+You can collect information about a VMware datastore using the Ansible module vsphere_copy. The full name is community.vmware.vsphere_copy, which means that it is part of the collection of modules that interact with VMware and is community supported. The module’s purpose is to copy a file to a VMware vSphere datastore.
+
+datastore_info.yml
+
+
+---
+- name: datastore copy demo
+  hosts: localhost
+
+  gather_facts: false
+  vars:
+    mysrc: "iso/ubuntu-22.04-live-server-amd64.iso"
+    mydest: "ISO/ubuntu-22.04-live-server-amd64.iso"
+  collections:
+    - community.vmware
+  pre_tasks:
+    - include_vars: vars.yml
+  tasks:
+    - name: copy file to datastore
+      vsphere_copy:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: "{{ vcenter_validate_certs }}"
+        datacenter: "{{ vcenter_datacenter }}"
+        datastore: "{{ vcenter_datastore }}"
+        src: "{{ mysrc }}"
+        path: "{{ mydest }}"
+
+vars.yml
+
+
+---
+vcenter_hostname: "vmware.example.com"
+vcenter_datacenter: "vmwaredatacenter"
+vcenter_validate_certs: false
+vcenter_username: "username@vsphere.local"
+vcenter_password: "MySecretPassword123"
+vcenter_datastore: "Datastore"
+
+
+
+
