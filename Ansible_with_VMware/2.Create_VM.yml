@@ -3,5 +3,11 @@
 # Ansible vmware_guest Module
 #    community.vmware.vmware_guest
 
-#The Ansible module vmware_guest is used to interact with your VMware infrastructure and create or manage VMware virtual machines. The full name is community.vmware.vmware_guest, which means that it is part of the collection of modules that interact with VMware and is community supported. The module vmware_guest has a very long list of parameters to customize all your needs to create a VMware vSphere virtual machine. The resource allocation list is especially extended to cover the more possible use cases. I suggest you begin with a minimum solution and then improve it little by little until you reach your expected outcome. It may be difficult to troubleshoot several lines of code and options at a time. Please refer to the manual for the full list.
+#The Ansible module vmware_guest is used to interact with your VMware infrastructure and create or manage VMware 
+#  virtual machines. The full name is community.vmware.vmware_guest, which means that it is part of the collection 
+#   of modules that interact with VMware and is community supported. The module vmware_guest has a very long list 
+#   of parameters to customize all your needs to create a VMware vSphere virtual machine. The resource allocation 
+#   list is especially extended to cover the more possible use cases. I suggest you begin with a minimum solution 
+#   and then improve it little by little until you reach your expected outcome. It may be difficult to troubleshoot
+#  several lines of code and options at a time. Please refer to the manual for the full list.
 
