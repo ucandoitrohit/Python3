@@ -40,3 +40,55 @@ The Ansible inventory is super simple and is limited to localhost because the An
 localhost
 
 
+# First Sample Ansible Script
+
+**vm_info.yml**
+---
+- name: info vm demo
+  hosts: localhost
+
+  gather_facts: false
+  collections:
+    - community.vmware
+  pre_tasks:
+    - include_vars: vars.yml
+  tasks:
+    - name: get VM info
+      vmware_guest_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ vcenter_datacenter }}"
+        validate_certs: "{{ vcenter_validate_certs }}"
+        name: "{{ vm_name }}"
+      register: detailed_vm_info
+    - name: print VM info
+      ansible.builtin.debug:
+        var: detailed_vm_info
+
+**vars.yml**
+
+
+---
+vcenter_hostname: "vmware.example.com"
+vcenter_datacenter: "vmwaredatacenter"
+vcenter_validate_certs: false
+vcenter_username: "username@vsphere.local"
+vcenter_password: "MySecretPassword123"
+vm_name: "myvm"
+---
+- vmware_guest_info: module to verify the successful configuration.
+
+
+**Community.Vmware**
+https://docs.ansible.com/ansible/latest/collections/community/vmware/index.html
+
+
+https://github.com/vmware/pyvmomi
+
+https://github.com/vmware/vsphere-automation-sdk-python
+
+pyVmomi: VMware vSphere API Python bindings
+
+vsphere-automation-sdk-python: VMware vSphere Automation SDK for Python
+
