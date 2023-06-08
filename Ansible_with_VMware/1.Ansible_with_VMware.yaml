@@ -1,0 +1,28 @@
+1.
+yum install python-pip
+yum install python2-pyvmomi
+pip install python2-pyvmomi
+
+2.
+# Ansible Collection  community.vmware
+# It conatain the module and plugin with a lot of useful autoation to perform any task and operation in VMware
+
+https://docs.ansible.com/ansible/latest/collections/community/vmware/vmware_guest_info_module.html
+
+ # Here’s how to configure Ansible for VMware:
+
+# 1. Install pyVmomi.
+
+pip install pyVmomi
+
+# 2. Install the community.vmware collection.
+
+Create a file with -- > requirements.yml
+---
+collections:
+  - name: community.vmware
+
+#The execution is pretty smooth via the ansible-galaxy tool:
+
+
+$ ansible-galaxy install -r requirements.yml
