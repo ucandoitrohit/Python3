@@ -1,0 +1,47 @@
+# Deleting a VMware Virtual Machine Snapshot
+
+#Ansible Module vmware_guest_snapshot
+#   community.vmware.vmware_guest_snapshot
+
+#You can manage the VMware snapshots using the Ansible module vmware_guest_snapshot. The full name is community.vmware.#vmware_guest_snapshot, which means that it is part of the collection of modules that interact with VMware and it is #community supported. It manages virtual machine snapshots in vCenter.
+
+vm_snapshot_remove.yml
+
+---
+- name: vm snapshot demo
+  hosts: localhost
+
+  gather_facts: false
+  collections:
+    - community.vmware
+  pre_tasks:
+    - include_vars: vars.yml
+  tasks:
+    - name: remove snapshot
+      vmware_guest_snapshot:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ vcenter_datacenter }}"
+        validate_certs: "{{ vcenter_validate_certs }}"
+        name: "{{ vm_name }}"
+        folder: "{{ vm_folder }}"
+        snapshot_name: "Ansible Managed Snapshot"
+        state: absent
+
+vars.yml
+
+
+---
+vcenter_hostname: "vmware.example.com"
+vcenter_datacenter: "vmwaredatacenter"
+vcenter_validate_certs: false
+vcenter_username: "username@vsphere.local"
+vcenter_password: "MySecretPassword123"
+vm_name: "myvm"
+
+vm_folder: "myvm"
+
+
+
+
