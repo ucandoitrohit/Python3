@@ -1,0 +1,40 @@
+# Starting a VMware Virtual Machine
+
+# Ansible Module vmware_guest_powerstate
+#       community.vmware.vmware_guest_powerstate
+
+#You can manage the power state of any virtual machine in your VMware infrastructure using the Ansible module #vmware_guest_powerstate. The full name of the vmware_guest_powerstate module is community.vmware.#vmware_guest_powerstate, which means that it is part of the collection of modules that interact with VMware and is #community supported. It manages the power states of virtual machines in vCenter.
+
+
+vm_start.yml
+
+---
+- name: start vm demo
+  hosts: localhost
+
+  gather_facts: false
+  collections:
+    - community.vmware
+  pre_tasks:
+    - include_vars: vars.yml
+  tasks:
+    - name: power on VM
+      vmware_guest_powerstate:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        name: "{{ vm_name }}"
+        validate_certs: "{{ vcenter_validate_certs }}"
+        state: powered-on
+
+
+vars.yml
+
+
+---
+vcenter_hostname: "vmware.example.com"
+vcenter_datacenter: "vmwaredatacenter"
+vcenter_validate_certs: false
+vcenter_username: "username@vsphere.local"
+vcenter_password: "MySecretPassword123"
+vm_name: "myvm"
