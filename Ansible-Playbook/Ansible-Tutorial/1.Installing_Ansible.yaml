@@ -286,6 +286,7 @@ done
 #=============================================================================================#
 # 20. Adding More Playbook Functionality with Variables and Loops
 #=============================================================================================#
+# dbserver-playbook.yml
 ---
 - hosts: mysql
   vars:
@@ -316,12 +317,257 @@ done
     - localhost
   - name: create a new database
     mysql_db: name=testdb state=present login_user=root login_password="{{ mysql_root_password }}"
+  - name: add sample data to database
+    copy: src=dump.sql dest=/tmp/dump.sql
+  - name: insert sample data into database
+    mysql_db: name=testdb state=import target=/tmp/dump.sql login_user=root login_password="{{ mysql_root_password }}"
 
 
+# Plugging In Our LAMP Stack
+#=============================================================================================#
+# webserver-playbook.yml
+---
+- hosts: webserver
+  tasks:
+  - name: ensure apache is installed and up to date
+    apt: name=apache2 state=latest
+  - name: write the apache config file
+    copy: src=000-default.conf dest=/etc/apache2/sites-available/000-default.conf
+    notify:
+    - restart apache2
+  - name: apache is running and enable it at boot
+    service: name=apache2 state=started enabled=yes
+  - name: disable pmp_event on apache
+    shell: "a2dismod mpm_event"
+    notify:
+    - restart apache2
+  - name: enable cgi on apache
+    shell: "a2enmod mpm_prefork cgi"
+    notify:
+    - restart apache2
+  - name: install pymysql module for index to use
+    pip: name=pymysql executable=pip3
+  - name: add in a test directory
+    file: path=/var/www/test/ state=directory
+  - name: add in your index file
+    copy: src=index.py dest=/var/www/test/index.py  mode=755
+    notify:
+    - restart apache2
+    handlers:
+    - name: restart apache2
+      service: name=apache2 state=restarted
+
+# we can also create different file for handler like below
+#=============================================================================================#
+# apache_handlers.yml
+---
+- name: restart apache2
+  service: name=apache2 state=restarted
 
 
+#=============================================================================================#
+# 21. Import 
+#=============================================================================================#
+# touch new-playbook.yml
+
+---
+- import_playbook: webserver-playbook.yml
+- import_playbook: dbserver-playbook.yml
+  handlers:
+  - include_tasks: apache_handlers.yml
+  # or
+  - import_tasks: apache_handlers.yml
+
+ansible-playbook -i hosts new-playbook.yml
+
+#=============================================================================================#
+# 21. Roles
+#=============================================================================================#
+# Out of the two ways that Ansible is able to reuse our configuration management tasks within playbooks, 
+#   we have already discussed the first way by using import and include. The second way of reusing our tasks is
+#   through roles. Both work in a similar way, but roles allow you a lot more flexibility
+
+# Example- Creating the Web Server Role
+# ------------------------------------------
+
+mkdir roles
+mkdir roles/web_server
+
+1. Files – This includes all our supporting files. In our example, this might include configuration files.
+2. Handlers – As we saw in our playbooks, we can set up handlers to perform specific tasks upon completion 
+      of our playbook. This is the separate directory for the handlers.
+3. Meta – This is for files to establish role dependencies or roles that need to be applied before your current 
+      role can work correctly.
+4. Templates – Instead of needing a separate file for all different web servers, you may be able to set up a 
+      template to cover them all. We will be discussing templates later in the book.
+5. Tasks – These are simply the tasks in our playbook to get our role to a specific state. Just as we created the 
+      tasks in our playbooks earlier, we will separate our tasks and place them in their own directory.
+6. Vars – These are variables which can be included as part of our tasks.
+7. Defaults – These are default variables for our roles.
 
 
+mkdir -p roles/web_server/{files,handlers,meta,templates,tasks,vars,defaults}
+
+cp webserver-playbook.yml roles/web_server/tasks/main.yml
+
+#Note:  remove the hosts details and notifiers section in the playbook
+---
+- name: ensure apache is installed and up to date
+  apt: name=apache2 state=latest
+- name: write the apache config file
+  copy: src=000-default.conf dest=/etc/apache2/sites-available/000-default.conf
+  notify:
+  - restart apache2
+- name: apache is running and enable it at boot
+  service: name=apache2 state=started enabled=yes
+- name: disable pmp_event on apache
+  shell: "a2dismod mpm_event"
+  notify:
+  - restart apache2
+- name: enable cgi on apache
+  shell: "a2enmod mpm_prefork cgi"
+  notify:
+  - restart apache2
+- name: install pymysql module for index to use
+  pip: name=pymysql executable=pip3
+- name: add in a test directory
+  file: path=/var/www/test/ state=directory
+- name: add in your index file
+  copy: src=index.py dest=/var/www/test/index.py     mode=755
+  notify:
+  - restart apache2
+
+
+cp 000-default.conf roles/web_server/files/
+    <VirtualHost *:80>
+         <Directory /var/www/test>
+             Options +ExecCGI
+             DirectoryIndex index.py
+         </Directory>
+         AddHandler cgi-script .py
+
+
+cp index.py roles/web_server/files/
+
+index.py
+#!/usr/bin/python3
+import pymysql
+# Print necessary headers.
+print("Content-Type: text/html")
+print()
+#Connect to the database.
+conn = pymysql.connect(
+             db='testdb',
+             user='root',
+             passwd='password',
+             host='localhost')
+c = conn.cursor()
+# Print the contents of the table.
+c.execute("SELECT * FROM test;")
+for i in c:
+  print(i)
+
+touch roles/web_server/handlers/main.yml
+---
+- name: restart apache2
+  service: name=apache2 state=restarted
+
+touch site.yml
+---
+- hosts: webserver
+  roles:
+  - web_server
+
+
+tree roles/web_server/
+#--------------------------
+roles/web_server/
+|-- defaults
+|-- files
+|   |-- 000-default.conf
+|   `-- index.py
+|-- handlers
+|   `-- main.yml
+|-- meta
+|-- tasks
+|   `-- main.yml
+|-- templates
+`-- vars
+
+
+#=============================================================================================#
+# 21. Ansible Command-Line Variables and Options
+#=============================================================================================#
+
+# if you need to override any of the variables currently in place
+
+--extra-vars variable=test
+-e variable=test
+
+-e "variable1=test1 variable2=test2"
+
+
+https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable
+
+#=============================================================================================#
+# 21. Conditional Tasks in Ansible
+#=============================================================================================#
+---
+- name: check if django app already exists
+  shell: ls -l {{ django_app_location }} | grep -c web_app
+  register: djangostatus
+  failed_when: djangostatus.rc == 2
+
+
+---
+- name: create a directory for our django app
+  file: path={{ django_app_location }}/web_app     mode=0755 owner=user group=user state=directory
+  when: djangostatus.stdout == "0"
+- name: create your new django app in the web_app directory
+  shell: django-admin startproject web_app {{django_app_location }}web_app
+  when: djangostatus.stdout == "0"
+- name: configure your database to use work with django
+  copy: src=settings.py dest={{ django_app_location}}/web_app/web_app/settings.py
+  when: djangostatus.stdout == "0"
+- name: apply a migration into the mysql database
+  shell: python3 {{ django_app_location }}/web_app/manage.py migrate
+  when: djangostatus.stdout == "0"
+- name: create the admin superuser
+  shell: python3 {{ django_app_location }}/web_app/manage.py createsuperuser --noinput ​--username=admin --email=admin@example.com
+  when: djangostatus.stdout == "0"
+
+#=============================================================================================#
+# 21. Using Tags to Run Specific Tasks
+#=============================================================================================#
+---
+- name: install django and make sure it is at the latest version
+  apt: name=python3-django state=present
+  tags: django_alive
+
+ansible-playbook -i hosts site.yml -e django_app_location=`pwd` --list-tags
+
+---
+playbook: site.yml
+  play #1 (webserver): webserver        TAGS: []
+      TASK TAGS: [django_present]
+---
+
+#=============================================================================================#
+# 21. Keeping Secret with Ansible Vault
+#=============================================================================================#
+
+ansible-vault encrypt roles/db_server/vars/test_environment.yml
+---
+New Vault password:
+Confirm New Vault password:
+Encryption successful
+---
+
+head -n5 roles/db_server/vars/test_environment.yml
+
+ansible-vault view roles/db_server/vars/test_environment.yml
+
+ansible-playbook -i hosts site.yml -e django_app_location=`pwd` -e env=test --ask-vault-pass
 
 
 
