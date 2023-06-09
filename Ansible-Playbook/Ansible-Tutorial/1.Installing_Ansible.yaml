@@ -1,25 +1,20 @@
 # 1. Installing Ansible
-#===========================
+#=============================================================================================#
 sudo apt-get update
-
 sudo apt-get install python3 python3-pip git libffi-dev libssl-dev -y
-
- pip3 install ansible
+pip3 install ansible
 
 ansible –-version
-
 ---
 ansible 2.9.9
    config file = None
 ---
-#=============================================================================================
+
+#=============================================================================================#
 # 2. Ansible Support for SSH
-#============================
-
+#=============================================================================================#
 sudo apt-get install openssh-server -y
-
 ssh-keygen -t rsa
-
 ls -l .ssh
 ---
 #-rw——- 1 user user 1679 Jan 18 10:57 id_rsa
@@ -28,18 +23,18 @@ ls -l .ssh
 ssh-copy-id localhost
 ssh localhost
 
+#=============================================================================================#
 # 3. Finally, Our First Ansible Command
-#==============================================
-
+#=============================================================================================#
 ansible all -i "localhost," -m shell -a 'echo Ansible is fun'
 ---
 #localhost | SUCCESS | rc=0 >>
 #Ansible is fun
 ---
 
+#=============================================================================================#
 # 4. Basic Ansible Playbooks
-#===============================================
-
+#=============================================================================================#
 ---                                      # first line of the playbook let us know it's a YAML file with the three dashes (---) 
  - hosts: localhost                      # tells us we are only deploying to our localhost
    tasks:                                # we then start a list of tasks which need to be run
@@ -51,25 +46,26 @@ ansible all -i "localhost," -m shell -a 'echo Ansible is fun'
 ansible-playbook test.yml -i "localhost"
 
 
+#=============================================================================================#
 # 5. Ansible Configuration and Inventory Files
-# ===================================================
+#=============================================================================================#
  ANSIBLE_ENVIRONMENT_VARIABLES – Usually specified in capital letters. Ansible will first look for variables 
   specified as environment variables and use them before any other variables.
 
 The /etc/ansible/ansible.cfg – These are the system Ansible configurations created when the application is installed.
 
-
+Ref- 
 https://docs.ansible.com/ansible/latest/installation_guide/intro_configuration.html#explanation-of-values-by-section
 
+#=============================================================================================#
 # 6. Running Ansible Modules
-#===============================
+#=============================================================================================#
 https://docs.ansible.com/ansible/latest/module_plugin_guide/index.html
 
-
+#=============================================================================================#
 7. # Ping Module
-#===================
+#=============================================================================================#
 # performs a ping test on the specified host requesting a reply if the host is accessible and powered on:
-
 ansible -i hosts mylaptop -m ping
 ---
 localhost | SUCCESS => {
@@ -81,15 +77,13 @@ localhost | SUCCESS => {
 }
 ---
 
-
+#=============================================================================================#
 # 8. Setup Module
-#=======================
+#=============================================================================================#
 # The setup module provides us with over 1000 lines of information on our system.
 # This command is useful to gather data on your system and then perform specific changes dependent on the 
 #   information gathered. For example, a specific application will be installed depending on the specific type of operating system architecture being used by the system:
-
 ansible mylaptop -i hosts -m setup
-
 ---
 localhost | SUCCESS => {
     "ansible_facts": {
@@ -113,17 +107,16 @@ localhost | SUCCESS => {
     },
     "changed": false
 }
-
 ---
 
+#=============================================================================================#
 # 9. Git Module
-#====================
+#=============================================================================================#
 # The git module allows you to perform Git commands via Ansible. If you need to deploy software directly from a 
 #   git repository, this would be the perfect reason to use this module. You will need to have Git installed and 
 #   available on your system before you are able to run the following command:
-
 ansible mylaptop -i hosts -m git -a "repo='https://github.com/ucandoitrohit/Python3.git' dest=/tmp/py/"
-
+---
 localhost | CHANGED => {
     "after": "ecfb900a44a84dcd0d798ad3b0c98ea838ea5668",
     "ansible_facts": {
@@ -132,19 +125,16 @@ localhost | CHANGED => {
     "before": null,
     "changed": true
 }
-
 ---
 #Exaplain-
 # In this case, we have specified the repository with repo argument and then provided a destination folder 
 #   with the dest argument. If the folder is not present, Ansible will create it, so we should see the file 
 #    downloaded and available in our destination folder.
 
-
+#=============================================================================================#
 # 10. Shell Module
-# =====================
-
+#=============================================================================================#
 ansible mylaptop -i hosts -m shell -a "ls -l /tmp/"
-
 ---
 localhost | CHANGED | rc=0 >>
 total 8
@@ -152,51 +142,56 @@ drwx------ 2 root root 4096 Jun 24 14:35 ansible_command_
 drwxr-xr-x 3 root root 4096 Jun 24 14:21 markdown-cheatsheet
 ---
 
+#=============================================================================================#
 # 11. Apt (or Yum)
-# =====================
-
+#=============================================================================================#
 ansible -i hosts mylaptop -m apt -a "name=apache2 state=present"
 
 # present and absent
 
+#=============================================================================================#
 # 12. Service
-#====================
+#=============================================================================================#
 ansible -i hosts mylaptop -m service -a "name=apache2 state=started"
 
 # started, stopped, or restarted. 
 
+#=============================================================================================#
 # 13. get_url
-#==================
+#=============================================================================================#
 # get_url module which grabs content from HTTP, HTTPS, or any other Internet protocols. 
 
 ansible -i hosts mylaptop -m get_url -a "url=http://localhost dest=/tmp/"
 
 # The output of our command shows a 200 value as a status_code to show we have a successful result from our command.
 
+#=============================================================================================#
 # 14. file
-# ==============
+#=============================================================================================#
 # To create a directory or file on an environment,
 
 ansible mylaptop -i hosts -m file -a "path=/tmp/another_test owner=root group=root state=directory"
 
+#=============================================================================================#
 # 15. user
-#===============
+#=============================================================================================#
 # Setting up users is easy with this user module. We can control the state of the account on the system as 
 #    being absent or present to determine if it is created or removed:
 
 ansible -i hosts mylaptop -m user -a "name=jsmith comment='Jane Smith' state=present"
 
+#=============================================================================================#
 # 16. find
-#================
+#=============================================================================================#
 # find module can be run to find different files and directories that are available on the host system. 
 #    The find module allows you to specify a path, age of the file, and the type of file and even search 
 #     for files of a specific size
 
 ansible mylaptop -i hosts -m find -a "path=/var/log/ age=1w file_type=directory"
 
-
+#=============================================================================================#
 # 17. Running Ansible on Different Servers
-#============================================
+#=============================================================================================#
 ssh-copy-id <remote_host_ip>
 
 # By performing the ssh-copy-id command, it will copy the public ssh key into the authorized_keys file located in 
@@ -206,9 +201,9 @@ sudoers file
 --------------
 <username> ALL=(ALL) NOPASSWD: ALL
 
-
+#=============================================================================================#
 # 18. Ansible and YAML Syntax
-#==================================
+#=============================================================================================#
 
 
 
