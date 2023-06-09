@@ -202,13 +202,120 @@ sudoers file
 <username> ALL=(ALL) NOPASSWD: ALL
 
 #=============================================================================================#
-# 18. Ansible and YAML Syntax
+# 18. Command-Line Modules to Ansible Playbooks
 #=============================================================================================#
 
+ansible mylaptop -i hosts mylaptop -m apt -a "name=apache2 state=present"
+
+ansible mylaptop -i hosts mylaptop -m file -a "path=/tmp/another_test owner=root group=root state=directory"
+
+ansible mylaptop -i hosts mylaptop -m service -a "name=apache2 state=started"
+
+#=============================================================================================#
+# 19. Playbook example
+#=============================================================================================#
+---
+- hosts: webserver
+  tasks:
+  - name: ensure apache is installed and up to date
+    apt: name=apache2 state=latest
+  - name: write the apache config file
+    copy: src=000-default.conf dest=/etc/apache2/sites-available/000-default.conf
+  notify:
+  - restart apache2
+  - name: apache is running (and enable it at boot)
+    service: name=apache2 state=started enabled=yes
+  handlers:
+  - name: restart apache2
+    service: name=apache2 state=restarted
+
+#=============================================================================================#
+# 19. Ansible Playbook Verbose Output
+#=============================================================================================#
+ansible-playbook -i hosts webserver-playbook.yml -v
+
+# One -v argument adds the default debug output, while adding more values like -vv or -vvv or -vvvv 
+#    will increase the amount of data being output and the detail of what is being run by Ansible. 
+#    By expanding the output, we get to see the specific commands being run by the modules
+
+# we add 1, 2, 3, 4, and 12 v arguments
+
+for i in -v -vv -vvv -vvvv -vvvvvvvvvvvv;
+
+  do ansible-playbook ​-i hosts  webserver-playbook.yml ${i} | wc -l ; 
+
+done
+
+#=============================================================================================#
+# 19. Ansible Syntax in Finer Detail
+#=============================================================================================#
+# Hosts and Remote Users
+---
+- hosts: all  # or * ( asterisk  also we can use )
+  order: sorted
+
+# we are using all to include all of the hosts in the inventory file and the order of sorted, which deploys 
+#   to the hosts in our inventory file in alphabetical order:
 
 
+ ---
+ - hosts: database
+   remote_user: tom
+   become: yes
+   become_user: postgres
 
+  # we are accessing the web server as user tom, but we then need to change to the postgres user, presumably to run database server tasks:
 
+---
+- hosts: database
+  remote_user: tom
+  become: yes
+  become_method: su
+
+#=============================================================================================#
+# 19. Notify
+#=============================================================================================#
+- name: write the apache config file
+  copy: src=000-default.conf dest=/etc/apache2/sites-available/000-default.conf
+  notify:
+  - restart apache
+  handlers:
+  - name: restart apache
+    service: name=apache2 state=restarted
+
+#=============================================================================================#
+# 20. Adding More Playbook Functionality with Variables and Loops
+#=============================================================================================#
+---
+- hosts: mysql
+  vars:
+    mysql_root_password: password
+  tasks:
+  - name: install mysql and python-myslqdb
+    apt: name={{ item }} update_cache=yes cache_valid_time=3600 state=present
+    with_items:
+    - python3-mysqldb
+    - mysql-server
+  - name: start up the mysql service
+    shell: "service mysql start"
+  - name: ensure mysql is enabled to run on startup
+    service: name=mysql state=started enabled=true
+  - name: update mysql root password for all root accounts
+    mysql_user:
+    name: root
+    host: "{{ item }}"
+    password: "{{ mysql_root_password }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    check_implicit_admin: yes
+    priv: "*.*:ALL,GRANT"
+    with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+  - name: create a new database
+    mysql_db: name=testdb state=present login_user=root login_password="{{ mysql_root_password }}"
 
 
 
