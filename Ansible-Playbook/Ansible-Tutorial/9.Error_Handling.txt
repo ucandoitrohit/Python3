@@ -1,0 +1,27 @@
+#Ansible error handling
+
+#Ignoring failed commands
+#-----------------------------
+- ignore_errors
+#Example, we have written a playbook which installs Apache and then starts the service. If the installation fails, 
+#   it does not make any sense to run a command, which will try to start the service. In this case, both the 
+#   commands are dependent. 
+
+- clear_host_errors 
+# The default Ansible behavior is to set the host unreachable; if the host did not respond on time, and the Ansible 
+#   timeout is breached – which can happen because of several issues, for example network or server utilization was 
+#   high and host could not respond on time – then Ansible will remove the host from the active host.
+#   The Ansible tasks will be executed on the active host only; in case we suspect there will be a false positive 
+#   for the unreachable hosts, and we want to change the Ansible behavior to auto recover the unreachable host, 
+#   then we have to use clear_host_errors in playbook.
+
+Controlling what defines failure
+-  failed_when
+----------------
+
+# In Ansible, we have the options to set a criterion which defines what failure means in each playbook task using the
+# keyword failed_when. A list of multiple failed_when conditions are joined like a conditional statement, 
+# meaning the task only fails when all the conditions are met.
+
+
+
