@@ -1,0 +1,28 @@
+# Ansible Facts
+
+#Listing All Facts of a Machine Playbook
+#-------------------------------------------
+facts_printall.yml
+---
+- name: facts_printall
+  hosts: all
+  tasks:
+  - name: Print all facts
+    ansible.builtin.debug:
+      var: ansible_facts
+
+
+#Referencing a Fact
+#---------------------
+facts_printone.yml
+---
+- name: facts_printone
+  hosts: all
+  tasks:
+  - name: Print a fact
+    ansible.builtin.debug:
+      var: "{{ ansible_facts['architecture'] }}"      
+
+
+
+      
