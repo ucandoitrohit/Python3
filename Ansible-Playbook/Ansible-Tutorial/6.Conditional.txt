@@ -30,4 +30,29 @@ conditional_basic_false.yml
     ansible.builtin.command: /sbin/shutdown -t now
     when: ansible_facts['os_family'] == "Debian"
 
-    
+
+
+
+#Below script will install apache2 on Debian and ignore centos hosts
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: Install apache2 on Ubuntu machines
+    apt: name=apache2 state=latest
+    when: ansible_os_family == "Debian"
+    register: apt_output
+
+  - name: Display the console output
+    debug: var=apt_output
+
+#Below script will install httpd on centos and ignore ubuntu hosts
+
+  - name: Install httpd on centos machines
+    yum: name=httpd state=latest
+    when: ansible_os_family == "RedHat"
+    register: yum_output
+  - name: Display the console output
+    debug: var=yum_output
+
+ #become:yes, it will allow us to become the root user since the installation requires sudo access. 
