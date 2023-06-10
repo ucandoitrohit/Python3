@@ -95,6 +95,44 @@ ansible-playbook test.yml -i "localhost"
 
 The /etc/ansible/ansible.cfg – These are the system Ansible configurations created when the application is installed.
 
+#Ansible looks for the configuration file in the following order:
+--------------------------------------------------------------------
+Priority 1: ANSIBLE_CONFIG (environment variable if set).
+Priority 2: ansible.cfg (in the current directory).
+Priority 3: ~/.ansible.cfg (in the home directory).
+Priority 4: /etc/ansible/ansible.cfg (default location)
+
+#The other parameters are-
+#-------------------------
+Inventory= /etc/ansible/hosts: We can specify the inventory file directly from the configuration file, 
+Forks = 5: This represents the number of parallel connections that needs to be established. 
+      By default, its value is 5. If we increase this value, the script processing time will be enhanced. 
+sudo_user = root: Here we can change the sudo user to some other user with the admin rights, 
+gathering = implicit: This option is used to collect more information about the host machine. 
+timeout = 10: This is for the SSH timeout in seconds; for lab setup 10 seconds is OK, but for production, 
+  you must change this to 30 seconds or even 60 seconds. 
+
+Other modules in detail to
+=============================
+Command
+This is default module, if you don't specifically mention any module, this module will be used. 
+   It will work only when you have Python installed on manage nodes. The command module takes the command name 
+   followed by a list of space-delimited arguments. These arguments are commands which will be executed on all the nodes.
+   The command(s) will not be processed through the shell, 
+   so variables like $HOME and operations like <, >, |,;, and & will not work.
+
+Shell
+This will work only when you have Python installed on manage nodes. It is almost exactly like the command module but 
+  runs the command through a shell (/bin/sh) on the remote node. Therefore, variables like $HOME and operations
+  like <, >, |, ;, and & will work.
+
+RAW
+This module is doing the same thing as Shell and command modules, but the key point is, it doesn't require Python 
+  on the remote machine. This is useful and should only be done in a few cases. A common case is installing Python 
+  on a system without Python installed by default. Another is managing any devices such as routers and switches that
+  do not have any Python installed. Arguments given to RAW are run directly through the configured remote shell.
+
+
 #Simple YAML Inventory
 #--------------------------
 ./simple_yaml_inventory.yml
