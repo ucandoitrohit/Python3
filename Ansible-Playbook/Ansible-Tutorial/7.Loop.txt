@@ -60,3 +60,72 @@ loop_hash_or_dict.yml
     ansible.builtin.debug:
       msg: "{{ item }}"
     with_items: "{{ data }}"
+
+
+#Loops in Ansible
+#===================
+- with_list
+- with_items
+- with_indexed_items
+- with_flattened
+- with_together
+- with_dict
+- with_sequence
+- with_subelements
+- with_nested/with_cartesian
+ -with_random_choice
+
+#- with_items
+#---------------
+---
+- hosts: ubuntu
+  become: yes
+  tasks:
+  - name: Install below listed packages on ubuntu machines
+    apt: name={{item}} state=latest
+    with_items:
+    - nano
+    - vim
+    - python
+    - wget
+  
+#- with_file
+#-------------
+---
+- hosts: ubuntu
+  become: yes
+  tasks:
+  - name: Display content of 2 files
+    debug: msg="{{item}}"
+    with_file:
+    - ip.txt
+    - host.txt
+
+#- with_sequence
+#------------------
+---
+- hosts: ubuntu
+  become: yes
+  tasks:
+  - name: Display sequence from 0 to 10
+    debug: msg="{{item}}"
+    with_sequence: start=0 end=10
+
+---
+- hosts: ubuntu
+  tasks:
+  - name: with sequence
+    debug: msg="{{item}}"
+    with_sequence: start=0 end=4
+
+# - loop
+#-------------
+---
+- hosts: ubuntu
+  tasks:
+  - name: with_sequence -> loop
+    debug: msg= "{{item}}"
+    loop: "{{range(0, 5)|list}}"    
+
+
+    
