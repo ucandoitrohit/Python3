@@ -42,4 +42,3 @@ task:
 # we only want to execute the script if a specific file exists on the remote nodes. 
 # So, the script executes on the nodes which satisfied the condition.
 
-
