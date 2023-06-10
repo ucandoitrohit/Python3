@@ -10,6 +10,46 @@ This module covers the different solutions to control a task, which includes the
 - Errors
 - Ansible blocks
 
+#- with_items
+#-------------------
+
+# with_items is a key word which will define a list of items that needs to be processed. 
+#  It is used as a label, listing the different items.
+
+# To refer to the items, {{item}} is used
+
+- name: Manage Group Membership for users
+  user:
+   name: "{{item.name}}"
+   state: present
+   groups: "{{item.group}}"
+  with_items:
+   - {name: 'Rony', group: 'student'}
+   - {name: 'Ali', group: 'teacher'}
+   - {name: 'John', group: 'teacher'}
+
+
+---
+- name: Clean-up the FTP and Webserver content
+   hosts: centos
+   task:
+   - name: Uninstall Packages
+     yum:
+      name: "{{item}}"
+      state: absent
+     with_items:
+      - httpd
+      - vsftpd
+   - name: Delete FTP and HTTP files
+     file:
+      path: "{{item}}"
+      state: absent
+     with_items:
+      - /var/www/html/index.html
+      - /var/ftp/pub/README
+      - /tmp/www/http_backup.tar
+      - /tmp/ftp/ftp_backup.tar
+
 
 
 
