@@ -1,7 +1,6 @@
 #Variables
 ### Variables store dynamic value for a given environment.
 
-
 ##Not Permitted Variable Names
 ##================================
 No white spaces: my var
@@ -56,8 +55,6 @@ demo2.example.com
 
 [servers:vars]
 user=alice
-
-
 
 #Common Magic Variables
 ############################
