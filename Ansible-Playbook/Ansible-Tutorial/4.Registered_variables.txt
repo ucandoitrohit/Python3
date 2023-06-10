@@ -1,5 +1,4 @@
 #Registered Variables
-
 ---
 - name: wget installed demo
   hosts: all
