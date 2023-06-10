@@ -1,0 +1,29 @@
+# Ansible ad-hoc mode
+
+$ ansible [pattern] -i inventory-file -m [module] -a "[module options]"
+
+#Pattern(s)
+#--------------
+1. All hosts                    all (or *)
+2. One host                     host1
+3. Multiple hosts               host1:host2 (or host1,host2)
+4. One group                    webservers
+5. Multiple groups              webservers:dbservers            All hosts in webservers plus all hosts in dbservers
+6. Excluding groups             webservers:!atlanta             All hosts in webservers except those in atlanta
+7. Intersection of groups       webservers:&staging             Any hosts in webservers that are also in staging
+
+
+
+#Rebooting servers
+#---------------------
+$ ansible centos -i inventory command -a "/sbin/reboot"
+
+# only the root has the rights to reboot any particular server, therefore, we will be requiring privilege escalation 
+#   to reboot the servers. For privilege escalation, the following commands will be used:
+
+$ ansible centos -i inventory -a "/sbin/reboot" -f 10 -u username --become [--ask-become-pass]
+
+# If you add --ask-become-pass or -K, Ansible prompts you for the password to use for privilege escalation.
+
+
+
