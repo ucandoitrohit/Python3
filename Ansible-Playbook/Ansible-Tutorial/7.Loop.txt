@@ -1,0 +1,62 @@
+# Loop
+
+loop_simple.yml
+---
+- name: Check services
+  hosts: all
+  tasks:
+  - name: httpd and mariadb are running
+    ansible.builtin.service:
+      name: "{{ item }}"
+      state: started
+    loop:
+      - httpd
+      - mariadb
+
+# This example checks that two services (httpd and mariadb) are in the “started” state. 
+#   Every service name is listed directly as a list element under the loop statement. 
+#    Please note the usage of the variable item that iterates the current values in each iteration.
+#      Here item is going to be expanded for each element of the list (in this case, httpd and mariadb).
+
+loop_hash_or_dict.yml
+
+---
+- name: users and group example
+  hosts: all
+  tasks:
+  - name: add users to groups
+    ansible.builtin.user:
+      name: "{{ item.name }}"
+      state: present
+      groups: "{{ item.group }}"
+    loop:
+      - name: alice
+        group: wheel
+      - name: bob
+        group: root
+
+# Some use cases require more complex iteration variable types such as hashes or dictionaries. 
+#   As always, Ansible relies heavily on Python data types. This is an example of a dictionary with 
+#   two keys: name and group for each element of the list. You can access the current item loop variable using a dot. 
+#  Specifically, name can be retrieved with the item.name and group with item.group variables, respectively.
+
+# with_* Statement
+#--------------------
+-   with_items
+-   with_file
+-   with_sequence
+
+#loop_with_items.yml
+#------------------------
+---
+- name: Example with_items
+  hosts: all
+  vars:
+    data:
+      - alice
+      - bob
+  tasks:
+  - name: Print values of data
+    ansible.builtin.debug:
+      msg: "{{ item }}"
+    with_items: "{{ data }}"
