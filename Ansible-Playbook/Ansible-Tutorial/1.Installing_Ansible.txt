@@ -121,10 +121,86 @@ This is default module, if you don't specifically mention any module, this modul
    The command(s) will not be processed through the shell, 
    so variables like $HOME and operations like <, >, |,;, and & will not work.
 
+ Parameters for command module
+-----------------------------------
+The following are the parameters for the command module:
+
+argv: This parameter will allow us to pass the command as a list rather than a string. This parameter will allow us
+     to add additional arguments. For example, if we need to change the directory before executing the command or 
+      if we need to see whether the file already exists or not.
+chdir: This parameter will allow us to change the directory before executing certain commands. If the command 
+      is working in a certain folder only, we might have to change our directory first and then execute the command.
+cmd: This parameter will specify the command or a list of commands, which will be executed on the manage nodes.
+creates: This parameter will allow us to check file or global pattern. If it already exists then this step will not run.
+removes: This parameter will check whether a file name or global pattern exists. If it already exists, this step will run.  
+
+Example 1:
+task:
+- name: Execute Command in Linux
+  command: whoami
+  register: user_name
+
+Example 2:
+task:
+- name: Execute Multiple Commands on Ansible Managed nodes
+  command:
+  argv:
+  - pwd
+  - whoami
+  - ls -al
+
+Example 3:
+task:
+- name: Execute DB Script
+  command: /usr/bin/make_database.sh db_user db_name
+  become: yes
+  become_user: db_owner
+  args:
+  chdir: /var/projects/databases/
+  creates: /var/projects/database/test_file
+
 Shell
 This will work only when you have Python installed on manage nodes. It is almost exactly like the command module but 
   runs the command through a shell (/bin/sh) on the remote node. Therefore, variables like $HOME and operations
   like <, >, |, ;, and & will work.
+
+Example 1:
+task:
+- name: Redirect command output
+  shell: cat /var/log/messages | grep "ram \| cpu" >>  health_log.txt
+
+we are collecting the logs, which have ram or cpu mentioned in them and redirect the output in a text file.
+
+Example 2:
+task:
+- name: Change Directory and Save logs
+  shell: cat /var/log/messages | grep "ram \| cpu" >>  health_log.txt
+  args:
+  chdir: /project/logs/
+
+we are changing the working directory before creating the log file
+
+Example 3:
+task:
+- name: Search Log file
+  shell:
+  cmd: ls -l | grep log
+  chdir: /var/projects/logs/
+The only difference is that we are not creating a log file after changing the directory. We are actually trying to
+   find the log files, as this would search all the files, which has log mentioned in their name.
+
+executables
+-------------
+This is the only significant parameter change which I would like to mention here. This parameter will help us change 
+  the shell that is used to execute the command. If we have a command or a script working only for a specific shell,
+   then this parameter can help.
+
+Example 4:
+task:
+   - name: Change the Linux SHELL
+    shell: cat < /tmp/*txt
+     args:
+      executable: /bin/bash
 
 RAW
 This module is doing the same thing as Shell and command modules, but the key point is, it doesn't require Python 
@@ -453,8 +529,14 @@ ansible mylaptop -i hosts mylaptop -m service -a "name=apache2 state=started"
     service: name=apache2 state=restarted
 
 #=============================================================================================#
-# 19. Ansible Playbook Verbose Output
+# 19. Ansible Playbook Verbose Output -debug
 #=============================================================================================#
+Ansible logging
+
+[defaults]
+log_path= errorlogs
+
+
 ansible-playbook -i hosts webserver-playbook.yml -v
 
 # One -v argument adds the default debug output, while adding more values like -vv or -vvv or -vvvv 
