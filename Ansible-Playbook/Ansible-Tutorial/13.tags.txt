@@ -1,0 +1,38 @@
+# Tags
+#===========
+Tags are used at a resource level to give a name to a specific resource. The –tags are used with the Ansible playbook to run only the resources with a specific tag. 
+
+# Ansible-playbook --tags 'tagname'. 
+
+# - - skip-tags 'tagname' to exclude a resource with a specific tag. 
+
+---
+ - name: Understand Ansible Tags
+   hosts: centos
+   tasks:
+   - name: Install network Analysis Packages
+     package:
+      name: "{{item}}"
+      state: installed
+     with_items:
+     - nmap
+     - wireshark
+     tags:
+     - network_analysis
+   - name: Install lamp packages
+     package:
+      name: "{{item}}"
+      state: installed
+     with_items:
+     - httpd
+     - mariadb-server
+     tags:
+     - lamp
+
+# to run only the network analysis packages to be installed, then we have to use the following command:
+
+$ ansible-playbook ansible_tags.yml -i inventory --tags network_analysis
+
+
+
+
