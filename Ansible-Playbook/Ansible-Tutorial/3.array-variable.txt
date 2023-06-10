@@ -1,5 +1,4 @@
 # Array Variables
-
 ---
 - name: Array demo
   hosts: all
