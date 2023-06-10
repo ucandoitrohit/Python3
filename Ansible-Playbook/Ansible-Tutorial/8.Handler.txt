@@ -1,7 +1,9 @@
 # Handler
+#Handlers are just like the normal tasks in an Ansible playbook, but it will run when called by another task that 
+# contains a notify directive. A Handler is useful for the secondary actions that might be required after running a task,
+#  such as starting a service after the installation or configuration change
 
 Rollingupdate.Yml
-
 ---
 - name: Rolling update
   hosts: all
@@ -24,4 +26,17 @@ Rollingupdate.Yml
 # it mentions the name of the handler to run. This Playbook checks the version of the Apache http web server on all hosts.
 # If an update is available, the yum module provides the upgrade process and restarts the daemon at the end.
 # If an upgrade is not necessary, the handler code is not necessary.
+
+
+---
+- hosts: ubu_node_01
+  become: true
+  tasks:
+  - name: Install Package
+    apt: name=apache2 state=present
+    notify:
+    - Start apache2
+  handlers:
+  - name: Start apache2
+    service: name=apache2 state=started
 
