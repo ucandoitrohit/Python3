@@ -1,11 +1,16 @@
 #Ansible error handling
+# The Ansible default behavior is to stop the execution when the task has failed. 
 
 #Ignoring failed commands
 #-----------------------------
 - ignore_errors
-#Example, we have written a playbook which installs Apache and then starts the service. If the installation fails, 
+# we can use ignore_errors: yes and it will ignore the error and the playbook with continue running
+# Example, we have written a playbook which installs Apache and then starts the service. If the installation fails, 
 #   it does not make any sense to run a command, which will try to start the service. In this case, both the 
 #   commands are dependent. 
+# When we are dealing with handlers, if a play fails, no handler will be executed. To overcome this issue, 
+#   we can use force_handler: yes in a playbook
+
 
 - clear_host_errors 
 # The default Ansible behavior is to set the host unreachable; if the host did not respond on time, and the Ansible 
@@ -18,6 +23,7 @@
 Controlling what defines failure
 -  failed_when
 ----------------
+It define when to consider a specific command failed
 
 # In Ansible, we have the options to set a criterion which defines what failure means in each playbook task using the
 # keyword failed_when. A list of multiple failed_when conditions are joined like a conditional statement, 
