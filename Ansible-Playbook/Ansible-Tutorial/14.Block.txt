@@ -1,0 +1,49 @@
+# Blocks
+
+# Blocks are used to logically group tasks. Blocks are useful for error handling and when statements. 
+#   One statement can be applied to the block, so that it affects all the tasks in the block. 
+---
+- name: Understand Blocks
+  hosts: all
+  tasks:
+  - name: Installing Apache
+    block:
+    - package:
+      name: "{{item}}"
+      state: installed
+    with_items:
+     - httpd
+     - elinks
+     - mod_ssl
+  - service:
+      name: httpd
+      state: started
+      enable: true
+    when: ansible_distribution == 'CentOS'
+
+# Blocks allow error handling; if a task fails, the task in the rescue task can be executed for recovery. 
+#  We also have an always task, which will run regardless of success or failure of the task defined in blocks or rescue.
+---
+- name: Error handling in Blocks
+  hosts: all
+  tasks:
+  - block:
+    - name: Upgrading Database
+       shell:
+       cmd: /opt/db_scripts/upgrade-database
+    rescue:
+    - name: Revert If Upgrade failure happens
+      shell:
+      cmd: /opt/db_scripts/revert-database
+    always:
+    - name: Restart the database
+      service:
+       name: mariadb
+       state: restarted
+
+# Ansible block option will upgrade the database. If upgrade script executed properly, 
+#   the rescue block will be ignored and the always block will be executed.
+
+# In case upgrade script failed, the rescue block will be executed, which will revert all the database changes; 
+#  once it's done, the always block will restart the database. So, either block or rescue will be executed at any time,
+#   but the always block will execute in any case.
