@@ -34,7 +34,35 @@ Ref:-
 https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable
 
 
-##Host Variables and Group Variables
-##--------------------------------------
+#Host Variables and Group Variables
+#--------------------------------------
+.\inventory_host_variables
+
+[servers]
+demo1.example.com ansible_user=devops
+
+[frontends]
+localhost  ansible_connection=local
+host1.example.com ansible_connection=ssh ansible_user=devops
+host2.example.com ansible_connection=ssh ansible_user=ansible
+host3.example.com ansible_user=example ansible_ssh_private_key_file=~/prj/id_rsa
+host4.example.com ansible_host=10.0.113.111
+
+.\inventory_group_variables
+
+[servers]
+demo1.example.com
+demo2.example.com
+
+[servers:vars]
+user=alice
 
 
+
+#Common Magic Variables
+############################
+hostvars
+groups
+group_names
+inventory_hostname
+ansible_version

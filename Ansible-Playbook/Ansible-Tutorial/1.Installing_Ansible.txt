@@ -33,6 +33,47 @@ ansible all -i "localhost," -m shell -a 'echo Ansible is fun'
 ---
 
 #=============================================================================================#
+# 4. YAML Syntax
+#=============================================================================================#
+#1. Tip 1: Ansible-Playbook –Check Option
+$ ansible-playbook -i inventory --check helloworld.yml
+#2. Tip 2: Debug Day-to-Day Usage
+
+.\helloworld_debug.yml
+---
+- name: message debug demo
+  hosts: all
+  tasks:
+    - name: sample message
+      ansible.builtin.debug:
+        msg: "Sample Text"
+        verbosity: 2
+---
+
+#3. privilege_escalation.yml#
+#---------------------------------
+---
+- name: install httpd
+  hosts: web.example.com
+  become: true
+  become_method: sudo
+  become_user: root
+  tasks:
+    - name: install httpd
+      ansible.builtin.yum:
+        name: httpd
+        status: present
+---        
+# The become_method specifies the escalation method. become_user specifies the destination user (default root).
+# Some action needs to be taken by a user with administrative power. In Linux, it’s typically the root user. 
+#   Some distributions allow for privilege escalation using the sudo command using the wheel group. 
+#   The Ansible task will install the httpd Apache web server software so Ansible needs the root privilege to 
+#   perform the task. This step is called “privilege escalation.” The yum module needs to perform some action on 
+#   the managed node. In the Playbook, when it is not necessary, you can disable it.
+
+
+
+#=============================================================================================#
 # 4. Basic Ansible Playbooks
 #=============================================================================================#
 ---                                      # first line of the playbook let us know it's a YAML file with the three dashes (---) 
@@ -54,6 +95,117 @@ ansible-playbook test.yml -i "localhost"
 
 The /etc/ansible/ansible.cfg – These are the system Ansible configurations created when the application is installed.
 
+#Simple YAML Inventory
+#--------------------------
+./simple_yaml_inventory.yml
+---
+all:
+  hosts:
+    host1.example.com:
+  children:
+    frontends:
+      hosts:
+        host2.example.com:
+        host3.example.com:
+---
+# host host1.example.com is ungrouped but host2.example.com and host3.example.com are grouped as frontends.
+
+#Adding Ranges of Hosts
+#--------------------------
+./ini_range_inventory
+
+[frontends]
+www[01:99].example.com
+
+[backends]
+back-[a-f].example.com
+
+
+#Hosting in Multiple Groups
+#-------------------------------
+./ini_groupsmultiple_inventory
+
+
+host1.example.com
+
+[frontends]
+host2.example.com
+host3.example.com
+
+[prod]
+host2.example.com
+
+[dev]
+host3.example.com
+
+
+#Host Variables
+#-------------------
+./ini_hostinventory
+
+[frontends]
+localhost  ansible_connection=local
+host1.example.com ansible_connection=ssh ansible_user=devops
+host2.example.com ansible_connection=ssh ansible_user=ansible
+host3.example.com ansible_user=example ansible_ssh_private_key_file=~/prj/id_rsa
+host4.example.com ansible_host=10.0.113.111
+
+#Group Variables
+#--------------------
+./groupsvariables_inventory_ini
+
+[frontends]
+host1.example.com
+host2.example.com
+
+[frontends:vars]
+ntp_server=europe.pool.ntp.org
+
+./groupsvariables_inventory_yaml.yml
+---
+frontends:
+  hosts:
+    host2.example.com:
+    host3.example.com:
+  vars:
+    ntp_server: europe.pool.ntp.org
+---
+
+
+#Inheriting Variable Values
+#----------------------------
+#Hosts and groups can be combined.
+
+./ini_variableinheriting_inventory
+
+[asia]
+host1.example.com
+
+[europe]
+host2.example.com
+
+[frontends:children]
+asia
+europe
+
+[frontends:vars]
+ntp_server=europe.pool.ntp.org
+./variableinheriting_inventory.yml
+---
+children:
+  frontends:
+    children:
+      asia:
+        hosts:
+          host1.example.com:
+      europe:
+        hosts:
+          host2.example.com:
+    vars:
+      ntp_server: europe.pool.ntp.org
+
+---
+
 Ref- 
 https://docs.ansible.com/ansible/latest/installation_guide/intro_configuration.html#explanation-of-values-by-section
 
@@ -61,6 +213,39 @@ https://docs.ansible.com/ansible/latest/installation_guide/intro_configuration.h
 # 6. Running Ansible Modules
 #=============================================================================================#
 https://docs.ansible.com/ansible/latest/module_plugin_guide/index.html
+https://docs.ansible.com/ansible/latest/collections/ansible/builtin/index.html
+
+#Files modules
+#----------------
+copy: Copies files from a local file or directory to the managed host
+fetch: Copies files from remote nodes to local files
+file: Sets permissions and other properties of files
+lineinfile: Adds or verifies that a particular line is or is not in a file configuration
+synchronize: Synchronizes content using Rsync
+
+#Software package modules
+#-----------------------------
+package: Manages packages using the autodetected package manager native to the operating system
+yum: Manages packages using the YUM package manager
+apt: Manages packages using the APT package manager
+dnf: Manages packages using the DNF package manager
+gem: Manages Ruby gems
+pip: Manages Python packages from PyPI
+
+#System modules
+#---------------
+firewalld: Manages arbitrary ports and services using firewalld
+reboot: Reboots a machine
+service: Manages services
+user: Adds, removes, and manages user accounts
+
+#Net tools modules
+#-------------------
+get_url: Downloads files in HTTP, HTTPS, and FTP
+nmcli: Manages networking
+uri: Interacts with web services
+
+
 
 #=============================================================================================#
 7. # Ping Module
@@ -568,7 +753,4 @@ head -n5 roles/db_server/vars/test_environment.yml
 ansible-vault view roles/db_server/vars/test_environment.yml
 
 ansible-playbook -i hosts site.yml -e django_app_location=`pwd` -e env=test --ask-vault-pass
-
-
-
 
