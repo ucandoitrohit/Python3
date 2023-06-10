@@ -1,0 +1,204 @@
+# Ansible in WIndows
+=====================
+
+$url = "https://raw.githubusercontent.com/ansible/ansible/devel/
+examples/scripts/ConfigureRemotingForAnsible.ps1"
+$file = "$env:temp\ConfigureRemotingForAnsible.ps1"
+(New-Object -TypeName System.Net.WebClient).DownloadFile($url,
+$file)
+powershell.exe -ExecutionPolicy ByPass -File $file
+Once WinRM is enabled, we can run the following command to verify if everything is in place:
+
+PS C:\Users\Administrator> winrm enumerate winrm/config/Listener
+Listener
+   Address = *
+   Transport = HTTP
+   Port = 5985
+   Hostname
+   Enabled = true
+   URLPrefix = wsman
+   CertificateThumbprint
+   ListeningOn = 10.0.0.31, 10.0.2.15, 127.0.0.1, ::1,
+   fe80::691e:1877:b1c4:74d2%4, fe80::6c93:ae74:4321:6681%9
+
+Listener
+   Address = *
+   Transport = HTTPS
+   Port = 5986
+   Hostname = WIN_NODE_01
+   Enabled = true
+   URLPrefix = wsman
+   CertificateThumbprint = EA886C91DF6DC9024C4B91C1A1C343784DC80A02
+   ListeningOn = 10.0.0.31, 10.0.2.15, 127.0.0.1, ::1,
+   fe80::691e:1877:b1c4:74d2%4, fe80::6c93:ae74:4321:6681%9
+
+
+   $ tree
+.
+.
+├── ansible.cfg
+├── group_vars
+│   ├── lnx
+│   │   ├── vars.yml
+│   │   └── vault.yml
+│   └── win
+│       ├── vars.yml
+│       └── vault.yml
+└── hosts
+
+3 directories, 6 files
+$
+
+$ cat hosts
+[win]
+win_node_01
+win_node_02
+[lnx]
+cen_node_01
+cen_node_02
+ubu_node_01
+ubu_node_02
+
+
+$ cat ansible.cfg
+[defaults]
+gathering = explicit
+inventory = hosts
+retry_files_enabled = False
+$ cat group_vars/lnx/vars.yml
+ansible_user: ansible
+ansible_password: "{{vault_ansible_password}}"
+
+$ cat group_vars/lnx/vault.yml
+$ANSIBLE_VAULT;1.1;AES256
+666633623836396337653263613262353664343262616139393530313364306462
+653133653065393335396439363633646264313637373731323734353332350a64
+343938303937313736306432343063373937623362363532636532303236313766
+6161343562393937333661313237656336653464383961306332393039620a6634
+323838336563396664333730363234316136663532643062623662376461383066
+333835376666626361633938343562386535613132613136386237336332623764
+36666632383239623535613335353330363938343263393538373833
+$ cat group_vars/win/vars.yml
+ansible_user: administrator
+ansible_password: "{{vault_ansible_password}}"
+ansible_connection: winrm
+ansible_winrm_server_cert_validation: ignore
+
+$ cat group_vars/win/vault.yml
+$ANSIBLE_VAULT;1.1;AES256
+323936376138636336333430316239623336626532646364663331336361323761
+613363633133623839323666303036623737353666373161303933316461350a63
+376261313234333866633531663334656165393934663562626666356533316136
+6436643632306661626164663339363938633330346161336534636235370a3461
+346439306665633462613837353833656430376365383662396566666234356563
+3561393136353763653566636264613062396239373939376232373238
+$
+
+
+
+The following is the test command to check if everything is working in our lab:
+
+$ ansible all -m raw -a "hostname" --ask-vault-pass
+Vault password:
+
+
+The remote command execution modules for the Linux machines are as follows:
+Command
+Shell
+
+The remote command execution modules for the Windows machines are as follows:
+win_command
+win_shell
+
+Ansible win_command module
+-----------------------------------
+#This Ansible module will execute the commands in the Windows computer. 
+#   The environmental variable and operations like <, >, |, and ; will not work, which is similar to the Linux module.
+
+Parameters for win_command module
+Example 1:
+task:
+- name: Execute command 'whoami' on windows
+  win_command: whoami
+  register: whoami_output
+
+Explanation
+Executing the whoami command on the Windows nodes and store the output in the whoami_output variable.
+
+
+chdir: This parameter will specify the current working directory before executing the command. 
+creates: This parameter will set a path or pattern; if the path doesn't exist, then the task will be skipped.
+removes: This parameter will set a path or pattern; if the path does not exist, then the task will be skipped.
+
+Example 2:
+task:
+- name: Run command only if folder exists
+  win_command: wbadmin - backupTarget:C:\backup\
+  args:
+  chdir: C:\projects\
+  creates: C:\backup\
+
+Explanation
+#we are looking for a folder before executing a command. If the folder exists, only then command
+#  wbadmin -backupTarget:C:\backup\will be executed.
+
+Ansible win_shell module
+----------------------------
+#This Ansible module will execute the commands in the Windows computer default terminal which is, by default, PowerShell.
+# Therefore, the environmental variable and operations like <, >, |, and ; will work.
+
+Parameters for win_shell module
+Example 1:
+task:
+- name: Execute a command in the remote shell and redirect
+  output
+  win_shell: C:\scripts\system_health.ps1 >> C:\systemlog.txt
+Explanation
+how to redirect the output in the Windows hosts.the output of the command C:\scripts\system_health.ps1 is being 
+stored in a file C:\systemlog.txt.
+
+chdir
+---------
+This parameter will specify the current working directory before executing the command.
+Example 2:
+task:
+- name: Change the working directory before executing the
+  command
+  win_shell: C:\scripts\system_health.ps1 >> C:\systemlog.txt
+  args:
+  chdir: C:\project\systemhealth\
+
+creates
+------------
+This parameter will set a path or pattern; if the path exists, then the task will be skipped.
+
+removes
+--------
+This parameter will set a path or pattern; if the path does not exist, then the task will be skipped.
+
+Example 3:
+task:
+- name: Run a command only run when specified file does not
+  exist
+  win_shell: C:\scripts\system_health.ps1 >> C:\systemlog.txt
+  args:
+  chdir: C:\project\systemhealth\
+  creates: C:\project\systemhealth\systemlog.txt
+Explanation
+#we change the directory to C:\project\systemhealth\, check the existence of the file systemlog.txt, and 
+#then execute the command C:\scripts\system_health.ps1 >> C:\systemlog.txt, which will save the output in a file.
+
+executable
+---------------
+This parameter will allow us to change the shell. By default, this module uses PowerShell; however, 
+Example 4:
+task:
+- name: Run a command under a non-Powershell interpreter
+  win_shell: echo %HOMEDIR%
+  args:
+  executable: cmd
+  register: homedir_out
+#we are changing the interpreter for Windows. By default, all the Ansible modules uses PowerShell. 
+#However, we can use this parameter to execute a specific command in another interpreter such as CMD. 
+#Moreover, the output is being saved in a variable named homedir_out.
+
