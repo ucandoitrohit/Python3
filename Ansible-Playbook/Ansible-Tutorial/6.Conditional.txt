@@ -1,0 +1,33 @@
+# Conditional
+
+#Basic Conditionals with “When”
+#----------------------------------
+conditional_basic_false.yml
+---
+- name: conditional_basic
+  hosts: all
+  vars:
+    configure_nginx: true
+  tasks:
+    - name: reload nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
+      when: configure_nginx
+
+# This is the output of the execution of conditional_basic_true.yml. In this execution, 
+#   the play is executed against the demo1.example.com node. The output is highlighted in green. As you can see, 
+#   the task of the task reload nginx is read by Ansible and executed successfully in the conditional statement.
+
+
+# Conditionals Based on ansible_facts
+#--------------------------------------
+---
+- name: conditional_facts
+  hosts: all
+  tasks:
+  - name: Shut down Debian-like systems
+    ansible.builtin.command: /sbin/shutdown -t now
+    when: ansible_facts['os_family'] == "Debian"
+
+    
