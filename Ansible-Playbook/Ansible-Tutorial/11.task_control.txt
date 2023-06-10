@@ -1,0 +1,15 @@
+# Managing task control
+This module covers the different solutions to control a task, which includes the following topics:
+
+- with_items
+- Nested loops
+- When statement
+- Registering variables
+- Handlers
+- Tags
+- Errors
+- Ansible blocks
+
+
+
+
