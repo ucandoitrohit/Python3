@@ -202,3 +202,1288 @@ task:
 #However, we can use this parameter to execute a specific command in another interpreter such as CMD. 
 #Moreover, the output is being saved in a variable named homedir_out.
 
+
+
+#User management
+#=======================
+The modules for user management in the Windows servers are as follows:
+win_domain_user
+win_domain_computer
+
+
+Parameters for user module
+-------------------------------
+The following are the parameters available with this Ansible module:
+name: This parameter is mandatory and allows us to enter the name of the user which we want to create, modify, or remove.
+group: This parameter will allow us to set the group for the user. This is an optional parameter.
+comment: This parameter will allow us to set the comment for the user.
+uid: This parameter will allow us to set the UID for the user. This is an optional parameter.
+
+Example 1:
+task:
+- name: Add the user
+  user:
+   name: wirtaza
+   comment: Waqas Irtaza
+   uid: 1040
+   group: admin
+
+Explanation
+#we are automating the most basic system administration task, which is creating a user. 
+#We are also adding comment, uid, and group which are self-explanatory.
+
+
+shell: This parameter will allow us to set the shell for the user.
+groups: This parameter will allow us to enter the list of groups and the user will be added in all of them.
+append: This is a tricky parameter, if append is set to yes, the user will be added in all the groups mentioned in the groups parameter. However, if it is mentioned as no, the user will be added in all the groups mentioned in the groups parameter and removed from any other group which is not listed.
+
+Example 2:
+task:
+- name: Create User and add in groups
+   user:
+    name: james
+    shell: /bin/bash
+    groups: admins,developers,dba
+    append: yes
+
+Explanation
+#we are creating a group, defining the shell for the user, and then appending the groups for the user. 
+#We just discussed what append can do for us, so I will not repeat it.
+
+
+state: This parameter will allow us to decide if the user should exist or be removed. The possible options are 
+      present, which means the user should exist, and absent, which mean the user should be deleted. 
+        present is the default value to the state and even if the user doesn't mention it explicitly, 
+        Ansible will fire the present operation; for the delete operation though, the user does need 
+        to mention state: absent.
+remove: This parameter is subjected to the state parameter; if the state is absent, only then this parameter 
+      will try to remove the directories associated with the user.
+force: Similar to the remove parameter, this parameter is subjected to the state parameter. 
+      If the state is absent, it will force the removal of the user and its associated directories.
+
+Example 3:
+task:
+- name: Remove the user
+  user:
+   name: johnd
+   state: absent
+   remove: yes
+   force: yes
+
+# we will see how to remove a user by using Ansible. We have already discussed the state, remove, and force parameters,
+# which are self-explanatory here.
+
+
+expires: This parameter will allow us to set the expiry date for the user.
+home: This is an optional parameter and allows us to set the users' home directory, if required.
+password: This parameter allows us to set the user's password to the provided encrypted value.
+
+#Modules for user management in Windows servers
+#----------------------------------------------------
+
+#Ansible win_domain_user module
+#--------------------------------
+This Ansible module allows us to manage the active directory users.
+
+#Parameters for win_domain_user
+#--------------------------------------
+#the parameters of this module are the user attributes in the active directory like the first name, last name, 
+#address, and so on. Therefore, we will only cover the parameters which are more specific to Ansible. 
+#The remaining parameters will be clear with the following examples.
+
+Example 1:
+task:
+- name: Create Windows User
+  win_domain_user:
+   name: waqas
+   firstname: waqas
+   surname: irtaza
+   company: acadigo
+   password: w@q@sP4ssw0rd
+   state: present
+   groups:
+    - Domain Admins
+   street: 402 Demascous St
+   city: Dubai
+   state_province: Dubai
+   country: UAE
+   attributes:
+   telephoneNumber: 111-123456
+#we will create a Windows user with additional parameters. As a system administrator,
+# you will be aware that most of the parameters we set here are optional. We are putting them here just to 
+#let you know the flexibility that you have available with this Ansible module.
+
+Example 2:
+task:
+- name: Remove a user
+  win_domain_user:
+    name: waqas
+    state: absent
+#we are removing a user from the active directory:
+
+domain_username: This parameter will allow us to use this specific user when interacting with the active directory.
+domain_password: This parameter will specify the password for the username mentioned in the domain_username parameter.
+domain_server: This parameter will specify the active directory server.
+status: This parameter will specify the state of the user account. The possible options are as follows:
+Absent: Removes the user account, if it exists.
+Present: Creates or updates the user account.
+Query: Gets information about the user account.
+
+Example 3:
+task:
+- name: Privilege Escalation during User Creation
+   win_domain_user:
+    name: Waqas
+    firstname: Waqas
+    surname: Irtaza
+    password: w@q@sP4ssw0rd
+    state: present
+    domain_username: DOMAIN\admin-account
+    domain_password: d0m@!nPas2w0rd
+    domain_server: domain@DOMAIN.COM
+#we will learn about another interesting concept. For example, our automation user doesn't have the permission to 
+#create a user. We can specifically provide the active directory admin credential to do the magic. Of course, 
+#for such cases, either we will put the credential in the Ansible Vault or encrypt the whole playbook since it has the credentials. For this example, we have provided the clear text credentials just for lab purpose only:
+
+
+path: This parameter will specify the container for the new user; if this parameter is not specified, the user will be placed in the default container in the active directory.
+groups: This parameter will specify the group or a list of groups for adding or removing the user based on the group_action parameter.
+group_action: This parameter will specify the action needed to be taken against the group or list of groups mentioned in the groups parameter. The possible options are as follows:
+add: Adds the user in each group listed in the groups parameter.
+remove: Removes the user from each group listed in the groups parameter.
+replace: Adds the user in each group listed in the groups parameter and removes from any other groups.
+
+Example 2:
+task: Ensure user in available in specific OU
+- name:
+  win_domain_user:
+    name: waqas
+    password: w@q@sP4ssw0rd
+    state: present
+    path: ou=test,dc=domain,dc=local
+    groups:
+    - Domain Admins
+#we will use the path parameter to the specific OU and domain for the user. Moreover, 
+#we will also be adding the user in the Domain Admins group.
+
+
+#Ansible win_domain_computer module
+#--------------------------------------
+This Ansible module enables us to create, delete, update, and read the computers from the active directory.
+
+#Parameters for win_domain_computer module
+#----------------------------------------------------
+sam_account_name: This parameter will allow us to specify the security account manager name for the computer. As highlighted in the example, the same name should end with $.
+dns_hostname: This parameter will specify the fully qualified domain name for the computer.
+enabled: As the name states, this parameter will enable the account. The possible options are yes and no.
+state: This parameter will specify the state of the computer in the active directory. The possible options are as follows:
+absent: Removes the user account, if it exists.
+present: Creates or updates the user account.
+
+Example 1:
+task:
+- name: Add Linux computer to Active Directory OU
+  win_domain_computer:
+   name: cen_node_01
+   sam_account_name: cen_node_01$
+   dns_hostname: cen_node_o1.acadigo.local
+   ou: "OU=servers,DC=acadigo,DC=local"
+   description: Adding Linux server to AD
+   enabled: yes
+   state: present
+delegate_to: my_windows_bridge.my_org.local
+#we are adding a Linux computer to the active directory. We only require such actions in productions, 
+#so we will also be adding some additional parameters which you might require in your production deployment.
+
+
+Example 2:
+task:
+- name: Remove Linux computer from Active Directory
+  win_domain_computer:
+   name: cen_node_01
+   state: absent
+   delegate_to: windows_bridge.acadigo.local
+#we are removing a Linux computer from the active directory.
+
+
+#Package management
+#-------------------------
+#Installing, updating, and uninstalling the software packages are also an essential part of the system administrator's 
+#day-to-day activities. Automating it, can save a lot of time and resources. Let's see which Ansible modules will 
+#help us accomplish this task.
+#package
+#------------
+
+win_package
+win_feature
+
+#Ansible package management module for Windows servers
+#-----------------------------------------------------------------
+#we will dissect the module functionality and parameters. Moreover, we will add an example for the most used cases.
+
+#Ansible win_package module
+#--------------------------------
+
+#This Ansible module will allow us to install and uninstall the software packages on the Windows computers. 
+#The support format are .exe, .msi, .msp, .appx, .appxbundle, .msix, and .msixbundle. This software can be 
+#sourced from the local file system, network share, or URL.
+
+#Parameter for win_package module
+#------------------------------------
+path: This parameter will specify the packages.
+product_id: This parameter will specify the product ID for the installed packages.
+arguments: This parameter will specify any additional argument required for the packages.
+
+Example 1:
+task:
+- name: Install the Package from URL
+  win_package:
+   path: http://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe
+   product_id: '{CF2BEA3C-26EA-32F8-AA9B-331F7E34BA97}'
+   arguments:
+    -/install
+    -/passive
+    -/norestart
+#we are downloading the .exe package from the URL and installing it on the Windows hosts.
+
+state: This parameter will specify the state of the packages. The following are the possible options:
+absent: Uninstall package.
+present: Install package.
+log_path: This parameter will specify the path for the log file. This file will persist after the package is installed.
+
+Example 2:
+task:
+- name: : Install package from msi
+  win_package:
+   path: https://download.microsoft.com/download/A/F/0/AF0071F3-B198-4A35-AA90-C68D103BDCCF/rdcman.msi
+   product_id: '{0240359E-6A4C-4884-9E94-B397A02D893C}'
+   state: present
+   log_path: D:\logs\vcredist_x64-exe-{{lookup('pipe', 'date +%Y%m%dT%H%M%S')}}.log
+
+#we are downloading the.msi package from the URL and installing it on the Windows hosts.
+
+Example 3:
+task:
+- name: Install package available locally
+  win_package:
+     path: C:\temp\rdcman.msi
+     state: present
+#we are installing the package, which is already available on the host machines.
+
+Example 4:
+task:
+- name: Uninstall package from local source
+  win_package:
+   path: C:\temp\rdcman.msi
+   state: absent
+#we are uninstalling the package, which is already available on the host machines.
+
+Example 5:
+task:
+- name: Install package from network share
+  win_package:
+     path: \\domain\programs\7z.exe
+     product_id: 7-Zip
+     arguments: /S
+     state: present
+  become: yes
+  become_method: runas
+  become_flags: logon_type=new_credentiallogon_flags=netcredentials_only
+  vars:
+    ansible_become_user: acadigo\waqas
+    ansible_become_password: Password
+#we are expanding our package installation option, and downloading a package from the network share after providing 
+#specific credentials; then we will be installing it.
+
+creates_path: This parameter will check the existence of the path and use the output to determine whether the package 
+#is already installed.
+creates_version: This parameter will check the file version property of the file and use the output to determine whether
+# the package is already installed.
+
+Example 6:
+task:
+- name: Install package and use a file version
+  win_package:
+     path: C:\temp\7z.exe
+     creates_path: C:\Program Files\7-Zip\7z.exe
+     creates_version: 16.04
+     state: present
+#we are ensuring if a specific version of the package is installed.
+
+#Ansible win_feature module
+#----------------------------
+#This Ansible module enables us to install or uninstall the Windows roles and features on the Windows servers.
+
+#Parameters for win_feature module
+#------------------------------------
+Example 1:
+task:
+- name: Install a windows feature named Web-Server
+  win_feature:
+     name: Web-Server
+     state: present
+
+Example 2:
+task:
+- name: Install multiple windows features
+  win_feature:
+     name:
+      - Web-Server
+      - Web-Common-Http
+     state: present
+Example 3:
+task:
+- name: include sub features and management tools during feature installation
+  win_feature:
+      name: Web-Server
+      state: present
+      include_sub_features: yes
+      include_management_tools: yes
+  register: win_feature
+# we are including sub features and management tools which are optionally available with the features. 
+#Moreover, we will be saving the output in a variable named as win_feature.
+
+#Service management
+#=========================
+The Ansible service management module for Windows is as follows:
+
+win_service
+
+Parameter for win_service module
+
+name: This parameter will allow us to specify the name or ID for the service.
+state: This parameter allow us the action needed to be taken on the service; the following are the possible options:
+          absent
+          paused
+          started
+          stopped
+          restarted
+
+Example 1:
+task:
+- name: Restart a service
+  win_service:
+     name: spooler
+     state: restarted
+Example 2:
+task:
+- name: Pause a service
+  win_service:
+    name: Netlogon
+    state: paused
+Example 3:
+task:
+- name: Remove a service
+  win_service:
+   name: service name
+   state: absent
+
+start_mode: This parameter will allow us to set the start-up type of the service. The possible options are as follows:
+                auto
+                delayed
+                disabled
+                manual
+
+Example 4:
+task:
+- name: Set service startup
+  win_service:
+   name: spooler
+   start_mode: auto
+   state: started
+#we are setting up a service startup mode as auto and ensure the service is started.
+
+path: This parameter will allow us to set the path of the executable as a service:
+
+Example 5:
+task:
+- name: Create a new service
+  win_service:
+     name: test_service
+     path: C:\temp\test.exe
+
+#we are creating a new service, named test_service. The path will specify the executable associated with the service.
+
+display_name: This parameter will allow us to set the display name for the service.
+description: This parameter will allow us to set the description for the service.
+Example 6:
+task:
+- name: Create a new service with extra details
+  win_service:
+     name: service name
+     path: C:\temp\test.exe
+     display_name: Service Name
+     description: A test service description
+#we are creating a new service and also set the display name for the service and description.
+
+username: This parameter will allow us to specify the username and the service will start with that user.
+password: This parameter will allow us to enter the password for the preceding user.
+
+Example 7:
+task:
+- name: Set the logon user to a domain account
+  win_service:
+     name: spooler
+     state: restarted
+     username: DOMAIN\User
+     password: Password
+#we are setting the log on user to a domain for that particular service.
+
+Example 8:
+task:
+- name: logon user to a local account
+  win_service:
+   name: service name
+   state: restarted
+   username: .\Administrator
+   password: Password
+#we are setting the logon user to a local user for that particular service.
+
+dependencies: This parameter will allow us to add a list of dependent services.
+
+Example 9:
+task:
+- name: Set dependencies for a service
+  win_service:
+   name: service name
+   dependencies: [service1, service2]
+#we are setting up the dependencies for the service.
+
+#Files and folder management
+#===============================
+The Ansible file and folder management modules for Linux are as follows:
+
+copy
+fetch
+template
+file
+lineinfile
+unarchive
+The Ansible file and folder management modules for Windows are as follows:
+win_copy
+fetch
+win_template
+win_file
+win_find
+win_unzip
+
+
+Parameters for copy module
+#--------------------------------
+attributes: This parameter will set the attributes on the file or directory. The attributes should be in the same order as they are displayed in the lsattr Linux command.
+backup: This parameter will create a backup file which includes the timestamp, so that we can get the original file back, if required.
+content: This parameter will set the content of a file directly with a value assigned to it.
+decrypt: This parameter will allow us to decrypt the source files using the vault.
+src: This parameter will allow us to specify the local path of the files. It supports both the relative and the absolute paths.
+dest: This parameter will set the directory path on the remote machines. It only supports the absolute path.
+directory_mode: This parameter will allow us to copy the directories to the remote locations.
+force: This parameter will allow us to replace the already existing file on the remote note. If not specified, its default value is Yes.
+group: This parameter will allow us to set the group of the file or directory.
+mode: This parameter will allow us to set the permission on the files and folders.
+owner: This parameter will allow us to set the owner of the files and directories.
+unsafe_writes: This parameter will allow us to use atomic operations to prevent data corruption or inconsistent reads from a target file. This option allows Ansible to fall back to unsafe methods of updating files when atomic operations fail however, it doesn't force Ansible to perform unsafe writes.
+
+Example 1:
+task:
+- name: Copy file and manipulate permissions
+  Copy:
+     src: /srv/project/data.conf
+     dest: /etc/data.conf
+     owner: app_user
+     group: app_user
+     mode: '0644'
+# we are copying a file and changing the owner, group, and permission on the file.
+
+Example 2:
+task:
+- name: Copy file and adding and removing permissions
+  copy:
+    src: /srv/project/data.conf
+    dest: /etc/data.conf
+    owner: app_user
+    group: app_user
+    mode: u+rw,g-wx,o-rwx
+Example 3:
+Task:
+- name: backing up the original if it differs from the copied version
+- copy:
+    src: /mine/ntp.conf
+    dest: /etc/ntp.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+#we are copying the file as well as taking the backup.
+
+
+Ansible fetch module
+
+src: This parameter allows us to provide the source file name from the remote systems. This module only supports files, and not directories.
+dest: This parameter allows us to enter the name of the directory where we want to save this file received from the remote nodes.
+
+Example 1:
+task:
+- name: Get file from remote system and save locally
+  fetch:
+    src: /tmp/somefile
+    dest: /tmp/fetched
+#we are copying a file from the remote systems to a local system.
+
+fail_on_missing: This parameter will allow us to modify the default Ansible behavior, so if it is set to yes, it forces the task to fail, in case remote file can't be read due to any reason.
+flat: This parameter will allow us to override the Ansible default behavior, where the hostname is appended in the 
+#     name which will avoid the file to be overwritten when we have multiple remote hosts.
+#     This optional parameter is useful when we have the files already renamed properly on the remote hosts.
+
+Example 2:
+task:
+- name: Understand the flat parameter
+  fetch:
+    src: /tmp/uniquefile
+    dest: /tmp/special
+    flat: yes
+
+In this example, we are exploring the usage of the flat option, which will help keep the same file name at the destination.
+
+
+Ansible file module
+This module is to set the attributes on the Linux files, symlinks, and directories.
+
+Parameters for file module
+Let's discuss the parameters with this module, which are as follows:
+
+path: This parameter will set the path of the file which is being managed.
+
+owner: This parameter will have the name of the owner of the file or directory.
+
+group: This parameter will have the name of the group that will own the file or directory.
+
+mode: This parameter will set the permission on the file or directory.
+
+Example 1:
+task:
+  - name: Change file ownership, group and permissions
+   file:
+    path: /etc/data/script.sh
+    owner: waqas
+    group: waqas
+    mode: '0644'
+Explanation
+
+In this example, we are changing the permission on a file. We have seen similar parameters in copy, so I am not explaining them again.
+
+state: This parameter covers a couple of the following scenarios:
+
+hard
+
+link
+
+absent
+
+directory
+
+file
+
+touch
+
+We will cover most of these options in our examples.
+
+src and dest: These parameters will contain the source and destination path of the link. It's only applicable when the state is link/hard:
+
+
+Example 2:
+task:
+   - name: Create a symbolic link
+    file:
+     src: /var/system/script.sh
+     dest: /home/Waqas/script
+     owner: waqas
+     group: waqas
+     state: link
+Explanation
+
+In this example, we are creating a symbolic link for the script.sh file.
+
+
+Example 3:
+task:
+   - name: Remove directory
+    file:
+     path: /etc/data
+     state: absent
+Explanation
+
+In this example, we are removing the dictionary. Remember, dictionary removal means recursively removing anything inside the directory as well.
+
+
+Example 4:
+task:
+   - name: Create a directory
+    file:
+     path: /etc/some_directory
+     state: directory
+     mode: '0755'
+Explanation
+
+In this example, we are creating a directory. If the directory already exists, then no change will be done.
+
+recurse: This parameter will allow us to recursively set the parameters on the directory content.
+
+
+Example 5:
+task:
+   - name: Recursively change ownership of a directory
+    file:
+     path: /etc/data
+     state: directory
+     recurse: yes
+     owner: waqas
+     group: waqas
+Explanation
+
+In this example, we are recursively changing the ownership on a dictionary.
+
+
+Ansible lineinfile module
+This Ansible module ensure a particular line is available in a file. It can also replace the existing line using the regular expressions.
+
+Parameters for lineinfile module
+Let's discuss the parameters with this module, which are as follows:
+
+regexp: This parameter will enable us to use the regular expression, so that we can look for a line in the file.
+
+line: This parameter will specify the line which will be either checked or inserted in the file.
+
+Example 1:
+task:
+   - name: Ensure SELinux is set to enforcing
+    lineinfile:
+     path: /etc/selinux/config
+     regexp: '^SELINUX='
+     line: SELINUX=enforcing
+Explanation
+
+In this example, we are searching for the text line SELINUX=enforcing in the SELinux configuration. If the line is not there, it will be placed.
+
+
+Example 2:
+task:
+   - name: Make sure group web_team is not in the sudoers
+    lineinfile:
+     path: /etc/sudoers
+     state: absent
+     regexp: '^%web_team'
+Explanation
+
+In this example, we are ensuring that a particular user doesn't have the SUDO rights.
+
+insertafter and insertbefore: These parameters will enable us to insert the line before or after the last match of the specified regular expression.
+
+
+Example 3:
+task:
+   - name: Ensure the default Apache port is 8080
+    lineinfile:
+     path: /etc/httpd/conf/httpd.conf
+     regexp: '^Listen '
+     insertafter: '^#Listen '
+     line: Listen 8080
+Explanation
+
+In this example, we are making sure that HTTP is using the 8080 port.
+
+validate: This parameter will allow us to validate the command before copying it.
+
+
+Example 4:
+task:
+   - name: Validate the sudoers file before saving
+    lineinfile:
+     path: /etc/sudoers
+     state: present
+     regexp: '^%ADMIN ALL='
+     line: '%ADMIN ALL=(ALL) NOPASSWD: ALL'
+     validate: /usr/sbin/visudo -cf %s
+Explanation
+
+In this example, we are verifying the configuration on the sudoers file before saving it.
+
+
+Ansible unarchive module
+This Ansible module will unpack an archive file. It normally copies the file from the local system to the remote system, and then unpacks it.
+
+Parameters for unarchive module
+The following are some key parameters with this module:
+
+src: This parameter will specify the source archive path.
+
+dest: This parameter will specify the destination path where the unarchived file will reside.
+
+Example 1:
+task:
+   - name: Extract .tgz File
+    unarchive:
+    src: package.tgz
+    dest: /var/lib/package
+Explanation
+
+In this example, we are extracting a .tgz file available in the current directory.
+
+remote_src: If this parameter is set to yes, it means the file is already available on the remote node. We only need to unarchive it and vice versa.
+
+
+Example 2:
+task:
+ - name: Unarchive a file that is already on the remote machine
+  unarchive:
+   src: /tmp/foo.zip
+   dest: /usr/local/bin
+   remote_src: yes
+Explanation
+
+In this example, we are extracting a file, which is already available on the remote machines. In the previous example, the file was available on the Ansible control node and extracted on the remote machines
+
+
+Example 3:
+task:
+ - name: Unarchive a file which needs to be downloaded
+  unarchive:
+   src: https://acadigo.com/temp.zip
+   dest: /usr/local/bin
+   remote_src: yes
+Explanation
+
+In this example, we are downloading the file and then extracting it.
+
+copy: If this parameter is set to yes, then the file will be copied to the remote machines and then unarchive will happen. Otherwise, the src path will be searched on the remote node for the archive file.
+
+
+Ansible file and folder management modules for Windows Servers
+In this section, we will dissect the module functionality and parameters. Moreover, we will add an example for the most used cases.
+
+Ansible win_copy module
+This module will copy the file to the remote Windows managed hosts.
+
+Parameters for win_copy module
+Let's discuss the parameters with this module, which are as follows:
+
+src: This parameter allows us to specify the source file or folder.
+
+dest: This parameter allows us to specify the destination file or folder name on the remote nodes. Let's take a couple of example scenarios to understand the possible options.
+
+Example 1:
+task:
+ - name: Copy a  file
+  win_copy:
+     src: /srv/myfiles/server.conf
+     dest: C:\Temp\renamed-server.conf
+Explanation
+
+In this example, we are copying a file from the control node to the managed nodes.
+
+
+Example 2:
+task:
+ - name: Copy a single file keeping the filename
+  win_copy:
+    src: /src/myfiles/foo.conf
+    dest: C:\Temp\
+Explanation
+
+In this example, we are copying a file without changing its name.
+
+
+Example 3:
+task:
+ - name: Copy folder
+  win_copy:
+    src: files/temp_files
+    dest: C:\Temp
+Explanation
+
+In this example, we are copying a folder and its content.
+
+remote_src: This parameter will allow us to copy the file when the source file is not available on the control node. It will go to the remote target for the source. The possible options are Yes and No.
+
+
+Example 4:
+task:
+ - name: Copy a single file where the source is on the remote host
+  win_copy:
+    src: C:\Temp\foo.txt
+    dest: C:\ansible\foo.txt
+    remote_src: yes
+Explanation
+
+In this example, we are copying a file when the source file is already on the remote nodes.
+
+backup: This parameter will allow us to create a backup folder and backup the original. This parameter only works when our source file is one remote node. We have just discussed that option in the preceding example.
+
+
+Example 5:
+task:
+ - name: Copy a single file, but keep a backup
+  win_copy:
+    src: /srv/myfiles/foo.conf
+    dest: C:\Temp\renamed-foo.conf
+    backup: yes
+Explanation
+
+In this example, we are copying a file, and also taking a backup of the file.
+
+content: This parameter allows us to save and write the content directly to a file.
+
+
+Example 6:
+task:
+ - name: Add  contents to a file
+  win_copy:
+    content: texttocopy
+    dest: C:\Temp\foo.txt
+Explanation
+
+In this example, we are copying the content in a file.
+
+
+Ansible win_file module
+This Ansible module creates the files, updates the file stamps, and creates and removes directories. This module can't modify the ownership or permission on the files as we did for the Linux module.
+
+Parameter for win_file module
+Let's discuss the parameters for this module, which are as follows:
+
+path: This parameter will specify the path to the file or folder, which we want to manage.
+
+state: This parameter will declare the action, which we want to perform on the file or folder. The possible options are as follows:
+
+absent
+
+directory
+
+file
+
+touch
+
+Example 1:
+task:
+ - name: Create a file
+  win_file:
+   path: C:\Temp\script.conf
+   state: touch
+Explanation
+
+In this example, we are creating a file on the remote machines.
+
+
+Example 2:
+task:
+ - name: Remove a file
+  win_file:
+    path: C:\Temp\foo.conf
+    state: absent
+Explanation
+
+In this example, we are deleting a file.
+
+
+Example 3:
+task:
+ - name: Create folder
+  win_file:
+    path: C:\Temp\folder\subfolder
+    state: directory
+Explanation
+
+In this example, we are creating a folder.
+
+
+Example 4:
+task:
+ - name: Remove folder
+  win_file:
+    path: C:\Temp
+    state: absent
+Explanation
+
+In this example, we are deleting a folder.
+
+
+Ansible win_find module
+This Ansible module will return a list of files based on the specified criteria. Finding the files is part of the daily system administrative tasks. The following are some practical examples which explore the different used cases.
+
+Example 1:
+task:
+ - name: Find files in Directories
+  win_find:
+     paths: D:\Temp
+Explanation
+
+In this example, we are searching for the files and directories.
+
+
+Example 2:
+task:
+ - name: Find hidden files
+  win_find:
+   paths: D:\Temp
+   hidden: yes
+Explanation
+
+In this example, we are searching for hidden files.
+
+
+Example 3:
+task:
+ - name: Find files in multiple directories
+  win_find:
+   paths:
+    - C:\Temp
+    - D:\Temp
+Explanation
+
+In this example, we are looking for the files and directories in multiple locations.
+
+
+Example 4:
+task:
+ - name: Find files with recursively search
+  win_find:
+   paths: D:\Temp
+   recurse: yes
+Explanation
+
+In this example, we are looking for the files in specified directories and sub folders recursively.
+
+
+Example 5:
+task:
+ - name: Find files with specific extensions
+  win_find:
+   paths: D:\Temp
+   patterns: ['*.log', '*.out']
+Explanation
+
+In this example, we are looking for the files with specific extensions like .log and .out.
+
+
+Example 6:
+task:
+ - name: Find files in regular expressions
+  win_find:
+   paths: D:\Temp
+   patterns: out_\d{8}-\d{6}.log
+Explanation
+
+In this example, we are searching for the files with regular expressions.
+
+
+Example 7:
+task:
+   - name: Find files older than 7 days
+    win_find:
+     paths: D:\Temp
+     age: 604800
+     age_stamp: ctime
+Explanation
+
+In this example, we are looking for files which are older than 7 days. Age (7*24*60*60) is provided in seconds.
+
+
+Example 8:
+task:
+ - name: Find files in bigger than 1 GB
+  win_find:
+     paths: D:\Temp
+     size: 1g
+Explanation
+
+In this example, we are searching for the files which are bigger than 1 GB. It can help the system administrator when troubleshooting a disk utilization incident.
+
+
+Ansible win_unzip module
+This Ansible module unzips the compressed files. Let's take the practical examples to uncompress the file with different extensions.
+
+Example 1:
+task:
+ - name: Unzip bz2 file
+  win_unzip:
+   src: C:\Users\Phil\Logs.bz2
+   dest: C:\Users\Phil\OldLogs
+   creates: C:\Users\Phil\OldLogs
+Explanation
+
+In this example, we are extracting a bz2 file on the Windows hosts.
+
+
+Example 2:
+task:
+ - name: Unzip gz file
+  win_unzip:
+   src: C:\Logs\application-error-logs.gz
+   dest: C:\ExtractedLogs\application-error-logs
+Explanation
+
+In this example, we are extracting a gz file on the Windows hosts.
+
+
+Example 3:
+task:
+ - name: Recursive decompression
+  win_unzip:
+   src: C:\Downloads\ApplicationLogs.zip
+   dest: C:\Application\Logs
+   recurse: yes
+   delete_archive: yes
+Explanation
+
+In this example, we are recursively extracting the zip file.
+
+
+Example 4:
+task:
+ - name: Unzip .7z file
+  win_unzip:
+   src: C:\Downloads\ApplicationLogs.7z
+   dest: C:\Application\gLogs
+   password: abcd
+   delete_archive: yes
+Explanation
+
+In this example, we are extracting a .tz file on the Windows hosts.
+
+
+Firewall management
+As part of the system administration, we may have to write the firewall rules for the servers. We can use the following Ansible modules to create the rules for both the Linux and the Windows computers.
+
+The Ansible firewall management module for Linux is as follows:
+
+firewall
+
+The Ansible firewall management modules for Windows are as follows:
+
+win_firewall
+
+win_eventlog
+
+Let's discuss each module with practical examples.
+
+Ansible firewall management module for Linux servers
+In this section, we will dissect the module functionality and parameters. Moreover, we will add an example for the most used cases.
+
+Ansible firewall module
+This module will allow us to add or remove the firewall rules on the Linux firewall. This module will only work if the manage nodes has firewalld >= 0.2.11.
+
+Parameters for Ansible firewalld module
+Let's explore the parameters associated with this module:
+
+service: This parameter will allow us to mention the name of the service.
+
+permanent: This parameter will allow us to save the rule permanently.
+
+state: This parameter will allow us to choose the action. The possible options are as follows:
+
+absent
+
+disabled
+
+enabled
+
+present
+
+Example 1:
+task:
+ - name: permit traffic in default zone for HTTPS
+  firewalld:
+     service: https
+     permanent: yes
+     state: enabled
+Explanation
+
+In this example, we are permitting the HTTP traffic in the default zone.
+
+port: This parameter will allow us to mention the TCP/UTP port.
+
+
+Example 2:
+task:
+ - name: Apply rule by Port number
+    firewalld:
+    port: 8081/tcp
+    permanent: yes
+    state: disabled
+Explanation
+
+In this example, we are adding a TCP port in the firewall rule.
+
+service: This parameter will allow us to name the protocol.
+
+zone: This parameter will allow us to choose the firewall zone.
+
+
+Example 3:
+task:
+ - name: Permanently Enable a Service
+    firewalld:
+       zone: dmz
+       service: http
+       permanent: yes
+       state: enabled
+Explanation
+
+In this example, permanently enable an HTTP service.
+
+icmp_block: As its name states, this parameter will allow us to block the ICMP on a firewall zone.
+
+
+Example 4:
+task:
+ - name: Block Ping
+  firewalld:
+     zone: drop
+     state: enabled
+     permanent: yes
+     icmp_block: echo-request
+Explanation
+
+In this example, we are blocking the ping on the managed nodes.
+
+immediate: This parameter will allow us to choose if this configuration needs to be applied immediately.
+
+rich_rule: This parameter will allow us to add rich rules in the firewall.
+
+
+Example 5:
+task:
+ - name: Redirect port 443 to 8443 with Rich Rule
+  firewalld:
+    rich_rule: rule family=ipv4 forward-port port=443
+    protocol=tcp to-port=8443
+    zone: public
+    permanent: yes
+    immediate: yes
+    state: enabled
+Explanation
+
+In this example, we are redirecting the HTTPS port 443 to the custom port number 8443 on the public zone.
+
+
+Ansible firewall management module for Windows servers
+In this section, we will dissect the module functionality and parameters. Moreover, we will add an example for the most used cases.
+
+Ansible win_firewall module
+This Ansible module will allow us to enable or disable the Windows firewall profiles.
+
+Parameters for win_firewall module
+The following are the parameters for this module:
+
+state: This parameter will specify the desire state of the firewall profile.
+
+profiles: This parameter will allow us to specify one or more profiles which we want to change. The following are the default profiles:
+
+T Domain
+
+T Private
+
+T Public
+
+Example 1:
+task:
+ - name: Enable firewall for multiple profiles
+  win_firewall:
+   state: enabled
+   profiles:
+    - Domain
+    - Private
+    - Public
+   tags: enable_firewall
+Explanation
+
+In this example, we are enabling firewall on multiple profiles in the Windows hosts.
+
+
+Example 2:
+task:
+ - name: Disable Domain firewall
+  win_firewall:
+   state: disabled
+   profiles:
+    - Domain
+   tags: disable_firewall
+Explanation
+
+In this example, we are disabling the domain firewall.
+
+outbound_action: This parameter will set the outbound traffic rule on the selected profile. The possible options are as follows:
+
+T Allow
+
+T Block
+
+T Not_configured
+
+inbound_action: This parameter will set the inbound traffic rule on the selected profile. The possible options are as follows:
+
+T Allow
+
+T Block
+
+T Not_configured
+
+
+Example 3:
+task:
+ - name: Enable firewall for Domain profile and block outbound
+ connections
+  community.windows.win_firewall:
+   profiles: Domain
+   state: enabled
+   outbound_action: block
+  tags: block_connection
+Explanation
+
+In this example, are enabling the firewall for the domain profiles and blocking the outbound connections.
+
+
+Ansible win_eventlog module
+This module will allow us to add, clear, or remove the local Windows event logs.
+
+Parameters win_eventlog module
+The following are the unique parameters associated with the win_eventlog module.
+
+sources: This parameter will allow us to list one or more sources present or absent in the event log:
+
+Example 1:
+task:
+ - name: Add new log sources
+  win_eventlog:
+   name: MyNewLog
+   sources:
+    - NewLogSource1
+    - NewLogSource2
+   state: present
+Explanation
+
+In this example, we are adding a new log source.
+
+
+Example 2:
+task:
+ - name: Clear event entries
+  win_eventlog:
+   name: AcadigoLogs
+   state: clear
+Explanation
+
+In this example, we are clearing specific log entries.
+
+
+Example 3:
+task:
+ - name: Remove Log Source
+  win_eventlog:
+   name: AcadigoLogs
+   sources:
+    - AcadigoLogSource1
+   state: absent
+Explanation
+
+In this example, we are removing the specific log source.
+
