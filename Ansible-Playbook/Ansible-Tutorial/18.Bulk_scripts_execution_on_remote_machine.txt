@@ -1,0 +1,45 @@
+#Bulk scripts execution on remote machines
+# Let's say, we have a script provided by the vendor, which we need to execute on all the servers. 
+#   We must copy the script on all the servers and then execute it and get the output. 
+#   If we have to do this task for a huge list of servers, it will be a lot of repetitive steps.
+
+# Module, named script. This will copy the script on the remote servers, execute it,
+#  and provide the output with just a simple playbook. Last but not the least, this module works for both the 
+#   Windows and the Linux machines.
+
+#Ansible script module
+#------------------------
+# This module will transfer the script on the Ansible manage nodes and execute it. 
+#   This module does not require Python on the remote nodes. It works for both the Linux and the Windows machines.
+
+#Parameters for script module
+#---------------------------------------
+#The parameters for this module are the same as the SHELL or COMMAND modules. 
+#   Therefore, we will not repeat them again. We will only discuss one parameter which was not available for the 
+#   SHELL and COMMAND modules.
+
+#decrypt
+#-----------
+#auto decrypt the source file using vault. The possible options are Yes and No. This is helpful 
+#if we have a sensitive data available on the script and we need to encrypt it for security reasons.
+
+Example 1:
+task:
+- name: Run a script with arguments
+  script: /some/local/script.sh --some-argument 1234
+
+#Explanation
+#the script is available on the Ansible control node location /some/local/script.sh. 
+#When we run this playbook, the script will be transferred to all the manage nodes and then be executed.
+# Of course, the arguments are optional; we only add them if our script needs them.
+
+Example 2:
+task:
+- name: Run a script only if file exists on the remote node
+  script: /some/local/remove_file.sh --some-argument 1234
+  args:
+  removes: /the/removed/file.txt
+# we only want to execute the script if a specific file exists on the remote nodes. 
+# So, the script executes on the nodes which satisfied the condition.
+
+
