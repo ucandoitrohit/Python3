@@ -1,4 +1,4 @@
-# Variables
+** Variables**
 # Variables store dynamic value for a given environment.
 
 
