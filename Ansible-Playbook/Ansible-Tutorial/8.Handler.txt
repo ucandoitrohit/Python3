@@ -1,0 +1,27 @@
+# Handler
+
+Rollingupdate.Yml
+
+---
+- name: Rolling update
+  hosts: all
+  become: true
+  tasks:
+    - name: latest apache httpd package is installed
+      ansible.builtin.yum:
+        name: httpd
+        state: latest
+      notify: restart apache
+
+  handlers:
+    - name: restart apache
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
+
+
+#The handler code is executed only if necessary. Please note the notify statement; 
+# it mentions the name of the handler to run. This Playbook checks the version of the Apache http web server on all hosts.
+# If an update is available, the yum module provides the upgrade process and restarts the daemon at the end.
+# If an upgrade is not necessary, the handler code is not necessary.
+
