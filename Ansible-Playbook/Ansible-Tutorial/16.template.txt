@@ -1,0 +1,34 @@
+# Ansible template
+
+To use the template, we have to set at least the following two parameters:
+src: This is the source path for the template file with relative or absolute path.
+dest: The destination path, where you want to copy the template on the managed hosts. Moreover, if the directory path is 
+        given, then a file with the same name as the template will be created.
+
+We also have the optional parameters
+-----------------------------------------
+mode: This option is used to set the permission for the destination file.
+group: This option is used to change the group of the file on remote hosts.
+owner: This option is used to change the owner of the file on remote hosts.
+force: By default, this option is set to yes, which means if there is an already existing file on the destination, then the target file will be overwritten. However, if we explicitly set this option to 'no', then it will not replace the existing file.
+
+backup: If the template file already exists and you want it to have a backup, then use this parameter and set to yes. By doing this, every time a new file with the same name is pushed from the controller node, then the older file on the remote hosts will be renamed with the name with date and time.
+
+newline_sequence: We can also enforce the new-line sequence. To specify the newline sequence to use for templating files, the acceptable values are \n and \r.
+
+---
+ - name: Template Example 1
+  hosts: centos
+  tasks:
+   - name: understand Ansible Template
+    template:
+     src: template01.j2
+     dest: /tmp/template-01.txt
+
+Jinja2 template file
+------------------------
+template01.j2
+
+Hostname:  {{ansible_hostname}}
+IP Address:  {{ansible_all_ipv4_addresses}}
+Operating system: {{ansible_distribution}}     
