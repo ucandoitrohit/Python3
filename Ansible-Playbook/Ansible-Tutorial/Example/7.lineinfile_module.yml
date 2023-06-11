@@ -1,0 +1,23 @@
+---
+- name: Manage SSHD
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Edit SSHD Config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin '
+        insertafter: '#PermitRootLogin'
+        line: 'PermitRootLogin no'
+...
+$ ansible-playbook sshd.yml
+
+
+#The lineinfile module have below argument
+#---------------------------------------------
+#path: This is the simple one, the path on the managed device of the file to edit.
+#regexp: If the line is likely to exist, we can search for it, allowing replacement the current line.
+#insertafter: If the line does not exist, a new line will be added to the end of the file or after the line that
+#     we specify here. We will add the line, if required, after the commented line.
+#line: This is the line that we dictate must be in the file and the desired setting we want to implement.
