@@ -1,0 +1,173 @@
+#$ vim $HOME/.ansible/roles/firewall/tasks/main.yml
+
+---
+- name: Firewall Package
+  package:
+    name: "{{ firewall_pkg }}"
+    state: present
+- name: Firewall Service
+  service:
+    name: "{{ firewall_pkg }}"
+    enabled: true
+    state: started
+- name: UFW Ubuntu
+  ufw:
+      state: enabled
+      policy: deny
+      rule: allow
+      port: "{{ item }}"
+  loop:
+    - "{{ service_name }}"
+    - "ssh"
+  when: ansible_distribution == "Ubuntu"
+- name: Firewalld CentOS
+  firewalld:
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  loop:
+    - "{{ service_name }}"
+    - "ssh"
+  when: ansible_distribution == "CentOS"
+...
+
+
+
+#$ vim  $HOME/ansible/apache/full_apache.yml
+---
+- name: Manage Apache Deployment
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    - service_name: http
+  roles:
+    - firewall
+
+#Configure Role for Web Content
+#---------------------------------
+#$ ansible-galaxy role init /home/tux/.ansible/roles/standard_web
+#$ mv $HOME/ansible/apache/web $HOME/.ansible/roles/standard_web/files/
+#mv $HOME/ansible/apache/server.j2 \ $HOME/.ansible/roles/standard_web/templates/
+#$ tree /home/tux/.ansible/roles/standard_web/
+#/home/tux/.ansible/roles/standard_web/
+├── defaults
+│   └── main.yml
+├── files
+│   └── web
+│       ├── contact.html
+│       └── index.html
+├── handlers
+│   └── main.yml
+├── meta
+│   └── main.yml
+├── README.md
+├── tasks
+│   └── main.yml
+├── templates
+│   └── server.j2
+├── tests
+│   ├── inventory
+│   └── test.yml
+└── vars
+    └── main.yml
+
+
+#$ vim $HOME/.ansible/standard_web/tasks/main.yml
+---
+- name: Copy web content
+  copy:
+    src: web/
+    directory_mode: true
+    dest: /var/www/html
+- name: Custom web content
+  template:
+    src: server.j2
+    dest: /var/www/html/server.html
+
+
+#$ vim  $HOME/ansible/apache/full_apache.yml
+---
+- name: Manage Apache Deployment
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    - service_name: http
+  roles:
+    - firewall
+    - standard_web
+
+
+
+#Creating the Apache Role
+#---------------------------------
+
+#$ ansible-galaxy role init $HOME/.ansible/roles/apache
+- Role /home/tux/.ansible/roles/apache was created successfully
+#$ vim $HOME/.ansible/roles/apache/tasks/main.yml
+---
+- name:  Install Apache Package
+  package:
+    name: "{{ apache_pkg }}"
+    state: present
+- name: Start and Enable Apache Service
+  service:
+    name: "{{ apache_pkg }}"
+    state: started
+    enabled: true
+- name: Configure Apache
+  lineinfile:
+    path: "{{ apache_cfg }}"
+    line: "ServerName {{ ansible_hostname }}"
+    insertafter: "#ServerName"
+  notify:
+    - restart_apache
+- name: Secure default ACL for apache user on document root
+  acl:
+    path: /var/www/html
+    entity: "{{ apache_user }}"
+    etype: user
+    state: present
+    permissions: rx
+    default: true
+- name: Secure default ACL for others on document root
+  acl:
+    path: /var/www/html
+    entry: default:others::---
+    state: present
+- name: Set read and execute permissions on document root for apache user
+  acl:
+    path: /var/www/html
+    entity: "{{ apache_user }}"
+    etype: user
+    state: present
+    permissions: rx
+- name: Set permissions to others to nothing on document root
+  acl:
+
+    path: /var/www/html
+    entry: others::---
+    state: present
+
+#$ vim $HOME/.ansible/roles/apache/handlers/main.yml
+---
+- name: restart_apache
+  service:
+    name: "{{ apache_pkg }}"
+    state: restarted
+
+#$ vim  $HOME/ansible/apache/full_apache.yml
+---
+- name: Manage Apache Deployment
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    - service_name: http
+  roles:
+    - apache
+    - firewall
+    - standard_web
+
