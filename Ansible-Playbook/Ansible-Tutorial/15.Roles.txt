@@ -3,6 +3,13 @@
 Directory structure for role
 The following are the important folders for roles. Let's see what these folders contain, as follows:
 
+init: Creates the required structure for a role
+list: Lists roles within the path structure
+search: Searches for roles on the Galaxy repository
+install: Downloads and installs a role from the URL
+remove: Removes a role from the system
+
+
 $ tree .
 .
 └── test-role-1
@@ -31,6 +38,9 @@ handlers - This folder contains a main.yml with handler definitions.
 Meta -  This folder contains main.yml with information about the roles, including author, license, platform, and dependencies.
 tasks - This folder has a main.yml file with task definitions.
 vars -  This folder has a main.yml file with role variable definitions.
+
+
+$ ansible-galaxy list
 
 #Create a Role
 $ ansible-galaxy init test-role-1
@@ -93,3 +103,36 @@ post_tasks are performed after completing all roles.
   post_tasks:
    - debug:
     msg: 'Last Task'
+
+
+
+
+
+
+$ ansible-galaxy role init $HOME/.ansible/roles/firewall
+$ $ tree $HOME/.ansible/roles/firewall
+/home/tux/.ansible/roles/firewall
+├── defaults
+│   └── main.yml
+├── files
+├── handlers
+│   └── main.yml
+├── meta
+│   └── main.yml
+├── README.md
+├── tasks
+│   └── main.yml
+├── templates
+├── tests
+│   ├── inventory
+│   └── test.yml
+└── vars
+    └── main.yml
+        dest: /var/www/html/server.html
+$ ansible-galaxy list
+# /home/tux/.ansible/roles
+- firewall, (unknown version)
+# /usr/share/ansible/roles
+# /etc/ansible/roles
+
+
