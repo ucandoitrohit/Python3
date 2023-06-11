@@ -1,0 +1,20 @@
+#$ cd $HOME/ansible/motd
+#$ vim motd.j2
+#Welcome to {{ ansible_hostname }}
+#The system uses:
+#{{ ansible_distribution }} {{ ansible_distribution_version }}
+#The IP Address is: {{ ansible_default_ipv4.address }}
+
+---
+- name: Manage the /etc/motd file
+  become: true
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Copy /etc/motd
+      template:
+        dest: /etc/motd
+        src: motd.j2
+...
+$ ansible-playbook motd.yml
+
