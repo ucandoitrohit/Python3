@@ -23,6 +23,25 @@ ls -l .ssh
 ssh-copy-id localhost
 ssh localhost
 
+or
+
+ansible all -bkKm authorized_key -a "user='ansible' state="present"  key='{{ lookup('file','/home/tux/.ssh/id_rsa.pub')}}'"
+
+
+#=============================================================================================#
+Preparing the User Account for Ansible
+#=============================================================================================#
+
+$ user_password=$(openssl passwd -6 Password1)
+$ ansible all -kKbm user -a "name=ansible password=$user_password"
+
+
+#=============================================================================================#
+Allowing Passwordless Sudo Access
+#=============================================================================================#
+
+
+
 #=============================================================================================#
 # 3. Finally, Our First Ansible Command
 #=============================================================================================#
@@ -101,6 +120,18 @@ Priority 1: ANSIBLE_CONFIG (environment variable if set).
 Priority 2: ansible.cfg (in the current directory).
 Priority 3: ~/.ansible.cfg (in the home directory).
 Priority 4: /etc/ansible/ansible.cfg (default location)
+
+
+#Printing the Ansible Configuration
+#--------------------------------------
+ansible-config view: Print the contents of the current effective Ansible configuration.
+
+ansible-config dump: Print the effective settings, which are made up from explicit settings from the effective 
+    files and the default settings where an option is unset.
+
+ansible-config list: This fully details the settings that can be made, either through variables or via directives
+     in the configuration file or Playbook.
+
 
 #The other parameters are-
 #-------------------------
@@ -323,6 +354,43 @@ children:
 Ref- 
 https://docs.ansible.com/ansible/latest/installation_guide/intro_configuration.html#explanation-of-values-by-section
 
+#Listing Inventory Hosts Using Ansible
+#----------------------------------------
+$ ansible all --list-hosts
+
+$ ansible webservers --list-hosts
+
+$ ansible ungrouped --list-hosts
+
+$ ansible-inventory --list --yaml
+
+Example:-
+$ ansible all --list-hosts
+  hosts (1):
+    3.8.123.144
+$ ansible-inventory --list --yaml
+all:
+  children:
+    redhat: {}
+    suse:
+      hosts:
+        3.8.123.144:
+          admin_group: sudo
+          ansible_user: ec2-user
+    ubuntu: {}
+    ungrouped: {}
+
+
+ $ ansible-inventory --graph --yaml dbservers
+@dbservers:
+  |--10.25.1.56
+  |--10.25.1.57
+  |--db-100-node.example.com
+  |--db-101-node.example.com
+  |--db-99-node.example.com
+  |--db01.intranet.mydomain.net
+  |--db02.intranet.mydomain.net
+  
 #=============================================================================================#
 # 6. Running Ansible Modules
 #=============================================================================================#
@@ -499,6 +567,12 @@ ssh-copy-id <remote_host_ip>
 sudoers file
 --------------
 <username> ALL=(ALL) NOPASSWD: ALL
+
+
+cho "ansible ALL =(root) NOPASSWD: ALL" > ansible
+$ sudo visudo -cf ansible
+ansible: parsed OK
+$ ansible all -bkK -m copy -a "src=ansible dest=/etc/sudoers.d/ansible"
 
 #=============================================================================================#
 # 18. Command-Line Modules to Ansible Playbooks
