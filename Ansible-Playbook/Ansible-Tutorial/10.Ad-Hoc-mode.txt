@@ -27,3 +27,21 @@ $ ansible centos -i inventory -a "/sbin/reboot" -f 10 -u username --become [--as
 
 
 
+$ ansible all -k -K -m ping
+
+-all: The argument specifies the group in the inventory that we want to target. We are using the all group here.
+
+-k: Prompt for the SSH password. We will later use key-based authentication, allowing us to omit this option.
+
+-K: We have already omitted this, as we did not need escalation for the ping module to succeed. 
+    Where we do need escalation, ideally the user account will have passwordless access to sudo. 
+        We will configure this with an ad hoc command.
+
+-b: Use privilege escalation even if it is not set in the configuration.
+
+-m: The name of the Ansible Python module to execute. We use the ping module.
+
+-a: argument
+
+
+
