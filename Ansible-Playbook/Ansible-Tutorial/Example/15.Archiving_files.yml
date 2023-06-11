@@ -1,0 +1,20 @@
+#Archiving Files#
+#====================
+
+$ vim archive.yml
+---
+- name: Backup web
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Archive DocRoot
+      archive:
+        path: /var/www/html/
+        dest: /root/web.tgz
+        format: gz
+
+
+#$ ansible all -b -m command -a "tar -tzf /root/web.tgz
+
+
