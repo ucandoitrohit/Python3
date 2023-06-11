@@ -1,0 +1,22 @@
+
+#$ cd $HOME/ansible/apache ; mkdir web
+#$ echo "Welcome" > web/index.html
+#$ echo "Peterborough, UK" > web/contact.html
+#$ vim simple_apache.yml
+---
+- name: Install Apache
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name:  Install Apache Package
+      package:
+        name: "{{ apache_pkg }}"
+        state: present
+    - name: Copy web content
+      copy:
+        src: web/*
+        directory_mode: true
+        dest: /var/www/html
+...
+$ ansible-playbook simple_apache.yml
