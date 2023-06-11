@@ -1,0 +1,107 @@
+#Configuration Options in the Inventory
+
+ansible_host
+----------------
+This allows you to use a different name for a host in the inventory file and in your playbooks than its actual hostname. This can be useful when you want to name a machine but its IP address can change. For example, in your inventory file:
+
+alpha ansible_host=192.168.33.10
+
+You will be able to refer to the machine alpha everywhere, but Ansible will connect to the IP address 192.168.33.10 when trying to reach it.
+
+ansible_user
+----------------
+The user to log in as to the remote machine via SSH.
+
+ansible_user=Michael
+
+would be the same as:
+
+ssh michael@host1.example.com
+
+ansible_port
+----------------
+The port on which your SSH server is listening. This is an alias for hostname:port.
+
+ansible_port=50822
+
+would be the same as:
+
+ssh host1.example.com -p 50822
+
+ansible_ssh_private_key_file
+--------------------------------
+The SSH key file used to log in.
+
+ansible_ssh_private_key_file=/path/to/id_rsa
+
+would be the same as
+
+ssh -i /path/to/id_rsa
+
+ansible_ssh_pass
+----------------
+If the user you're connecting to a machine as requires a password, you can specify it in the inventory file with ansible_ssh_pass.
+
+Note: This is highly insecure, and you should use SSH key authentication or use the --ask-pass flag on the command line to provide the password at run time.
+
+ansible_ssh_common_args
+-----------------------------
+Any additional arguments to provide to any calls to SSH, SFTP, or SCP commands.
+
+ansible_ssh_common_args='-o
+
+ForwardAgent=yes'
+
+would be the same as:
+
+ssh -o ForwardAgent=yes host1.example.com
+
+ansible_ssh_extra_args
+------------------------
+
+This is the same as ansible_ssh_common_args, but the arguments specified are only used when Ansible runs an SSH command
+
+ansible_sftp_extra_args
+-----------------------------
+
+This is the same as ansible_ssh_common_args, but the arguments specified are only used when Ansible runs an SFTP command
+
+ansible_scp_extra_args
+---------------------------
+
+This is the same as ansible_ssh_common_args, but the arguments specified are only used when Ansible runs an SCP command
+
+
+Here's an example inventory file that uses some of these options:
+
+alpha.example.com ansible_user=bob ansible_port=50022
+bravo.example.com ansible_user=mary ansible_ssh_private_key_file=/path/to/mary.key
+frontend.example.com ansible_port=50022
+yellow.example.com ansible_host=192.168.33.10
+
+
+
+
+
+[web_centos5]
+fe1.example.com ansible_user=michael ansible_ssh_private_key_file=michael.key
+fe2.example.com ansible_user=michael ansible_ssh_private_key_file=michael.key
+
+[web_centos6]
+web[1:3].example.com ansible_user=automation ansible_port=50022 ansible_ssh_private_key_file=/path/to/auto.key
+
+[database_centos6]
+db.example.com ansible_user=michael ansible_ssh_private_key_file=/path/to/db.key
+
+[loadbalancer_centos6]
+lb.example.com ansible_user=automation ansible_port=50022 ansible_ssh_private_key_file=/path/to/lb.key 
+
+[web:children]
+web_centos5
+web_centos6
+
+[database:children]
+database_centos6
+
+[loadbalancer:children]
+loadbalancer_centos6
