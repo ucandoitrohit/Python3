@@ -18,26 +18,3 @@ bravo.example.com ansible_become_user=automation
 frontend.example.com ansible_become_user=ansible
 yellow.example. com
 
-
-[web_centos5]
-fe1.example.com ansible_user=michael ansible_ssh_private_key_file=michael.key
-fe2.example.com ansible_user=michael ansible_ssh_private_key_file=michael.key
-
-[web_centos6]
-web[1:3].example.com ansible_user=automation ansible_port=50022 ansible_ssh_private_key_file=/path/to/auto.key
-
-[database_centos6]
-db.example.com ansible_user=michael ansible_ssh_private_key_file=/path/to/db.key
-
-[loadbalancer_centos6]
-lb.example.com ansible_user=automation ansible_port=50022 ansible_ssh_private_key_file=/path/to/lb.key 
-
-[web:children]
-web_centos5
-web_centos6
-
-[database:children]
-database_centos6
-
-[loadbalancer:children]
-loadbalancer_centos6
