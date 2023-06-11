@@ -1,0 +1,110 @@
+#Managing VDO with Ansible
+#==============================
+
+#VDO is one of the new features of RHEL 8 but its actual debut was in RHEL 7.5. Using VDO we can create an 
+# Kernel layer that sits between the block device and the filesystem, allowing for data deduplication and compression.
+
+
+Updating a Managed Host
+We need to make sure that we have both the VDO tools and the Kernel module installed. 
+Installing the VDO Kernel module will ensure that we also have the latest Kernel installed. 
+For this reason, it is best to check that the system is updated and rebooted to ensure we are booted with
+ the correct Kernel. This can be done with Ansible, including the reboot, but as we are working on the controller
+  node, we will drop our own connection to the Ansible engine on the reboot. In order to demonstrate this, we will 
+  initially use the CentOS 8 client for the update before we do an update manually on the controller. We will not
+   use this client system for VDO, only the controller. I merely want to demonstrate the update and reboot and some
+    additional Ansible features.
+
+We only want to reboot if the update is needed, so for this we know to use a handler. By default, handlers will run
+ after all tasks. In a real VDO deployment, we would need to reboot the managed device if a new Kernel was added,
+  ensuring the running Kernel matches the version of the Kernel module. The reboot would need to happen before 
+  the Playbook continues by creating the VDO device. We would ideally have a single Playbook that performed the update,
+   reboot, and VDO creation. To ensure that the reboot happens before the remaining VDO tasks, we use the Ansible
+    meta module to force the reboot handler at the correct time.
+
+As well as learning about the meta module, we want to look at a new way to use variables. We will run a new task 
+    to collect the Kernel version after the reboot on the client system. Rather than printing the version directly to 
+    the Ansible controllers screen, we can also use the register operator to store the output in an array variable. 
+    This is great for your learning looking at new options for variable population, as if we haven't seen enough already!
+
+
+$ vim update.yml
+---
+- name: Update and reboot
+  hosts: 172.16.120.185
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Update all packages
+      package:
+        name: '*'
+        state: latest
+      notify: reboot
+    - name: run handlers now
+      meta: flush_handlers
+    - name: Collect Kernel
+      shell: "uname -r"
+      register: kernel_version
+    - name: Show Kernel
+      debug:
+        msg: "The kernel is: {{ kernel_version.stdout }}"
+  handlers:
+    - name: reboot
+      reboot:
+
+
+#Deploying VDO
+#We will need to create a new raw disk file of at least 5GB for the loop device that we will use as the 
+#   underlying storage for VDO. VDO required at least 4GB storage, and much of this space is used as a cache drive 
+#   to allow expansion of compressed files if space is limited on the rest of the drive.
+
+Listing 14-9:
+$ cd $HOME/ansible/disk
+$ fallocate -l 5G disk1
+$ sudo losetup /dev/loop1 disk1
+
+$ vim vdo.yml
+---
+- name: Managing VDO in Ansible
+  hosts: 172.16.120.161
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Install VDO
+      package:
+        name:
+          - vdo
+          - kmod-kvdo
+        state: latest
+    - name: Start VDO service
+      service:
+        name: vdo
+        enabled: true
+        state: started
+    - name: Create VDO device
+      vdo:
+        name: vdo1
+        state: present
+        device: /dev/loop1
+        logicalsize: 10G
+    - name: Format VDO device
+      filesystem:
+        type: xfs
+        dev: /dev/mapper/vdo1
+    - name: Create Mount Point
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - /data
+        - /data/vdo
+    - name: Mount VDO filesystem
+      mount:
+        path: /data/vdo
+        fstype: xfs
+        state: mounted
+        src: /dev/mapper/vdo1
+        opts: defaults,x-systemd.requires=vdo.service
+$ ansible-playbook vdo.yml
+
+
