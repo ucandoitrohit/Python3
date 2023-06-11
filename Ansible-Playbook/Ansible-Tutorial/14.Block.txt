@@ -2,6 +2,8 @@
 
 # Blocks are used to logically group tasks. Blocks are useful for error handling and when statements. 
 #   One statement can be applied to the block, so that it affects all the tasks in the block. 
+# Blocks allow a logical grouping of tasks and enable you to specify options such as when and become for 
+#   multiple tasks instead of specifying them for each task, one at a time.
 ---
 - name: Understand Blocks
   hosts: all
@@ -47,3 +49,33 @@
 # In case upgrade script failed, the rescue block will be executed, which will revert all the database changes; 
 #  once it's done, the always block will restart the database. So, either block or rescue will be executed at any time,
 #   but the always block will execute in any case.
+
+
+
+If you have a playbook that requires some tasks to be run with elevated privileges and others that need to run as a normal user, you can use block to split the tasks
+example, the following playbook installs and configures apache2 as root before copying a configuration file into the home directory of the default user:
+
+---
+- hosts: all
+  tasks:
+    - block:
+        - apt: name=apache2 state=installed
+        - template: name=vhost.conf dest=/etc/apache2/sites-enabled/vhost.conf
+      become: true
+
+    - copy: name=s3.cfg dest=~/.s3.cfg
+
+
+---
+- hosts: all
+  tasks:
+    - block:
+        - command: /bin/false
+        - debug: msg="I will never run as the task above fails"
+      rescue:
+        - debug: msg="This will run because the block failed"
+      always:
+        - debug: msg="This runs no matter what happens"
+
+        
+            
