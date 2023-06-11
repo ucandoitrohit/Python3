@@ -1,0 +1,136 @@
+#Block Devices
+
+#Creating Loopback Devices
+#A loopback device is an internal virtual block device in Linux. We can use this to mount ISO files to
+# loopback devices as an example. For the labs, we will create raw files and then connect them as loopback devices.
+
+$ lsblk
+NAME         MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda            8:0    0   20G  0 disk
+├─sda1        8:1    0    1G  0 part /boot
+└─sda2        8:2    0   19G  0 part
+  ├─cl-root 253:0    0   17G  0 lvm  /
+  └─cl-swap 253:1    0    2G  0 lvm  [SWAP]
+sr0           11:0    1  6.7G  0 rom
+
+
+$ cd $HOME/ansible ; mkdir disk ; cd disk
+$ fallocate -l 1G disk0 # The option is -l for length
+$ ls -lh disk0
+-rw-rw-r--. 1 tux tux 1.0G Dec 10 13:59 disk0
+
+
+$ sudo losetup /dev/loop0 disk0
+$ losetup
+NAME       SIZELIMIT OFFSET AUTOCLEAR RO BACK-FILE                   DIO LOG-SEC
+/dev/loop0         0      0         0  0 /home/tux/ansible/         disk/disk0   0     512
+
+$ lsblk
+NAME         MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+loop0          7:0    0    1G  0 loop
+sda            8:0    0   20G  0 disk
+├─sda1        8:1    0    1G  0 part /boot
+└─sda2        8:2    0   19G  0 part
+  ├─cl-root 253:0    0   17G  0 lvm  /
+  └─cl-swap 253:1    0    2G  0 lvm  [SWAP]
+sr0           11:0    1  6.7G  0 rom
+
+
+
+Partitioning Disks and Mounting Filesystems
+------------------------------------------------
+$ vim partition.yml
+- name: Partition disk/filesystem/mount
+  hosts: 172.16.120.161
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Partition loop0 P1
+      parted:
+        device: /dev/loop0
+        part_start: 0%
+        part_end: 50%
+        number: 1
+        state: present
+    - name: Create XFS filesystem on P1
+      filesystem:
+        dev: /dev/loop0p1
+        fstype: xfs
+    - name: Create mount point
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - /data
+        - /data/p1
+    - name: Mount P1 to /data/p1
+      mount:
+        path: /data/p1
+        src: /dev/loop0p1
+        fstype: xfs
+        state: mounted
+
+$ ansible-playbook partition.yml
+
+$ tail -n1 /etc/fstab
+/dev/loop0p1 /data/p1 xfs defaults 0 0
+
+$ mount -t xfs
+/dev/mapper/cl-root on / type xfs
+(rw,relatime,seclabel,attr2,inode64,noquota)
+
+/dev/loop0p1 on /data/p1 type xfs (rw,relatime,seclabel,attr2,inode64,noquota)
+
+
+Managing Logical Volumes
+--------------------------
+$ vim lvm.yml
+---
+- name: Using LVMs
+  hosts: 172.16.120.161
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Partition loop0 P2
+      parted:
+        device: /dev/loop0
+        part_start: 50%
+        part_end: 100%
+        number: 2
+        flags: [ lvm ]
+        state: present
+    - name: Create Volume Group
+      lvg:
+        vg: vg1
+        pvs: /dev/loop0p2
+    - name: Create LV
+      lvol:
+        lv: lv1
+        vg: vg1
+        size: 100%FREE
+        shrink: false
+    - name: Create XFS filesystem on lv1
+      filesystem:
+        dev: /dev/vg1/lv1
+        fstype: xfs
+    - name: Create mount point
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - /data
+        - /data/lv1
+    - name: Mount lv1 to /data/lv1
+      mount:
+        path: /data/lv1
+        src: /dev/vg1/lv1
+        fstype: xfs
+        state: mounted
+$ ansible-playbook lvm.yml
+...
+$ tail -n1 /etc/fstab
+/dev/vg1/lv1 /data/lv1 xfs defaults 0 0
+$ mount -t xfs
+/dev/mapper/cl-root on / type xfs (rw,relatime,seclabel,attr2,i node64,noquota)
+/dev/loop0p1 on /data/p1 type xfs (rw,relatime,seclabel,attr2,inode64,noquota)
+/dev/mapper/vg1-lv1 on /data/lv1 type xfs (rw,relatime,seclabel,attr2,inode64,noquota)
