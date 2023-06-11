@@ -1,0 +1,225 @@
+mkdir provisioning
+touch provisioning/playbook.yml
+
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Make sure we can connect
+      ping:
+
+#Installing PHP
+#------------------------
+# PHP
+- name: Add the ondrej PHP PPA
+  apt_repository: repo='ppa:ondrej/php'
+- name: Update the apt cache
+  apt: update_cache=yes cache_valid_time=3600
+- name: Install PHP
+  apt: name=php state=installed
+- name: Install PHP
+  apt: name={{item}} state=installed
+  with_items:
+    - php
+    - php-fpm
+    - php-mysql
+    - php-xml
+- name: Remove apache2
+  apt: name=apache2 state=removed
+
+#Installing MySQL
+#------------------------
+- name: Install MySQL
+  apt: name={{item}} state=installed
+  with_items:
+    - mysql-server-5.6
+    - python-mysqldb
+
+#Here are the tasks that you're going to complete with Ansible:
+
+#Change the default root password.
+#Remove anonymous users.
+#Remove test database and access to it.
+
+#To change the default password, you need to generate a password to use. To do this, you can use the 
+#   openssl utility to generate a 15-character password. Add the following to your playbook:
+
+- name: Generate new root password
+  command: openssl rand -hex 7
+  register: mysql_new_root_pass
+- name: Remove anonymous users
+  mysql_user: name="" state=absent
+- name: Remove test database
+  mysql_db: name=test state=absent
+
+# final thing to do is to change the root password 
+- name: Update root password
+  mysql_user: name=root host={{item}} password={{mysql_new_root_pass.stdout}}
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+- name: Output new root password
+  debug: msg="New root password is {{mysql_new_root_pass.stdout}}"
+
+#------------------------------------
+#Till now we performed a beow step
+#---------------------------------
+#Installed MySQL server
+#Removed anonymous users
+#Removed the test database
+#Generated a new root password
+#Output the new root password to the screen
+
+#Now Perform Below Step
+#---------------------------
+#You need to write out a new config file (located at /root/.my.cnf) containing the new root password so that 
+# the root user can run MySQL commands automatically.
+
+#mkdir -p provisioning/templates/mysql
+#touch provisioning/templates/mysql/my.cnf
+
+#Once you've created my.cnf, edit it and make sure that it has the following contents:
+
+#[client]
+#user=root
+#password={{ mysql_new_root_pass.stdout }}
+
+- name: Create my.cnf
+  template: src=templates/mysql/my.cnf dest=/root/.my.cnf
+
+- name: Generate new root password
+  command: openssl rand -hex 7 creates=/root/.my.cnf
+  register: mysql_new_root_pass
+# If /root/.my.cnf doesn't exist and the command is run
+- debug: msg="New root password is {{ mysql_new_root_pass.stdout }}"
+  when: mysql_new_root_pass.changed
+# If /root/.my.cnf exists and the command is not run
+- debug: msg="No change to root password"
+  when: not mysql_new_root_pass.changed
+
+
+#Installing nginx
+#=====================
+- name: Install nginx
+  apt: name=nginx state=installed 
+- name: Start nginx
+  service: name=nginx state=running
+
+#mkdir -p provisioning/templates/nginx
+#touch provisioning/templates/nginx/default  
+
+- name: Create nginx config
+  template: src=templates/nginx/default dest=/etc/nginx/sites-available/default
+
+
+Edit provisioning/templates/nginx/default and make sure that it contains the following content:
+
+server {
+        server_name book.example.com;
+        root /var/www/book.example.com;
+
+        index index.php;
+
+        location = /favicon.ico {
+                log_not_found off;
+                access_log off;
+        }
+
+        location = /robots.txt {
+                allow all;
+                log_not_found off;
+                access_log off;
+        }
+
+        location ~ /\. {
+                deny all;
+        }
+
+        location ~* /(?:uploads|files)/.*\.php$ {
+                deny all;
+        }
+
+        location / {
+                try_files $uri $uri/ /index.php?$args;
+        }
+
+        rewrite /wp-admin$ $scheme://$host$uri/ permanent;
+
+        location ~*
+^.+\.(ogg|ogv|svg|svgz|eot|otf|woff|mp4|ttf|rss|atom|jpg|jpeg|gif|png|ico|zi
+p|tgz|gz|rar|bz2|doc|xls|exe|ppt|tar|mid|midi|wav|bmp|rtf)$ {
+               access_log off;
+               log_not_found off;
+                expires max;
+        }
+
+        location ~ [^/]\.php(/|$) {
+                fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+                if (!-f $document_root$fastcgi_script_name) {
+                        return 404;
+                }
+                include fastcgi_params;
+                fastcgi_index index.php;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_
+                name;
+                fastcgi_pass php;
+        }
+}
+
+
+#Tasks and Handlers
+#------------------------
+---
+- name: Create nginx config
+  template: src=templates/nginx/default dest=/etc/nginx/sites-available/default
+  notify: restart nginx
+
+
+sudo mkdir -p /var/www/book.example.com
+echo "<?php echo date('H:i:s'); " | sudo tee /var/www/book.example.com/
+index.php
+exit
+
+#Wordpress Downloading it Automatically
+#---------------------------------
+---
+- name: Get WordPress checksum
+  uri: url=https://wordpress.org/latest.zip.sha1 return_content=true
+  register: wp_checksum
+# Once you have the SHA1 checksum against which to compare, you can download WordPress itself. 
+#   This time, you will be using the get_url module. You specify a URL to download, the destination 
+#   where the file should be saved, and a checksum:
+
+- name: Install required tools
+  apt: name={{item}} state=installed
+  with_items:
+    - unzip
+
+- name: Download WordPress
+  get_url:
+    url: https://wordpress.org/latest.zip
+    dest: /tmp/wordpress.zip
+    checksum: "sha1:{{wp_checksum.content}}"
+
+- name: Unzip WordPress
+  unarchive: src=files/wordpress.zip 
+  dest: /tmp 
+  copy: no
+  creates: /tmp/wordpress/wp-settings.php
+
+- name: Create project folder
+  file: dest=/var/www/book.example.com state=directory
+- name: Copy WordPress files
+  command: cp -a /tmp/wordpress/. /var/www/book.example.com 
+  creates: /var/www/book.example.com/wp-settings.php
+
+- name: Create WordPress MySQL database
+  mysql_db: name=wordpress state=present
+- name: Create WordPress MySQL user
+  mysql_user: name=wordpress host=localhost password=bananas priv=wordpress.*:ALL  
+
+- name: Create wp-config
+  template: src=templates/wordpress/wp-config.php dest=/var/www/book.example.com/wp-config.php
+
