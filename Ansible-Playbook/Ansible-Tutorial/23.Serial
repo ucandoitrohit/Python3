@@ -1,0 +1,35 @@
+Running in Serial
+--------------------
+---
+- hosts: all
+  serial: 3
+  roles:
+    - mheap.demo
+
+#By adding serial: 3, you are telling Ansible that it should only run on three hosts at a time. It will run on the first #three and wait for the play to complete on all of them before moving on to the next three. If you prefer, you can #specify this as a percentage rather than a raw number:
+
+---
+- hosts: all
+  serial: 40%
+  roles:
+    - mheap.demo
+
+#Given this configuration, Ansible will run on the first 40 percent of hosts specified, then the next 40 percent, and #then the final 20 percent. When the number of hosts does not divide cleanly, the final group will contain all of the #remaining hosts.
+
+#By default, Ansible will run on every host specified. If a host fails, no more tasks will run on that host, and Ansible #will move on to the next available host. If you want to tell Ansible not to run on the remaining hosts if Ansible fails #on a host, you can use max_fail_percentage to stop Ansible if a certain percentage of hosts fail:
+
+---
+- hosts: all
+  serial: 40%
+  max_fail_percent: 10
+  roles:
+    - mheap.demo
+#If more than 10 percent of servers fail to complete their Ansible run, the rest of the play will be aborted. If you #want to stop as soon as a single server fails, you can set this option to zero:
+
+---
+- hosts: all
+  serial: 40%
+  max_fail_percent: 0
+  roles:
+    - mheap.demo
+#It's important to note that the failed percentage must exceed the value that you specify. This means that if you want #to abort the run if half of your servers fail to complete a play, you should set max_fail_percentage to 49, not 50.
