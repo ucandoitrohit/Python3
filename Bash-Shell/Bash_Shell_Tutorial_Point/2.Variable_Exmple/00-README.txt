@@ -1,1 +1,1 @@
-Understanding Variables
+Understanding Variables with Examples
