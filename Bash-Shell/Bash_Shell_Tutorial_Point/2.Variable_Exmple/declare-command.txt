@@ -1,0 +1,9 @@
+declare
+
+-p display all variables
+-x export
+-r readonly
+-i Interger
+-l lower case
+-u upper case
+-a arrays
