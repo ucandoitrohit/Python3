@@ -7,3 +7,4 @@ Get-Alias
 
 $Nu=3
 $Nu.GetType()
+

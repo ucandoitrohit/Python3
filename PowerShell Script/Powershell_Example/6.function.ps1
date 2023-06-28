@@ -2,7 +2,7 @@
 function Get-Config {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory,ValueFromPipeline)]
         [string]$Name,
         [Parameter()]
         [ValidateSet("1","2")]        
@@ -11,4 +11,5 @@ function Get-Config {
     Write-Host "Fetching the configuration....:$Name .. $version"
 
 }
+
 Get-Config -Name "ansible.example.com" -version "2"
