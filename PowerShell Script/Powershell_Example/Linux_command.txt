@@ -1,0 +1,5 @@
+﻿uptime
+pwd
+free -m
+cat /etc/passwd
+ls -ltr
