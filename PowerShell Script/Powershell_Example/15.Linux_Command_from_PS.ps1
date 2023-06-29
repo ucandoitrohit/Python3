@@ -20,4 +20,13 @@ Invoke-SSHCommand -SSHSession $SSH -Command "cd /home/u1;pwd;ls;cat file1.txt"
 $linux=Invoke-SSHCommand -SSHSession $SSH -Command "cd /home/u1;pwd;ls;cat file1.txt"
 $linux.output
 
+
+$Command = (Get-Content -Path "E:\python_repo\Python3\PowerShell Script\Powershell_Example\Linux_command.txt") -join ";"
+$out=Invoke-SSHCommand -SSHSession $SSH -Command $Command
+$out.output
+
+
+
+
+
 #Remove-SSHSession -SSHSession $SSH
