@@ -12,5 +12,7 @@
         masked: true
         state: stopped
       when: "'nginx.service' in ansible_facts.services"
-
-      
+    - name: Is Apache service
+      debug:
+        msg: "This must be Ubuntu!"
+      when: "'apache2.service' in ansible_facts.services"
