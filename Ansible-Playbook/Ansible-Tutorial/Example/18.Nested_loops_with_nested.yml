@@ -1,0 +1,13 @@
+# Nested loops (with_nested)
+
+# A nested loop is a loop within a loop.
+
+task:
+ - name: Add Users in Groups
+   user:
+    name: "{{item[0]}}"
+    state: present
+    groups: "{{item[1]}}"
+   with_nested:
+   - ['rony','ali','john']
+   - ['student','teacher','teacher']
