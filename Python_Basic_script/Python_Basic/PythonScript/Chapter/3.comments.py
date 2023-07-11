@@ -1,0 +1,1 @@
+print("to comment the line press ctrl+/ to add and to remove ctrl+/")

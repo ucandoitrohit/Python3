@@ -1,0 +1,13 @@
+Chapter 1
+	print()
+	escape sequences
+	variable
+	
+
+
+\'	single quote
+\"	double quote
+\\	backslash
+\n	new line
+\t	tab
+\b	backspace

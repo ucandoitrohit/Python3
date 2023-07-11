@@ -1,0 +1,2 @@
+New file added and new file created added by writeNew file added and append line in file created added by write
+var1 = 50

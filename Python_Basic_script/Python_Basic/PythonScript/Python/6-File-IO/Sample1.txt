@@ -1,0 +1,11 @@
+This is example of remove the unwanted words from the txt file
+as example ####### word 
+in the txt file ####### which donket word is not good
+so ####### need to remove ####### #######
+so ####### need to remove ####### #######
+so ####### need to remove ####### #######
+so ####### need to remove ####### #######
+so ####### need to remove ####### #######
+this is examle python is great
+python help us to read
+python is job
